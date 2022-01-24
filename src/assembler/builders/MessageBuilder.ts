@@ -13,12 +13,12 @@ import {
   Message,
   MessageAttachment,
   MessageEmbed,
+  SelectMenu,
   Snowflake,
   TextChannel
 } from '../../api/entities'
 import { DateTime } from 'luxon'
 import { keyFromEnum } from '../../api/utils'
-import { SelectMenu } from '../../api/entities'
 
 export default class MessageBuilder {
   constructor (private client: Client) {
@@ -31,13 +31,15 @@ export default class MessageBuilder {
     const author = guild.members.cache.get(payload.author.id) || guild.bots.cache.get(payload.author.id)
 
     const mentionChannel: Collection<Snowflake, any> = new Collection()
-    const channelMentions = payload.content.split(' ')
-      .filter((word: string) => word.startsWith('<#'))
-      .map((word: string) => {
-        return word
-          .replace(/<#/g, '')
-          .replace(/>/g, '')
-      })
+    const channelMentions = payload.content
+      ? payload.content.split(' ')
+        .filter((word: string) => word.startsWith('<#'))
+        .map((word: string) => {
+          return word
+            .replace(/<#/g, '')
+            .replace(/>/g, '')
+        })
+      : []
 
     channelMentions.forEach((id: Snowflake) => {
       const channel = guild?.channels.cache.get(id)

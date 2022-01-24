@@ -5,7 +5,7 @@ import EmbedThumbnail from './EmbedThumbnail'
 import { DateTime } from 'luxon'
 import EmbedVideo from './EmbedVideo'
 import EmbedFooter from './EmbedFooter'
-import Color from '../colors'
+import { Color } from '../../../api/entities'
 
 export default interface MessageEmbed {
   readonly title: string | undefined

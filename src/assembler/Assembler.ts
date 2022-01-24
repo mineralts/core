@@ -72,7 +72,7 @@ export default class Assembler {
     const identifiers = {
       event: () => this.registerEvent(path, item),
       'slash-command': () => this.registerCommand(path, item),
-      'subcommand': () => this.registerSubCommands(path, item),
+      subcommand: () => this.registerSubCommands(path, item),
     }
 
     if (item && item.identifier in identifiers) {

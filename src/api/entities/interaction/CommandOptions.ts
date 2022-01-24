@@ -27,21 +27,21 @@ export default class CommandOptions {
 
   public getString (name: string): string | undefined {
     const stringValue = this.params.options?.find((param: CommandParamsResolvable) => param.name == name) as unknown as { value: string }
-    return stringValue.value
+    return stringValue?.value
   }
 
   public getNumber (name: string): number | undefined {
     const numberValue = this.params.options?.find((param: CommandParamsResolvable) => param.name == name) as unknown as { value: number }
-    return numberValue.value
+    return numberValue?.value
   }
 
   public getBoolean (name: string): boolean | undefined {
     const numberValue = this.params.options?.find((param: CommandParamsResolvable) => param.name == name) as unknown as { value: boolean }
-    return numberValue.value
+    return numberValue?.value
   }
 
   public getChoices<T> (name: string): T | undefined {
     const choiceValue = this.params.options?.find((param: CommandParamsResolvable) => param.name == name) as unknown as { value: T }
-    return choiceValue.value
+    return choiceValue?.value
   }
 }
