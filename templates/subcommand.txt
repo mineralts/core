@@ -1,0 +1,12 @@
+import { Subcommand, MineralCommand, CommandInteraction } from '@mineralts/core-preview'
+
+@Subcommand('$parent', '$Class', '$Class command description')
+export default class $Class extends MineralCommand {
+  public async run (interaction: CommandInteraction) {
+    // Your code here
+
+    await interaction.reply({
+      content: 'Hello world !'
+    })
+  }
+}

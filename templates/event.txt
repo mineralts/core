@@ -1,0 +1,8 @@
+import { Event, MineralCommand } from '@mineralts/core-preview'
+
+@Event('$event')
+export default class $Class extends MineralCommand {
+  public async run (...args: any[]) {
+    // Your code here
+  }
+}
