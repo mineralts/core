@@ -1,0 +1,74 @@
+import ReadyPacket from './ReadyPacket'
+import Packet from '../entities/Packet'
+import GuildCreatePacket from './GuildCreatePacket'
+import MessageCreatePacket from './MessageCreatePacket'
+import ChannelCreatePacket from './ChannelCreatePacket'
+import ChannelDeletePacket from './ChannelDeletePacket'
+import ChannelUpdatePacket from './ChannelUpdatePacket'
+import InviteCreatePacket from './InviteCreatePacket'
+import InviteDeletePacket from './InviteDeletePacket'
+import MemberJoinPacket from './MemberJoinPacket'
+import MessageReactionAdd from './MessageReactionAdd'
+import MessageReactionRemove from './MessageReactionRemove'
+import MessageDeletePacket from './MessageDeletePacket'
+import MessageUpdatePacket from './MessageUpdatePacket'
+import MemberLeavePacket from './MemberLeavePacket'
+import RoleCreatePacket from './RoleCreatePacket'
+import RoleUpdatePacket from './RoleUpdatePacket'
+import RoleDeletePacket from './RoleDeletePacket'
+import RuleAcceptPacket from './RuleAcceptPacket'
+import TypingStartPacket from './TypingStartPacket'
+import VoiceJoinPacket from './VoiceJoinPacket'
+import VoiceLeavePacket from './VoiceLeavePacket'
+import MemberTimeoutAddPacket from './MemberTimeoutAddPacket'
+import MemberTimeoutRemovePacket from './MemberTimeoutRemovePacket'
+import CommandInteractionPacket from './CommandInteractionPacket'
+import Collection from '../../api/utils/Collection'
+
+export default class PacketManager {
+  public packets: Collection<string, Packet[]> = new Collection()
+
+  constructor () {
+    this.register(
+      new ReadyPacket(),
+      new GuildCreatePacket(),
+      new MessageCreatePacket(),
+      new MessageDeletePacket(),
+      new MessageUpdatePacket(),
+      new ChannelCreatePacket(),
+      new ChannelDeletePacket(),
+      new ChannelUpdatePacket(),
+      new InviteCreatePacket(),
+      new InviteDeletePacket(),
+      new MemberJoinPacket(),
+      new MemberLeavePacket(),
+      new MessageReactionAdd(),
+      new MessageReactionRemove(),
+      new RoleCreatePacket(),
+      new RoleUpdatePacket(),
+      new RoleDeletePacket(),
+      new RuleAcceptPacket(),
+      new TypingStartPacket(),
+      new VoiceJoinPacket(),
+      new VoiceLeavePacket(),
+      new MemberTimeoutAddPacket(),
+      new MemberTimeoutRemovePacket(),
+      new CommandInteractionPacket(),
+    )
+  }
+
+  public register (...packets: Packet[]) {
+    packets.forEach((packet: Packet) => {
+      const packetEvent = this.packets.get(packet.packetType)
+      if (!packetEvent) {
+        this.packets.set(packet.packetType, [packet])
+      } else {
+        packetEvent.push(packet)
+      }
+    })
+  }
+
+  public resolve (packetType: string) {
+    return this.packets.get(packetType)
+  }
+}
