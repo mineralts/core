@@ -8,6 +8,7 @@
  *
  */
 
+import os from 'os'
 import path from 'path'
 import { Command } from '../forge/entities/Command'
 
@@ -23,6 +24,13 @@ export default class MakeCommand extends Command {
     const jsonPackage = await import(path.join(process.cwd(), 'package.json'))
 
     const result = {
+      node_version: process.version,
+      os: {
+        arch: os.arch(),
+        version: os.version(),
+        platform: os.platform(),
+        type: os.type()
+      },
       appName: jsonPackage.name,
       appVersion: jsonPackage.version,
       appIntents: this.application.intents,
