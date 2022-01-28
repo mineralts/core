@@ -14,7 +14,7 @@ import path from 'path'
 import Environment from '../../environment/Environment'
 
 class Forge {
-  private logger: Logger = new Logger
+  private logger: Logger = new Logger()
   private environment: Environment = new Environment()
   private kernel: Kernel = new Kernel()
 
