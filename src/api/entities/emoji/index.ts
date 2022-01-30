@@ -8,7 +8,13 @@ export default class Emoji {
     public managed: boolean,
     public available: boolean,
     public animated: boolean = false,
-    public roles: Role[] = [],
+    public roles: Role[] = []
   ) {
+  }
+
+  public toString (): string {
+    return this.id
+      ? `<${this.animated ? 'a' : ''}:${this.label}:${this.id}>`
+      : this.label
   }
 }
