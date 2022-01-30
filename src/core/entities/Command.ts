@@ -3,7 +3,7 @@ import { CommandOption, CommandOptionType, OptionType, Snowflake } from '../../a
 import { Client } from '../../api/entities'
 import Application from '../../application/Application'
 
-export function Command (name: string, description: string, scope: 'GUILDS' | Snowflake, hasSubcommands?: boolean) {
+export function Command (name: string, description: string, scope: 'GUILDS' | Snowflake) {
   return (target: any) => {
     target.identifier = 'command'
     target.label = name.toLowerCase()
@@ -11,14 +11,19 @@ export function Command (name: string, description: string, scope: 'GUILDS' | Sn
     const container = Application.getContainer()
     const command = new target() as MineralBaseCommand & { data: any }
 
-    command.hasSubcommands = hasSubcommands || false
+    console.log(target.prototype.subcommands)
+    command.hasSubcommands = target.prototype.subcommands
+      ? Object.values(target.prototype.subcommands)?.length !== 0
+      : false
+
     command.data = {
       label: name.toLowerCase(),
       scope: scope,
       description: description,
-      options: hasSubcommands
+      options: command.hasSubcommands
         ? Object.values(target.prototype.subcommands)
         : target.prototype.commandOptions
+      || []
     }
 
     container.commands.set(command.data.label, command)
@@ -28,7 +33,7 @@ export function Command (name: string, description: string, scope: 'GUILDS' | Sn
 export function Subcommand (description: string) {
   return (target, propertyKey: string) => {
     if (!target.constructor.prototype.subcommands) {
-      target.constructor.prototype['subcommands'] = []
+      target.constructor.prototype['subcommands'] = {}
     }
 
     target.constructor.prototype.subcommands[propertyKey] = {
