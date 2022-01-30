@@ -1,7 +1,8 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { CommandInteractionBuilder } from '../../assembler/builders'
-import { CommandInteraction } from '../../api/entities'
+import { CommandInteraction, OptionType } from '../../api/entities'
+import { MineralBaseCommand } from '../entities/Command'
 
 export default class CommandInteractionPacket extends Packet {
   public packetType = 'INTERACTION_CREATE'
@@ -14,32 +15,41 @@ export default class CommandInteractionPacket extends Packet {
     const member = guild?.members.cache.get(payload.member.user.id)
 
     const interactionBuilder = new CommandInteractionBuilder(assembler.application.client as any, member as any)
-    const interaction: CommandInteraction = interactionBuilder.build(payload)
+    let interaction: CommandInteraction
 
-    let targetCommand: any | null = null
+    const command = container.commands.find((command: MineralBaseCommand) => (
+      command.data.label === payload.data.name
+    ))
 
-    container.commands.forEach((command: any) => {
-      if (command.data.label === payload.data.name) {
-        const subcommands: any[] = command.data.options.filter((command) => command.type === 'SUB_COMMAND')
+    if (!command) {
+      return
+    }
 
-        if (subcommands.length) {
-          // Command with sub-commands
-          const subcommand = subcommands.find((command) => command.name === payload.data.options[0].name)
-          const targetSubcommandName = `${payload.data.name}.${subcommand.name}`
-          targetCommand = container.subcommands.find((subcommand: any) => (
-            subcommand.data.identifier === targetSubcommandName
-          ))
-        } else {
-          // Simple command without subcommands
-          targetCommand = container.commands.find((command: any) => (
-            command.data.label === payload.data.name
-          ))
-        }
+    const subcommand = payload.data.options.find((option) => (
+      option.type === OptionType.SUB_COMMAND
+    ))
+
+    if (subcommand) {
+      interaction = interactionBuilder.build({
+        ...payload,
+        data: subcommand.options
+      })
+
+      await command[subcommand.name](interaction)
+    } else {
+      interaction = interactionBuilder.build({
+        ...payload,
+        data: payload.data.options
+      })
+
+      if (!command['run']) {
+        assembler.application.logger.fatal('The "run" method does not exist within your command.')
+        return
       }
-    })
 
-    await targetCommand.run(interaction)
+      await command['run'](interaction)
+    }
 
-    assembler.eventListener.emit('commandInteraction', interaction)
+    assembler.eventListener.emit('commandInteraction', 'interaction')
   }
 }
