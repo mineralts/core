@@ -21,9 +21,8 @@ import GuildThreadManager from './GuildThreadManager'
 import GuildEmojiManager from './GuildEmojiManager'
 import InviteManager from '../invitation/InviteManager'
 import GuildHashes from './GuildHashes'
-import { serializeCommand } from '../../utils'
 import Assembler from '../../../assembler/Assembler'
-import { MineralCommand } from '../../../core/entities/Command'
+import { serializeCommand } from '../../utils'
 
 export default class Guild {
   public commands: Collection<Snowflake, Command> = new Collection()
@@ -353,49 +352,80 @@ export default class Guild {
 
   public async registerCommands (assembler: Assembler) {
     const container = assembler.application.container
+    const request = Application.createRequest()
 
     if (!container.commands.size) {
       return
     }
 
+    container.commands.map(async (command: any) => {
+      command.logger = assembler.application.logger
+      command.client = assembler.application.client
+
+
+      const payload = await request.post(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, {
+        ...serializeCommand(command.data)
+      })
+
+      command.id = payload.id
+
+      // console.log(command)
+    })
+
+
+    //
+    // const request = Application.createRequest()
+    // const commands = container.commands.filter((command: any) => (
+    //   command.data.scope === 'GUILD'
+    // ))
+    //
+    // // Trrr add
+    // await Promise.all(
+    //   container.subcommands.map((subcommand: any) => {
+    //     const parent = assembler.application.container.commands.find((command: any) => (
+    //       command.data.label === subcommand.data.parent[0]
+    //     )) as MineralCommand & { data: any }
+    //
+    //     if (!parent) {
+    //       const logger = Application.getLogger()
+    //       logger.fatal(`Subcommand ${subcommand.data.parent[0]}.${subcommand.data.label} is invalid because it is not associated with any parent command.`)
+    //       process.exit(1)
+    //     }
+    //
+    //     parent.data.options.push({
+    //       name: subcommand.data.label,
+    //       description: subcommand.data.description,
+    //       options: subcommand.data.options,
+    //       type: 'SUB_COMMAND'
+    //     })
+    //   })
+    // )
+    //
+    // await Promise.all(
+    //   commands.map(async (command: any) => {
+    //     const payload = await request.post(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, {
+    //       ...serializeCommand(command.data)
+    //     })
+    //
+    //     command.id = payload.id
+    //     command.guild = this
+    //
+    //     this.commands.set(command.id!, command as unknown as Command)
+    //   })
+    // )
+  }
+
+  public async removeBulkGlobalCommand (assembler: Assembler) {
     const request = Application.createRequest()
+    await request.put(`/applications/${assembler.application.client.application.id}/commands`, {})
+  }
 
-    const commands = container.commands.filter((command: any) => (
-      command.data.scope === 'GUILD'
-    ))
+  public async removeBulkCommand (assembler: Assembler) {
+    const request = Application.createRequest()
+    await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, {})
+  }
 
-    await Promise.all(
-      container.subcommands.map((subcommand: any) => {
-        const parent = assembler.application.container.commands.find((command: any) => (
-          command.data.label === subcommand.data.parent[0]
-        )) as MineralCommand & { data: any }
-
-        if (!parent) {
-          const logger = Application.getLogger()
-          logger.fatal(`Subcommand ${subcommand.data.parent[0]}.${subcommand.data.label} is invalid because it is not associated with any parent command.`)
-          process.exit(1)
-        }
-
-        parent.data.options.push({
-          name: subcommand.data.label,
-          description: subcommand.data.description,
-          options: subcommand.data.options,
-          type: 'SUB_COMMAND'
-        })
-      })
-    )
-
-    await Promise.all(
-      commands.map(async (command: any) => {
-        const payload = await request.post(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, {
-          ...serializeCommand(command.data)
-        })
-
-        command.id = payload.id
-        command.guild = this
-
-        this.commands.set(command.id!, command as unknown as Command)
-      })
-    )
+  public toString (): string {
+    return this.name
   }
 }
