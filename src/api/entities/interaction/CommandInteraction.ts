@@ -12,7 +12,7 @@ import CommandOptions from './CommandOptions'
 import Application from '../../../application/Application'
 
 export default class CommandInteraction {
-  public commandOptions: CommandOptions
+  public options: CommandOptions
 
   constructor (
     public id: Snowflake,
@@ -25,7 +25,7 @@ export default class CommandInteraction {
     public member: GuildMember,
     public params: any,
   ) {
-    this.commandOptions = new CommandOptions(this.params, this.member)
+    this.options = new CommandOptions(this.params, this.member)
   }
 
   public async reply (messageOption: MessageOption): Promise<void> {
