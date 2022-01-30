@@ -457,15 +457,29 @@ export enum OptionType {
   NUMBER =	10,
 }
 
+export enum CommandOptionType {
+  STRING =	3,
+  BOOLEAN =	5,
+  USER =	6,
+  CHANNEL =	7,
+  ROLE =	8,
+  MENTIONABLE =	9,
+  NUMBER =	10,
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-export type CommandOption<T extends keyof typeof OptionType | 'CHOICE'> = OptionWrapper[T]
+export type CommandOption<T extends keyof typeof CommandOptionType | 'CHOICE'> = OptionWrapper[T]
 
 interface OptionWrapper {
   STRING: StringOption
   NUMBER: NumberOption
+  BOOLEAN: BooleanOption
   CHANNEL: ChannelOption
   CHOICE: ChoiceOption
+  USER: UserOption
+  ROLE: BaseOption
+  MENTIONABLE: BaseOption
 }
 
 type BaseOption = {
@@ -493,6 +507,10 @@ export type ChannelOption = BaseOption & {
   channelType: (keyof ChannelOptions)[]
   autocomplete?: boolean
 }
+
+export type UserOption = BaseOption
+
+export type BooleanOption = BaseOption
 
 export type MenuSelectOption = {
   label: string
