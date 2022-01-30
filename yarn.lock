@@ -31,10 +31,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@mineralts/connector-preview@^1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@mineralts/connector-preview/-/connector-preview-1.1.3.tgz#3da4258c7f7be47c2c3988017e5f6f1e93a30ed9"
-  integrity sha512-rQHK2kwGqT/VNryyzfZ8kDcckjeFAGDfdbQhK1JFK3iH7BpqY5RfINS8CWUrm8fnOwDa//KgiQSGHWB2pHhKyg==
+"@mineralts/connector-preview@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@mineralts/connector-preview/-/connector-preview-1.1.4.tgz#ed5c097b93c8b7c934cecd7b24ff6cd35586855c"
+  integrity sha512-5dih7mMMOPY7kW9ZyXqLTabwPrZDBr/n7rNX/1npUqYRdxbttzWN+pAFauRIvqsZhChtzwSQAcw40sP7vzyE7A==
   dependencies:
     "@mineralts/logger" "^1.0.2"
     "@types/luxon" "^2.0.5"
