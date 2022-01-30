@@ -16,7 +16,6 @@ import { Connector } from '@mineralts/connector-preview'
 import Application from '../application/Application'
 import PacketManager from '../core/packets/PacketManager'
 import { MineralEvent } from '../core/entities/Event'
-import { MineralCommand } from '../core/entities/Command'
 import { MineralProvider } from '../core/entities/Provider'
 import Entity from '../core/entities/Entity'
 
@@ -71,8 +70,6 @@ export default class Assembler {
   private async dispatch (path, item) {
     const identifiers = {
       event: () => this.registerEvent(path, item),
-      'slash-command': () => this.registerCommand(path, item),
-      subcommand: () => this.registerSubCommands(path, item),
     }
 
     if (item && item.identifier in identifiers) {
@@ -103,37 +100,6 @@ export default class Assembler {
     this.eventListener.on(item.event, async (...args: any[]) => {
       await event.run(...args)
     })
-  }
-
-  protected registerCommand (path, item: { new(): MineralCommand }) {
-    const command = new item() as MineralCommand & { data, getOption }
-
-    command.logger = this.application.logger
-    command.client = this.application.client
-    command.data = item.prototype.data
-
-    command.getLabel = () => command.data.label
-    command.getDescription = () => command.data.description
-    command.getOption = (name: string) => command.data.options.find((option) => (
-      option.name === name
-    ))
-
-    this.application.container.commands.set(path, command)
-  }
-
-  public registerSubCommands (path, item: { new(): MineralCommand }) {
-    const subcommand = new item() as MineralCommand & { data }
-    subcommand.logger = this.application.logger
-    subcommand.client = this.application.client
-    subcommand.data = {
-      ...item.prototype.data,
-      identifier: `${item.prototype.data.parent.join('.')}.${item.prototype.data.label}`
-    }
-
-    subcommand.getLabel = () => subcommand.data.label
-    subcommand.getDescription = () => subcommand.data.description
-
-    this.application.container.subcommands.set(path, subcommand)
   }
 
   public async registerProvider () {
