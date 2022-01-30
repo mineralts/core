@@ -19,7 +19,7 @@ import { Client } from '../api/entities'
 import Helper from '../helper'
 import { MineralEvent } from '../core/entities/Event'
 import { MineralProvider } from '../core/entities/Provider'
-import { MineralCommand } from '../core/entities/Command'
+import { MineralBaseCommand, MineralCommand } from '../core/entities/Command'
 
 export default class Application {
   private static $instance: Application
@@ -42,7 +42,7 @@ export default class Application {
 
   public aliases: Map<string, string> = new Map()
 
-  public container: { events: Collection<string, Map<string, MineralEvent>>, commands: Collection<string, MineralCommand>, subcommands: Collection<string, MineralCommand>, providers: Collection<string, MineralProvider> } = {
+  public container: { events: Collection<string, Map<string, MineralEvent>>, commands: Collection<string, MineralBaseCommand>, subcommands: Collection<string, MineralCommand>, providers: Collection<string, MineralProvider> } = {
     events: new Collection(),
     commands: new Collection(),
     subcommands: new Collection(),
