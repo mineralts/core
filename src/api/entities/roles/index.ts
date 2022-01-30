@@ -24,4 +24,11 @@ export default class Role {
   public isManaged (): boolean {
     return this.managed
   }
+
+  public toString(): string {
+    if (this.id === this.guild.id) {
+      return '@everyone'
+    }
+    return `<@&${this.id}>`
+  }
 }
