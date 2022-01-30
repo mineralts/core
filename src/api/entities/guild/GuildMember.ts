@@ -114,4 +114,8 @@ export default class GuildMember {
     await request.delete(`/guilds/${this.guild.id}/members/${this.id}`)
     request.resetHeaders('X-Audit-Log-Reason')
   }
+
+  public toString (): string {
+    return `<@${this.username ? '!' : ''}${this.user.id}>`
+  }
 }
