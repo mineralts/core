@@ -9,7 +9,7 @@
  */
 
 import Kernel from './core/Kernel'
-import { MineralCommand, Subcommand, Command, Option } from './core/entities/Command'
+import { MineralCommand, MineralSubcommand, Subcommand, Command, Option } from './core/entities/Command'
 import { MineralEvent, Event } from './core/entities/Event'
 import { MineralProvider, Provider } from './core/entities/Provider'
 import Ignitor from './core/standalone/Ignitor'
@@ -20,6 +20,7 @@ export * from './typing/interfaces'
 export {
   Kernel,
   MineralCommand,
+  MineralSubcommand,
   Command,
   Subcommand,
   Option,
