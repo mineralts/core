@@ -25,6 +25,11 @@ export default class CommandInteractionPacket extends Packet {
       return
     }
 
+    if (!payload.data.options) {
+      payload.data.options = []
+    }
+
+
     const subcommand = payload.data.options.find((option) => (
       option.type === OptionType.SUB_COMMAND
     ))
