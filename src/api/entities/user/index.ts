@@ -54,4 +54,8 @@ export default class User {
   protected makeImageUrl (root, { format = 'webp', size = 256 }: { format?: any; size?: any } = {}) {
     return `${root}.${format}${size ? `?size=${size}` : ''}`
   }
+
+  public toString(): string {
+    return `<@${this.id}>`
+  }
 }
