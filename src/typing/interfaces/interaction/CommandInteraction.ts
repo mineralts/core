@@ -4,7 +4,7 @@ import GuildMember from '../guild/GuildMember'
 import CommandOptions from './CommandOptions'
 
 export default interface CommandInteraction {
-  readonly commandOptions: CommandOptions
+  readonly options: CommandOptions
   readonly id: Snowflake
   readonly version: number
   readonly type: keyof typeof InteractionType
