@@ -117,6 +117,7 @@ export default class Assembler {
         if (item && item.identifier === 'provider') {
           const provider = new item() as MineralProvider
           provider.logger = this.application.logger
+          provider.application = this.application
 
           this.application.container.providers.set(item.path, provider)
         }
