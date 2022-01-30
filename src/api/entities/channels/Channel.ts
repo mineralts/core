@@ -75,4 +75,8 @@ export default class Channel {
     const request = Application.createRequest()
     await request.delete(`/channels/${this.id}`)
   }
+
+  public toString() {
+    return `<#${this.id}>`
+  }
 }
