@@ -24,12 +24,12 @@ export default class Kernel {
 
     this.assembler = new Assembler(this.application, this.packetManager)
     this.application.environment.registerEnvironment()
-    this.assembler.registerProvider()
   }
 
   public async createApplication () {
     await this.application.registerCliCommands()
     await this.assembler.build()
+    await this.assembler.registerProvider()
 
     this.application.registerBinding('request', this.assembler.connector.http)
     await Promise.all(
