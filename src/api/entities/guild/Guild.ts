@@ -368,51 +368,7 @@ export default class Guild {
       })
 
       command.id = payload.id
-
-      // console.log(command)
     })
-
-
-    //
-    // const request = Application.createRequest()
-    // const commands = container.commands.filter((command: any) => (
-    //   command.data.scope === 'GUILD'
-    // ))
-    //
-    // // Trrr add
-    // await Promise.all(
-    //   container.subcommands.map((subcommand: any) => {
-    //     const parent = assembler.application.container.commands.find((command: any) => (
-    //       command.data.label === subcommand.data.parent[0]
-    //     )) as MineralCommand & { data: any }
-    //
-    //     if (!parent) {
-    //       const logger = Application.getLogger()
-    //       logger.fatal(`Subcommand ${subcommand.data.parent[0]}.${subcommand.data.label} is invalid because it is not associated with any parent command.`)
-    //       process.exit(1)
-    //     }
-    //
-    //     parent.data.options.push({
-    //       name: subcommand.data.label,
-    //       description: subcommand.data.description,
-    //       options: subcommand.data.options,
-    //       type: 'SUB_COMMAND'
-    //     })
-    //   })
-    // )
-    //
-    // await Promise.all(
-    //   commands.map(async (command: any) => {
-    //     const payload = await request.post(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, {
-    //       ...serializeCommand(command.data)
-    //     })
-    //
-    //     command.id = payload.id
-    //     command.guild = this
-    //
-    //     this.commands.set(command.id!, command as unknown as Command)
-    //   })
-    // )
   }
 
   public async removeBulkGlobalCommand (assembler: Assembler) {

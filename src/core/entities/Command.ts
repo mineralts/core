@@ -1,5 +1,5 @@
 import Logger from '@mineralts/logger'
-import { CommandOption, CommandOptionType, OptionType, Snowflake } from '../../api/types'
+import { CommandOption, CommandOptionType, Snowflake } from '../../api/types'
 import { Client } from '../../api/entities'
 import Application from '../../application/Application'
 
@@ -40,7 +40,7 @@ export function Subcommand (description: string) {
       type: 'SUB_COMMAND',
       name: propertyKey.toLowerCase(),
       description,
-      options: target.options
+      options: target.options.reverse()
     }
 
     target.options = []
@@ -72,10 +72,6 @@ export abstract class MineralBaseCommand {
   public client: Client
   public hasSubcommands: boolean
   public data: any
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  public getOption<T extends keyof typeof OptionType | 'CHOICE'> (type: T, name: string): CommandOption<T>
 }
 
 export abstract class MineralCommand extends MineralBaseCommand {
