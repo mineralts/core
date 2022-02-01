@@ -7,7 +7,6 @@ export default class MessageCreatePacket extends Packet {
   public packetType = 'MESSAGE_CREATE'
 
   public async handle (assembler: Assembler, payload: any) {
-    console.log(payload)
     if (!payload.guild_id) {
       return
     }
