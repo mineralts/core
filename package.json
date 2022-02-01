@@ -1,6 +1,6 @@
 {
   "name": "@mineralts/core-preview",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "main": "build/index.js",
   "repository": "git@github.com:Mineral-ts/core.git",
   "author": "leadcodedev <baptiste.parmantier.pro@gmail.com>",

@@ -20,6 +20,7 @@ import { MineralProvider } from '../core/entities/Provider'
 import Entity from '../core/entities/Entity'
 import { MineralTask } from '../core/entities/tasks/Task'
 import Scheduler from '../core/entities/tasks/Scheduler'
+import { MineralContextMenu } from '../core/entities/ContextMenu'
 
 export default class Assembler {
   public readonly eventListener: EventsListener = new EventsListener()
@@ -73,6 +74,7 @@ export default class Assembler {
     const identifiers = {
       event: () => this.registerEvent(path, item),
       scheduler: () => this.registerTask(path, item),
+      contextmenu: () => this.registerContextMenu(path, item)
     }
 
     if (item && item.identifier in identifiers) {
@@ -87,7 +89,7 @@ export default class Assembler {
   }
 
   protected registerEvent (path, item: { new(): MineralEvent, event: string }): void {
-    const event = new item() as MineralEvent & { event: string, client }
+    const event = new item() as MineralEvent & { event: string }
     event.logger = this.application.logger
     event.client = this.application.client
 
@@ -103,6 +105,21 @@ export default class Assembler {
     this.eventListener.on(item.event, async (...args: any[]) => {
       await event.run(...args)
     })
+  }
+
+  protected registerContextMenu (path, item: { new(): MineralContextMenu }): void {
+    const menu = new item() as MineralContextMenu & { name: string }
+    menu.logger = this.application.logger
+    menu.client = this.application.client
+
+    const menuContainer = this.application.container.menus
+
+    if (menuContainer.get(menu.name)) {
+      this.application.logger.fatal(`The ${menu.name} menu already exists, please choose another name`)
+      return
+    }
+
+    menuContainer.set(menu.name, menu)
   }
 
   protected registerTask (path, item: { new(): MineralTask, id: string, cron: string }): void {

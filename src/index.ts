@@ -13,6 +13,7 @@ import { MineralCommand, MineralSubcommand, Subcommand, Command, Option } from '
 import { MineralEvent, Event } from './core/entities/Event'
 import { MineralProvider, Provider } from './core/entities/Provider'
 import { MineralTask, Task } from './core/entities/tasks/Task'
+import { MineralContextMenu, ContextMenu } from './core/entities/ContextMenu'
 import Ignitor from './core/standalone/Ignitor'
 import MessageEmbed from './api/entities/embed/MessageEmbed'
 import Scheduler from './core/entities/tasks/Scheduler'
@@ -34,5 +35,7 @@ export {
   MineralProvider,
   Ignitor,
   MessageEmbed,
-  Scheduler
+  Scheduler,
+  MineralContextMenu,
+  ContextMenu,
 }

@@ -17,10 +17,7 @@ import Environment from '../environment/Environment'
 import Collection from '../api/utils/Collection'
 import { Client } from '../api/entities'
 import Helper from '../helper'
-import { MineralEvent } from '../core/entities/Event'
-import { MineralProvider } from '../core/entities/Provider'
-import { MineralBaseCommand } from '../core/entities/Command'
-import Scheduler from '../core/entities/tasks/Scheduler'
+import Container from './Container'
 
 export default class Application {
   private static $instance: Application
@@ -43,12 +40,7 @@ export default class Application {
 
   public aliases: Map<string, string> = new Map()
 
-  public container: { events: Collection<string, Map<string, MineralEvent>>, commands: Collection<string, MineralBaseCommand>, schedulers: Collection<string, Scheduler>, providers: Collection<string, MineralProvider> } = {
-    events: new Collection(),
-    commands: new Collection(),
-    schedulers: new Collection(),
-    providers: new Collection(),
-  }
+  public container: Container = new Container()
 
   public helper: Helper = new Helper()
   public client!: Client

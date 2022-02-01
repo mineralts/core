@@ -1,5 +1,6 @@
 import Collection from '../../utils/Collection'
 import {
+  CommandType,
   ExplicitContentLevel, Feature, GuildFeature, LocalPath, Milliseconds,
   NotificationLevel,
   Region,
@@ -371,6 +372,26 @@ export default class Guild {
 
       command.id = payload.id
     })
+  }
+
+  public async registerMenus (assembler: Assembler) {
+    const container = assembler.application.container
+    const request = Application.createRequest()
+
+    if (!container.menus.size) {
+      return
+    }
+
+    await Promise.all(
+      container.menus.map(async (menu: any) => {
+        const payload = await request.post(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, {
+          name: menu.name,
+          type: CommandType[menu.type]
+        })
+
+        menu.id = payload.id
+      })
+    )
   }
 
   public async removeBulkGlobalCommand (assembler: Assembler) {

@@ -542,3 +542,4 @@ export type EmbedOptions = {
   url?: string | undefined
   footer?: EmbedFooter | undefined
 }
+

@@ -3,11 +3,16 @@ import Packet from '../entities/Packet'
 import { CommandInteractionBuilder } from '../../assembler/builders'
 import { CommandInteraction, OptionType } from '../../api/entities'
 import { MineralBaseCommand } from '../entities/Command'
+import { CommandType } from '../../api/types'
 
 export default class CommandInteractionPacket extends Packet {
   public packetType = 'INTERACTION_CREATE'
 
   public async handle (assembler: Assembler, payload: any) {
+    if (payload.type !== CommandType.CHAT_INPUT) {
+      return
+    }
+
     const client = assembler.application.client
     const container = assembler.application.container
 
@@ -54,6 +59,6 @@ export default class CommandInteractionPacket extends Packet {
       await command['run'](interaction)
     }
 
-    assembler.eventListener.emit('commandInteraction', 'interaction')
+    assembler.eventListener.emit('commandInteraction', interaction)
   }
 }

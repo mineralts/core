@@ -24,6 +24,7 @@ import MemberTimeoutAddPacket from './MemberTimeoutAddPacket'
 import MemberTimeoutRemovePacket from './MemberTimeoutRemovePacket'
 import CommandInteractionPacket from './CommandInteractionPacket'
 import Collection from '../../api/utils/Collection'
+import MenuInteractionPacket from './MenuInteractionPacket'
 
 export default class PacketManager {
   public packets: Collection<string, Packet[]> = new Collection()
@@ -54,6 +55,7 @@ export default class PacketManager {
       new MemberTimeoutAddPacket(),
       new MemberTimeoutRemovePacket(),
       new CommandInteractionPacket(),
+      new MenuInteractionPacket(),
     )
   }
 
