@@ -31,7 +31,6 @@ export default class CommandOptions {
   }
 
   public getNumber (name: string): number | undefined {
-    console.log(this.params)
     const numberValue = this.params?.find((param: CommandParamsResolvable) => param.name == name) as unknown as { value: number }
     return numberValue?.value
   }
