@@ -23,6 +23,7 @@ import InviteManager from '../invitation/InviteManager'
 import GuildHashes from './GuildHashes'
 import Assembler from '../../../assembler/Assembler'
 import { serializeCommand } from '../../utils'
+import { DateTime } from 'luxon'
 
 export default class Guild {
   public commands: Collection<Snowflake, Command> = new Collection()
@@ -74,6 +75,7 @@ export default class Guild {
     public vanityUrlCode: string | null,
     public embeddedActivities: any[],
     public invites: InviteManager,
+    public createdAt: DateTime | undefined,
   ) {
   }
 
