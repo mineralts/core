@@ -21,7 +21,7 @@ export function Command (name: string, description: string, scope: 'GUILDS' | Sn
       description: description,
       options: command.hasSubcommands
         ? Object.values(target.prototype.subcommands)
-        : target.prototype.commandOptions.reverse()
+        : target.prototype.commandOptions?.reverse()
       || []
     }
 

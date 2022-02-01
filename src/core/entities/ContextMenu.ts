@@ -1,4 +1,4 @@
-import { CommandType } from '../../api/types'
+import { CommandType, Snowflake } from '../../api/types'
 import Logger from '@mineralts/logger'
 import { Client } from '../../api/entities'
 import MenuInteraction from '../../typing/interfaces/interaction/MenuInteraction'
@@ -12,6 +12,7 @@ export function ContextMenu (type: Exclude<keyof typeof CommandType, 'CHAT_INPUT
 }
 
 export abstract class MineralContextMenu {
+  public id: Snowflake
   public logger: Logger
   public client: Client
   abstract run (interaction: MenuInteraction): Promise<void>

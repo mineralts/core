@@ -98,9 +98,9 @@ export default class GuildCreatePacket extends Packet {
     })
 
     // await this.guild.removeBulkGlobalCommand(assembler)
-    await this.guild.removeBulkCommand(assembler)
+    // await this.guild.removeBulkCommand(assembler)
     await this.guild.registerCommands(assembler)
-    await this.guild.registerMenus(assembler)
+    // await this.guild.registerMenus(assembler)
 
     assembler.application.client.guilds.cache.set(this.guild.id, this.guild as any)
 

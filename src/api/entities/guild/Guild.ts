@@ -361,37 +361,35 @@ export default class Guild {
       return
     }
 
-    container.commands.map(async (command: any) => {
+    const serializedCommands = container.commands.map((command: any) => {
       command.logger = assembler.application.logger
       command.client = assembler.application.client
 
-
-      const payload = await request.post(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, {
-        ...serializeCommand(command.data)
-      })
-
-      command.id = payload.id
+      return serializeCommand(command.data)
     })
-  }
 
-  public async registerMenus (assembler: Assembler) {
-    const container = assembler.application.container
-    const request = Application.createRequest()
+    const serializedMenus = container.menus.map((menu: any) => {
+      menu.logger = assembler.application.logger
+      menu.client = assembler.application.client
 
-    if (!container.menus.size) {
-      return
-    }
+      return {
+        name: menu.name,
+        type: CommandType[menu.type]
+      }
+    })
 
-    await Promise.all(
-      container.menus.map(async (menu: any) => {
-        const payload = await request.post(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, {
-          name: menu.name,
-          type: CommandType[menu.type]
-        })
+    const payload = await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, [...serializedCommands, ...serializedMenus])
+    if (payload) {
+      payload.forEach((item) => {
+        const command = item.type === CommandType.CHAT_INPUT
+          ? container.commands.get(item.name)
+          : container.menus.get(item.name)
 
-        menu.id = payload.id
+        if (command) {
+          command.id = item.id
+        }
       })
-    )
+    }
   }
 
   public async removeBulkGlobalCommand (assembler: Assembler) {
