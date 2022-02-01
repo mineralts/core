@@ -15,6 +15,7 @@ export default class CommandInteractionBuilder {
       undefined,
       undefined,
       this.member,
+      this.member.guild,
       payload.data
     )
   }
