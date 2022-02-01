@@ -10,6 +10,7 @@ import GuildMember from '../guild/GuildMember'
 import EmbedRow from '../embed/EmbedRow'
 import CommandOptions from './CommandOptions'
 import Application from '../../../application/Application'
+import Guild from '../guild/Guild'
 
 export default class CommandInteraction {
   public options: CommandOptions
@@ -23,6 +24,7 @@ export default class CommandInteraction {
     public componentType: keyof typeof ComponentType | undefined,
     public message: Message | undefined,
     public member: GuildMember,
+    public guild: Guild | undefined,
     public params: any,
   ) {
     this.options = new CommandOptions(this.params, this.member)
