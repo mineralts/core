@@ -379,21 +379,34 @@ export default class Guild {
 
       return {
         name: menu.name,
-        type: CommandType[menu.type]
+        type: CommandType[menu.type],
+        permissions: menu.permissions || [],
+        default_permission: menu.permissions
+          ? menu.permissions?.length === 0
+          : true,
       }
     })
 
+    const permissions: { id: Snowflake, permissions: { id: Snowflake, type: number, permission: boolean } }[] = []
     const payload = await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, [...serializedCommands, ...serializedMenus])
     if (payload) {
       payload.forEach((item) => {
         const command = item.type === CommandType.CHAT_INPUT
           ? container.commands.get(item.name)
-          : container.menus.get(item.name)
+          : container.menus.get(item.name) as any
 
         if (command) {
           command.id = item.id
+          if (command.data) {
+            permissions.push({
+              id: command.id,
+              permissions: command.data.permissions,
+            })
+          }
         }
       })
+
+      await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands/permissions`, permissions)
     }
   }
 

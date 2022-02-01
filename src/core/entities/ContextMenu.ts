@@ -8,6 +8,8 @@ export function ContextMenu (type: Exclude<keyof typeof CommandType, 'CHAT_INPUT
     target.identifier = 'contextmenu'
     target.prototype.type = type
     target.prototype.name = name
+    target.prototype.data = {}
+    target.permissions = target.prototype.permissions || []
   }
 }
 
@@ -15,5 +17,7 @@ export abstract class MineralContextMenu {
   public id: Snowflake
   public logger: Logger
   public client: Client
+  public data: any
+
   abstract run (interaction: MenuInteraction): Promise<void>
 }

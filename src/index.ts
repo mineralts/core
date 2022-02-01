@@ -9,7 +9,7 @@
  */
 
 import Kernel from './core/Kernel'
-import { MineralCommand, MineralSubcommand, Subcommand, Command, Option } from './core/entities/Command'
+import { MineralCommand, MineralSubcommand, Subcommand, Command, Option, Permission } from './core/entities/Command'
 import { MineralEvent, Event } from './core/entities/Event'
 import { MineralProvider, Provider } from './core/entities/Provider'
 import { MineralTask, Task } from './core/entities/tasks/Task'
@@ -27,6 +27,7 @@ export {
   Command,
   Subcommand,
   Option,
+  Permission,
   MineralEvent,
   Event,
   MineralTask,

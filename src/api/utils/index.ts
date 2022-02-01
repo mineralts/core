@@ -30,6 +30,8 @@ export function serializeCommand (command) {
   return {
     name: command.label,
     description: command.description,
+    default_permission: command.default_permission,
+    permissions: command.permissions,
     options: walk(command.options),
   }
 

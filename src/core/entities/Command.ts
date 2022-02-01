@@ -1,5 +1,5 @@
 import Logger from '@mineralts/logger'
-import { CommandOption, CommandOptionType, Snowflake } from '../../api/types'
+import { CommandOption, CommandOptionType, PermissionType, Snowflake } from '../../api/types'
 import { Client } from '../../api/entities'
 import Application from '../../application/Application'
 
@@ -19,10 +19,14 @@ export function Command (name: string, description: string, scope: 'GUILDS' | Sn
       label: name.toLowerCase(),
       scope: scope,
       description: description,
+      default_permission: target.prototype.permissions
+        ? target.prototype.permissions?.length === 0
+        : true,
+      permissions: command.hasSubcommands ? [] : target.prototype.permissions,
       options: command.hasSubcommands
         ? Object.values(target.prototype.subcommands)
         : target.prototype.commandOptions?.reverse()
-      || []
+        || []
     }
 
     container.commands.set(command.data.label, command)
@@ -39,10 +43,33 @@ export function Subcommand (description: string) {
       type: 'SUB_COMMAND',
       name: propertyKey.toLowerCase(),
       description,
+      permissions: target.permissions,
       options: target.options.reverse()
     }
 
     target.options = []
+  }
+}
+
+export function Permission (type: keyof typeof PermissionType, can: boolean, ...ids: Snowflake[]): any {
+  return (target: any) => {
+    if (!target.permissions) {
+      target['permissions'] = []
+    }
+    if (!target.prototype) {
+      target.prototype = {}
+    }
+
+    if (!target.prototype.permissions) {
+      target.prototype['permissions'] = []
+    }
+
+    target.prototype.permissions = [
+      ...target.prototype.permissions,
+      ...ids.map((id: Snowflake) => (
+        { id, type: PermissionType[type], permission: can }
+      ))
+    ]
   }
 }
 
@@ -60,7 +87,7 @@ export function Option<T extends keyof typeof CommandOptionType | 'CHOICE'> (typ
       target.prototype['commandOptions'] = []
     }
 
-    target.prototype.commandOptions.push({type, ...options})
+    target.prototype.commandOptions.push({ type, ...options })
     target.options.push({ type, ...options })
   }
 }

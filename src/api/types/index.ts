@@ -543,3 +543,7 @@ export type EmbedOptions = {
   footer?: EmbedFooter | undefined
 }
 
+export enum PermissionType {
+  ROLE = 1,
+  USER = 2,
+}

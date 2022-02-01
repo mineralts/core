@@ -107,12 +107,16 @@ export default class Assembler {
     })
   }
 
-  protected registerContextMenu (path, item: { new(): MineralContextMenu }): void {
-    const menu = new item() as MineralContextMenu & { name: string }
+  protected registerContextMenu (path, item: { new(): MineralContextMenu } & { permissions: any }): void {
+    const menuContainer = this.application.container.menus
+    const menu = new item() as MineralContextMenu & { name: string, permissions: any[] }
+
     menu.logger = this.application.logger
     menu.client = this.application.client
 
-    const menuContainer = this.application.container.menus
+    menu.data = {
+      permissions: item.permissions
+    }
 
     if (menuContainer.get(menu.name)) {
       this.application.logger.fatal(`The ${menu.name} menu already exists, please choose another name`)
