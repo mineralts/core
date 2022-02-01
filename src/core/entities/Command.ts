@@ -11,7 +11,6 @@ export function Command (name: string, description: string, scope: 'GUILDS' | Sn
     const container = Application.getContainer()
     const command = new target() as MineralBaseCommand & { data: any }
 
-    console.log(target.prototype.subcommands)
     command.hasSubcommands = target.prototype.subcommands
       ? Object.values(target.prototype.subcommands)?.length !== 0
       : false
@@ -22,7 +21,7 @@ export function Command (name: string, description: string, scope: 'GUILDS' | Sn
       description: description,
       options: command.hasSubcommands
         ? Object.values(target.prototype.subcommands)
-        : target.prototype.commandOptions
+        : target.prototype.commandOptions.reverse()
       || []
     }
 
