@@ -18,6 +18,8 @@ import PacketManager from '../core/packets/PacketManager'
 import { MineralEvent } from '../core/entities/Event'
 import { MineralProvider } from '../core/entities/Provider'
 import Entity from '../core/entities/Entity'
+import { MineralTask } from '../core/entities/tasks/Task'
+import Scheduler from '../core/entities/tasks/Scheduler'
 
 export default class Assembler {
   public readonly eventListener: EventsListener = new EventsListener()
@@ -70,6 +72,7 @@ export default class Assembler {
   private async dispatch (path, item) {
     const identifiers = {
       event: () => this.registerEvent(path, item),
+      scheduler: () => this.registerTask(path, item),
     }
 
     if (item && item.identifier in identifiers) {
@@ -100,6 +103,13 @@ export default class Assembler {
     this.eventListener.on(item.event, async (...args: any[]) => {
       await event.run(...args)
     })
+  }
+
+  protected registerTask (path, item: { new(): MineralTask, id: string, cron: string }): void {
+    const task = new item() as MineralTask
+
+    const scheduler = new Scheduler(item.id, item.cron, task.run)
+    scheduler.start()
   }
 
   public async registerProvider () {
