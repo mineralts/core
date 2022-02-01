@@ -2,6 +2,7 @@ import { ComponentType, InteractionType, MessageOption, Snowflake } from '../../
 import Message from '../message'
 import GuildMember from '../guild/GuildMember'
 import CommandOptions from './CommandOptions'
+import Guild from '../guild/Guild'
 
 export default interface CommandInteraction {
   readonly options: CommandOptions
@@ -13,6 +14,7 @@ export default interface CommandInteraction {
   readonly componentType: keyof typeof ComponentType | undefined
   readonly message: Message | undefined
   readonly member: GuildMember
+  readonly guild: Guild | undefined
 
   reply (messageOption: MessageOption): Promise<void>
 }
