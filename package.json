@@ -1,6 +1,6 @@
 {
   "name": "@mineralts/core-preview",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "build/index.js",
   "repository": "git@github.com:Mineral-ts/core.git",
   "author": "leadcodedev <baptiste.parmantier.pro@gmail.com>",
@@ -16,12 +16,14 @@
     "@mineralts/logger": "1.1.5",
     "@types/luxon": "^2.0.5",
     "@types/node": "^16.11.6",
+    "@types/node-cron": "^3.0.1",
     "axios": "^0.24.0",
     "change-case": "^4.1.2",
     "enquirer": "^2.3.6",
     "fs-recursive": "^1.1.7",
     "js-yaml": "^4.1.0",
     "luxon": "^2.0.2",
+    "node-cron": "^3.0.0",
     "pluralize": "^8.0.0",
     "truncatise": "^0.0.8",
     "typescript": "^4.4.4"
