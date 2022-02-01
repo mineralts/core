@@ -18,6 +18,7 @@ import GuildEmojiManager from './GuildEmojiManager'
 import InviteManager from '../invitation/InviteManager'
 import GuildHashes from './GuildHashes'
 import { Command } from '../../../forge/entities/Command'
+import { DateTime } from 'luxon'
 
 export default interface Guild {
   readonly commands: Collection<Snowflake, Command>
@@ -67,6 +68,7 @@ export default interface Guild {
   readonly vanityUrlCode: string | null
   readonly embeddedActivities: any[]
   readonly invites: InviteManager
+  readonly createdAt: DateTime | undefined
 
   setName (value: string): Promise<void>
   setPreferredLocale (region: keyof typeof Region): Promise<void>
