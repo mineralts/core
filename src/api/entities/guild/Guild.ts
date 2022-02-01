@@ -1,10 +1,15 @@
 import Collection from '../../utils/Collection'
 import {
   CommandType,
-  ExplicitContentLevel, Feature, GuildFeature, LocalPath, Milliseconds,
+  ExplicitContentLevel,
+  Feature,
+  GuildFeature,
+  LocalPath,
+  Milliseconds,
   NotificationLevel,
   Region,
-  Snowflake, SystemChannelFlag,
+  Snowflake,
+  SystemChannelFlag,
   VerificationLevel
 } from '../../types'
 import GuildMember from './GuildMember'
@@ -76,7 +81,7 @@ export default class Guild {
     public vanityUrlCode: string | null,
     public embeddedActivities: any[],
     public invites: InviteManager,
-    public createdAt: DateTime | undefined,
+    public createdAt: DateTime | undefined
   ) {
   }
 
@@ -180,7 +185,7 @@ export default class Guild {
     }
   }
 
-  public hasFeature(feature: keyof typeof Feature): boolean {
+  public hasFeature (feature: keyof typeof Feature): boolean {
     return this.features.includes(feature)
   }
 
@@ -205,7 +210,7 @@ export default class Guild {
 
   public async removeIcon (): Promise<void> {
     const request = Application.createRequest()
-    const data =  await request.patch(`/guilds/${this.id}`, {
+    const data = await request.patch(`/guilds/${this.id}`, {
       icon: null
     })
 
@@ -216,7 +221,7 @@ export default class Guild {
 
   public async setOwner (member: GuildMember | Snowflake): Promise<void> {
     const client = Application.getClient()
-    const value = member instanceof GuildMember ? member.id :member
+    const value = member instanceof GuildMember ? member.id : member
 
     if (this.ownerId === client.user.id) {
       throw new Error('OWNERISALREADYMEMBER')
@@ -291,7 +296,7 @@ export default class Guild {
   }
 
   public async setSystemChannel (channel: TextChannel | Snowflake): Promise<void> {
-    const value = channel instanceof TextChannel ? channel.id :channel
+    const value = channel instanceof TextChannel ? channel.id : channel
 
     const request = Application.createRequest()
     const result = await request.patch(`/guilds/${this.id}`, {
