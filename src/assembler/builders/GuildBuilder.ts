@@ -12,6 +12,7 @@ import {
   Collection
 } from '../../api/entities'
 import { keyFromEnum } from '../../api/utils'
+import { DateTime } from 'luxon'
 
 export default class GuildBuilder {
   constructor (private client: Client, private readonly payload: any) {
@@ -67,7 +68,8 @@ export default class GuildBuilder {
       this.payload.system_channel_id,
       this.payload.vanity_url_code,
       this.payload.embedded_activities,
-      new InviteManager()
+      new InviteManager(),
+      DateTime.fromISO(this.payload.joined_at),
     )
 
     guild.setRoles(new GuildRoleManager(guild))
