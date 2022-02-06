@@ -17,6 +17,7 @@ import { MineralContextMenu, ContextMenu } from './core/entities/ContextMenu'
 import Ignitor from './core/standalone/Ignitor'
 import MessageEmbed from './api/entities/embed/MessageEmbed'
 import Scheduler from './core/entities/tasks/Scheduler'
+import Application from './application/Application'
 
 export * from './typing/interfaces'
 
@@ -39,4 +40,5 @@ export {
   Scheduler,
   MineralContextMenu,
   ContextMenu,
+  Application,
 }
