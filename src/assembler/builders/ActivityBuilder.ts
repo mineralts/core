@@ -1,10 +1,14 @@
 import { DateTime } from 'luxon'
-import { Activity, ActivityType, Emoji } from '../../api/entities'
+import { Activity, ActivityType, Emoji, Guild } from '../../api/entities'
 
 export default class ActivityBuilder {
+  constructor (private guild: Guild | undefined) {
+  }
+
   public build (payload: any) {
     const emoji = new Emoji(
       payload.emoji?.id,
+      this.guild,
       payload.emoji?.name,
       false,
       false,

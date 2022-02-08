@@ -9,6 +9,8 @@ export default class MenuInteractionBuilder {
   public build (payload: any) {
     const channel = this.member.guild.channels.cache.get<TextChannelResolvable>(payload.channel_id)
 
+    console.log(payload)
+
     if ('messages' in payload.data.resolved) {
       const messageBuilder = new MessageBuilder(this.client)
       const message = messageBuilder.build({

@@ -393,7 +393,7 @@ export default class Guild {
       payload.forEach((item) => {
         const command = item.type === CommandType.CHAT_INPUT
           ? container.commands.get(item.name)
-          : container.menus.get(item.name) as any
+          : container.menus.get(item.name)
 
         if (command) {
           command.id = item.id

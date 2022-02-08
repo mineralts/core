@@ -7,9 +7,10 @@ export default class MenuInteractionPacket extends Packet {
   public packetType = 'INTERACTION_CREATE'
 
   public async handle (assembler: Assembler, payload: any): Promise<void> {
-    if (payload.type === CommandType.CHAT_INPUT) {
+    if (payload.data.type === CommandType.CHAT_INPUT) {
       return
     }
+    console.log(payload.type, CommandType[payload.type])
 
     const client = assembler.application.client
     const container = assembler.application.container

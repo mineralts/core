@@ -91,7 +91,7 @@ export default class Message {
     })
   }
 
-  public async react (emoji: string | Emoji, ) {
+  public async react (emoji: string | Emoji) {
     const encodedEmoji = emoji instanceof Emoji
       ? encodeURI(`${emoji.label}:${emoji.id}`)
       : encodeURI(emoji)
@@ -103,7 +103,7 @@ export default class Message {
     let a: Emoji = emoji as Emoji
     if (typeof emoji === 'string') {
       const parsedEmoji = parseEmoji(emoji)
-      a = new Emoji(parsedEmoji!.id!, parsedEmoji!.name, false, true, false, [])
+      a = new Emoji(parsedEmoji!.id!, this.guild, parsedEmoji!.name, false, true, false, [])
     }
 
     this.reactions.addReaction(a, client as unknown as Client | GuildMember)

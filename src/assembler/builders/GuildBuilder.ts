@@ -72,6 +72,8 @@ export default class GuildBuilder {
       DateTime.fromISO(this.payload.joined_at),
     )
 
+    guild.emojis.defineContext({ guild })
+
     guild.setRoles(new GuildRoleManager(guild))
 
     return guild

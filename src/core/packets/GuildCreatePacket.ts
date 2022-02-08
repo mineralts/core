@@ -52,7 +52,7 @@ export default class GuildCreatePacket extends Packet {
       this.emojis.set(emoji.id, emoji)
     })
 
-    const presenceBuilder = new PresenceBuilder(assembler.application.client as any, this.guildMembers.concat(this.guildBots))
+    const presenceBuilder = new PresenceBuilder(assembler.application.client, this.guild, this.guildMembers.concat(this.guildBots))
     payload.presences.forEach((item: any) => {
       const presence = presenceBuilder.build(item)
       this.presences.set(presence.member.user.id, presence)

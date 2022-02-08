@@ -1,13 +1,13 @@
-import { Client, Snowflake, GuildMember, Presence, PresenceStatus, Collection } from '../../api/entities'
+import { Client, Snowflake, GuildMember, Presence, PresenceStatus, Collection, Guild } from '../../api/entities'
 import { keyFromEnum } from '../../api/utils'
 import ActivityBuilder from './ActivityBuilder'
 
 export default class PresenceBuilder {
-  constructor (private client: Client, private readonly guildMember: Collection<Snowflake, GuildMember>) {
+  constructor (private client: Client, private guild: Guild | undefined, private readonly guildMember: Collection<Snowflake, GuildMember>) {
   }
 
   public build (payload: any) {
-    const activityBuilder = new ActivityBuilder()
+    const activityBuilder = new ActivityBuilder(this.guild)
 
     return new Presence(
       this.guildMember.get(payload.user.id)!,

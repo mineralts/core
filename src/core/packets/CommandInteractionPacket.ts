@@ -9,7 +9,7 @@ export default class CommandInteractionPacket extends Packet {
   public packetType = 'INTERACTION_CREATE'
 
   public async handle (assembler: Assembler, payload: any) {
-    if (payload.type !== CommandType.CHAT_INPUT) {
+    if (payload.data.type !== CommandType.CHAT_INPUT) {
       return
     }
 

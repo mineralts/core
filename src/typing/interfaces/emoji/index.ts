@@ -8,4 +8,6 @@ export default interface Emoji {
   readonly available: boolean
   readonly animated: boolean
   readonly roles: Role[]
+
+  delete (): Promise<void>
 }
