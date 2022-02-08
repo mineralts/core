@@ -6,5 +6,5 @@ import Emoji from '../emoji'
 export default interface GuildEmojiManager {
   readonly cache: Collection<Snowflake, Emoji>
 
-  create (name: string, path: string, roles?: Role[] | Snowflake[]): Promise<Emoji>
+  create (options: { name: string, path: string, roles?: Role[] | Snowflake[], reason?: string }): Promise<Emoji>
 }

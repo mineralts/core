@@ -15,10 +15,17 @@ export default class Emoji {
   ) {
   }
 
-  public async delete () {
+  public async delete (reason?: string) {
     const request = Application.createRequest()
-    console.log(this.guild?.id)
+
+    if (reason) {
+      request.defineHeaders({
+        'X-Audit-Log-Reason': reason
+      })
+    }
+
     await request.delete(`/guilds/${this.guild?.id}/emojis/${this.id}`)
+    request.resetHeaders('X-Audit-Log-Reason')
   }
 
   public toString (): string {

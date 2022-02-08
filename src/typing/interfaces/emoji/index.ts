@@ -9,5 +9,5 @@ export default interface Emoji {
   readonly animated: boolean
   readonly roles: Role[]
 
-  delete (): Promise<void>
+  delete (reason?: string): Promise<void>
 }

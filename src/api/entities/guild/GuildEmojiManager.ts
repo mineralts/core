@@ -23,16 +23,23 @@ export default class GuildEmojiManager {
     return this
   }
 
-  public async create (name: string, path: string, roles?: Role[] | Snowflake[]) {
-    const filePath = join(process.cwd(), path)
+  public async create (options: { name: string, path: string, roles?: Role[] | Snowflake[], reason?: string }) {
+    const filePath = join(process.cwd(), options.path)
     const file = await fs.promises.readFile(filePath, 'base64')
 
     const request = Application.createRequest()
+
+    if (options.reason) {
+      request.defineHeaders({
+        'X-Audit-Log-Reason': options.reason
+      })
+    }
+
     const data = await request.post(`/guilds/${this.guild.id}/emojis`, {
-      name,
+      name: options.name,
       image: `data:image/png;base64,${file}`,
-      roles: roles
-        ? roles.map((role: Role | Snowflake) => role instanceof Role ? role.id : role)
+      roles: options.roles
+        ? options.roles.map((role: Role | Snowflake) => role instanceof Role ? role.id : role)
         : []
     })
 
