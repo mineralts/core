@@ -35,6 +35,7 @@ export default class Assembler {
 
     await this.connector.socket.connect()
     this.connector.socket.dispatch(async (payload) => {
+      console.log(payload.t)
       const packets = this.packetManager.resolve(payload.t)
 
       if (packets?.length) {
