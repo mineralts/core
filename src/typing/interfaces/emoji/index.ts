@@ -9,5 +9,6 @@ export default interface Emoji {
   readonly animated: boolean
   readonly roles: Role[]
 
+  update (options: { label: string, roles?: Role[] | Snowflake[], reason?: string }): Promise<Emoji>
   delete (reason?: string): Promise<void>
 }

@@ -5,7 +5,6 @@ export default class EmojiBuilder {
   }
 
   public build (payload: any) {
-    console.log('this.guild',this.guild)
     return new Emoji(
       payload.id,
       this.guild,

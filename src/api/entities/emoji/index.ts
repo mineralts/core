@@ -15,6 +15,25 @@ export default class Emoji {
   ) {
   }
 
+  public async update (options: { label: string, roles?: Role[] | Snowflake[], reason?: string }) {
+    const request = Application.createRequest()
+
+    if (options.reason) {
+      request.defineHeaders({
+        'X-Audit-Log-Reason': options.reason
+      })
+    }
+
+    await request.patch(`/guilds/${this.guild?.id}/emojis/${this.id}`, {
+      name: options.label,
+      roles: options.roles
+        ? options.roles.map((role: Role | Snowflake) => role instanceof Role ? role.id : role)
+        : []
+    })
+
+    request.resetHeaders('X-Audit-Log-Reason')
+  }
+
   public async delete (reason?: string) {
     const request = Application.createRequest()
 
