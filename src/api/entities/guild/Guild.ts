@@ -378,6 +378,27 @@ export default class Guild {
     return payload?.pruned
   }
 
+  public async pruned (options?: PruneOption & { pruneCount: boolean, reason?: string }) {
+    const request = Application.createRequest()
+
+    if (options?.reason) {
+      request.defineHeaders({
+        'X-Audit-Log-Reason': options.reason
+      })
+    }
+
+    const payload = await request.post(`/guilds/${this.id}/prune`, {
+      days: options?.days || 7,
+      compute_prune_count: options?.pruneCount || true,
+      include_roles: options?.includeRoles
+        ? options?.includeRoles.map((role) => typeof role === 'string' ? role : role.id)
+        : []
+    })
+
+    request.resetHeaders('X-Audit-Log-Reason')
+    return payload?.pruned
+  }
+
   public async registerCommands (assembler: Assembler) {
     const container = assembler.application.container
     const request = Application.createRequest()
