@@ -18,4 +18,5 @@ export default interface Role {
   isManaged (): boolean
   delete (reason?: string): Promise<void>
   update (options: RoleUpdateOption): Promise<Role>
+  setPosition (position: number): Promise<void>
 }

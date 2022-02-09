@@ -95,6 +95,23 @@ export default class Role {
     request.resetHeaders('X-Audit-Log-Reason')
   }
 
+  public async setPosition (position: number, reason?: string): Promise<void> {
+    const request = Application.createRequest()
+
+    if (reason) {
+      request.defineHeaders({
+        'X-Audit-Log-Reason': reason
+      })
+    }
+
+    await request.patch(`/guilds/${this.guild.id}/roles`, {
+      id: this.id,
+      position
+    })
+
+    request.resetHeaders('X-Audit-Log-Reason')
+  }
+
   public toString(): string {
     if (this.id === this.guild.id) {
       return '@everyone'
