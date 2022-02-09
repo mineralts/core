@@ -91,5 +91,5 @@ export default interface Guild {
   setRuleChannel (channel: TextChannel | Snowflake): Promise<void>
   setPublicUpdateChannel (channel: TextChannel | Snowflake): Promise<void>
   getPotentiallyKick (options?: PruneOption): Promise<number | undefined>
-  pruned (options?: PruneOption & { pruneCount: boolean, reason?: string })
+  pruned (options?: PruneOption & { pruneCount: boolean, reason?: string }): Promise<number | undefined>
 }
