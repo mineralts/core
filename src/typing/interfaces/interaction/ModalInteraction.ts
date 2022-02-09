@@ -1,16 +1,10 @@
-import { InteractionType, ModalComponent, Snowflake } from '../../../api/types'
-import GuildMember from '../guild/GuildMember'
+import { ModalComponent } from '../../../api/types'
 import Guild from '../guild/Guild'
+import Interaction from './index'
 
-export default interface ModalInteraction {
-  type: keyof typeof InteractionType
-  id: Snowflake,
-  version: number,
-  token: string,
-  member: GuildMember,
-  guild: Guild | undefined,
-  customId: string,
-  components: ModalComponent[]
+export default interface ModalInteraction extends Interaction {
+  readonly guild: Guild | undefined,
+  readonly components: ModalComponent<unknown>[]
 
-  getInput (customId: string): ModalComponent | undefined
+  getInput<T> (customId: string): ModalComponent<T> | undefined
 }

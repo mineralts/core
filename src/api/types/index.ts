@@ -648,8 +648,8 @@ export type InputOption = {
   placeholder?: string
 }
 
-export type ModalComponent = {
+export type ModalComponent<T> = {
   customId: string,
   type: keyof typeof ComponentType,
-  value: string | number
+  value: T
 }

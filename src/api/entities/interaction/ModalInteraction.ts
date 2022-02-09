@@ -1,23 +1,23 @@
-import { InteractionType, ModalComponent, Snowflake } from '../../types'
+import { ModalComponent, Snowflake } from '../../types'
 import GuildMember from '../guild/GuildMember'
 import Guild from '../guild/Guild'
+import Interaction from './index'
 
-export default class ModalInteraction {
-  public type: keyof typeof InteractionType = 'CHANNEL_MESSAGE_WITH_SOURCE'
-
+export default class ModalInteraction extends Interaction {
   constructor (
-    public id: Snowflake,
-    public version: number,
-    public token: string,
-    public member: GuildMember,
+    id: Snowflake,
+    version: number,
+    token: string,
+    member: GuildMember,
     public guild: Guild | undefined,
-    public customId: string,
-    public components: ModalComponent[]
+    customId: string,
+    public components: ModalComponent<unknown>[]
   ) {
+    super(id, version, 'DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE', token, customId, undefined, undefined, member)
   }
 
   public getInput (customId: string) {
-    const component = this.components.find((component: ModalComponent) => (
+    const component = this.components.find((component: ModalComponent<unknown>) => (
       component.customId === customId
     ))
 
