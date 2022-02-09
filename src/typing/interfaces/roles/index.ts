@@ -1,4 +1,4 @@
-import { Snowflake } from '../../../api/types'
+import { RoleUpdateOption, Snowflake } from '../../../api/types'
 import Guild from '../guild/Guild'
 
 export default interface Role {
@@ -17,4 +17,5 @@ export default interface Role {
   isMentionable (): boolean
   isManaged (): boolean
   delete (reason?: string): Promise<void>
+  update (options: RoleUpdateOption): Promise<Role>
 }
