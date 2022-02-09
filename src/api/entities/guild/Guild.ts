@@ -378,7 +378,7 @@ export default class Guild {
     return payload?.pruned
   }
 
-  public async pruned (options?: PruneOption & { pruneCount: boolean, reason?: string }) {
+  public async pruned (options?: PruneOption & { pruneCount: boolean, reason?: string }): Promise<number | undefined> {
     const request = Application.createRequest()
 
     if (options?.reason) {
