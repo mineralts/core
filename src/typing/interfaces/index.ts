@@ -43,6 +43,7 @@ import EmbedImage from './embed/EmbedImage'
 import EmbedFooter from './embed/EmbedFooter'
 import Reaction from './reaction/Reaction'
 import CommandInteraction from './interaction/CommandInteraction'
+import ModalInteraction from './interaction/ModalInteraction'
 import {
   ActivityType,
   ButtonStyle,
@@ -115,5 +116,6 @@ export {
   CommandOption,
   OptionType,
   CommandInteraction,
+  ModalInteraction,
   InteractionType
 }

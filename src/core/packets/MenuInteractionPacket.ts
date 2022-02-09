@@ -1,16 +1,15 @@
 import Packet from '../entities/Packet'
 import Assembler from '../../assembler/Assembler'
-import { CommandType } from '../../api/types'
+import { CommandType, InteractionType } from '../../api/types'
 import MenuInteractionBuilder from '../../assembler/builders/MenuInteractionBuilder'
 
 export default class MenuInteractionPacket extends Packet {
   public packetType = 'INTERACTION_CREATE'
 
   public async handle (assembler: Assembler, payload: any): Promise<void> {
-    if (payload.data.type === CommandType.CHAT_INPUT) {
+    if (payload.type !== InteractionType.APPLICATION_COMMAND || payload.data.type === CommandType.CHAT_INPUT) {
       return
     }
-    console.log(payload.type, CommandType[payload.type])
 
     const client = assembler.application.client
     const container = assembler.application.container

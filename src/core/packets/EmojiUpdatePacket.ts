@@ -36,8 +36,6 @@ export default class EmojiUpdatePacket extends Packet {
         }
       }).filter((role: Emoji | undefined) => role)
 
-      console.log(emoji)
-
       if (!emoji[0]) {
         assembler.application.logger.error('An error has occurred (emoji not recognised)')
         return

@@ -16,8 +16,8 @@ export default class Modal {
     this.customId = options.customId
     this.title = options.title
 
-    if ('components' in options) {
-      this.components = options.components!
+    if ('components' in options && options.components?.length) {
+      this.components = options.components
     }
   }
 
