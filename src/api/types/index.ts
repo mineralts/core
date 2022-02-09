@@ -438,6 +438,7 @@ export type RoleOption = {
   emoji?: string
   icon?: string
   isMentionable?: boolean
+  reason?: string
 }
 
 export type WelcomeChannel = {

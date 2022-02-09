@@ -16,4 +16,5 @@ export default interface Role {
 
   isMentionable (): boolean
   isManaged (): boolean
+  delete (reason?: string): Promise<void>
 }

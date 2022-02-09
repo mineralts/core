@@ -1,5 +1,6 @@
 import { Snowflake } from '../../types'
 import Guild from '../guild/Guild'
+import Application from '../../../application/Application'
 
 export default class Role {
   constructor (
@@ -23,6 +24,19 @@ export default class Role {
 
   public isManaged (): boolean {
     return this.managed
+  }
+
+  public async delete (reason?: string): Promise<void> {
+    const request = Application.createRequest()
+
+    if (reason) {
+      request.defineHeaders({
+        'X-Audit-Log-Reason': reason
+      })
+    }
+
+    await request.delete(`/guilds/${this.guild.id}/roles/${this.id}`)
+    request.resetHeaders('X-Audit-Log-Reason')
   }
 
   public toString(): string {

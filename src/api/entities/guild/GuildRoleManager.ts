@@ -15,7 +15,6 @@ export default class GuildRoleManager {
   constructor (private guild: Guild) {
   }
 
-
   public register (roles: Collection<Snowflake, Role>) {
     roles.forEach((role: Role) => {
       this.cache.set(role.id, role)
@@ -62,7 +61,15 @@ export default class GuildRoleManager {
     }
 
     const request = Application.createRequest()
+
+    if (options.reason) {
+      request.defineHeaders({
+        'X-Audit-Log-Reason': options.reason
+      })
+    }
+
     const data = await request.post(`/guilds/${this.guild.id}/roles`, payload)
+    request.resetHeaders('X-Audit-Log-Reason')
 
     const roleBuilder = new RoleBuilder()
     return roleBuilder.build({

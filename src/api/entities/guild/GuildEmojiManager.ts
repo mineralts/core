@@ -43,6 +43,8 @@ export default class GuildEmojiManager {
         : []
     })
 
+    request.resetHeaders('X-Audit-Log-Reason')
+
     return new EmojiBuilder(this.guild).build(data)
   }
 }
