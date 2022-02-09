@@ -2,6 +2,11 @@ import Collection from '../../utils/Collection'
 import { RoleOption, Snowflake } from '../../types'
 import Role from '../roles'
 import Guild from './Guild'
+import Application from '../../../application/Application'
+import { Color } from '../index'
+import { join } from 'path'
+import fs from 'fs'
+import { RoleBuilder } from '../../../assembler/builders'
 
 export default class GuildRoleManager {
   public cache: Collection<Snowflake, Role> = new Collection()
@@ -18,23 +23,46 @@ export default class GuildRoleManager {
   }
 
   public async create (options: RoleOption) {
-    // if (!this.guild.hasFeature('ANIMATED_ICON') && options.icon) {
-    //   const logger = Application.getLogger()
-    //   logger.error('You must have the `` feature in order to define a role icon')
-    // }
-    //
-    // const payload = {
-    //   name: options.name,
-    //   permissions: options.everyone,
-    //   color: Color[options.color] || options.color,
-    //   hoist: options.hoist || false,
-    //   icon: `data:image/png;base64,${file}`
-    // }
-    //
-    // const filePath = join(process.cwd(), options.icon)
-    // const file = await fs.promises.readFile(filePath, 'base64')
-    //
-    // const request = Application.createRequest()
-    // await request.post(`/guilds/${this.guild.id}/roles`, )
+    const logger = Application.getLogger()
+    const payload = {
+      name: options.label,
+      // permissions: options.everyone,
+      hoist: options.display || false,
+      mentionable: options.isMentionable || false
+    }
+
+    if (options.color) {
+      payload['color'] = Color[options.color] || options.color
+    }
+
+    if (options.icon) {
+      if (!this.guild.hasFeature('ROLE_ICONS') && options.icon) {
+        logger.error('You must have the `ROLE_ICONS` feature in order to define a role icon')
+        return
+      }
+
+      const filePath = join(process.cwd(), options.icon)
+      const file = await fs.promises.readFile(filePath, 'base64')
+
+      payload['icon'] = `data:image/png;base64,${file}`
+    }
+
+    if (options.emoji) {
+      if (!this.guild.hasFeature('ROLE_ICONS') && options.icon) {
+        logger.error('You must have the `ROLE_ICONS` feature in order to define a role icon')
+        return
+      }
+
+      payload['unicode_emoji'] = options.emoji
+    }
+
+    const request = Application.createRequest()
+    const data = await request.post(`/guilds/${this.guild.id}/roles`, payload)
+
+    const roleBuilder = new RoleBuilder()
+    return roleBuilder.build({
+      ...data,
+      guild: this.guild
+    })
   }
 }

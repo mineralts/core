@@ -430,10 +430,10 @@ export interface MessageOption {
 }
 
 export type RoleOption = {
-  name: string
-  everyone: boolean
-  color: keyof typeof Color | string
-  hoist?: boolean
+  label: string
+  everyone?: boolean
+  color?: keyof typeof Color | string
+  display?: boolean
   emoji?: string
   icon?: string
   isMentionable?: boolean

@@ -5,5 +5,5 @@ import Role from '../roles'
 export default interface GuildRoleManager {
   readonly cache: Collection<Snowflake, Role>
 
-  create (options: RoleOption): Promise<void>
+  create (options: RoleOption): Promise<Role>
 }

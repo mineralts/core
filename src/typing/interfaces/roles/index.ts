@@ -3,7 +3,7 @@ import Guild from '../guild/Guild'
 
 export default interface Role {
   readonly id: Snowflake
-  readonly name: string
+  readonly label: string
   readonly unicodeEmoji: string | null
   readonly position: number
   readonly permissions: string

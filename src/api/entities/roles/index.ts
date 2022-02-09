@@ -4,7 +4,7 @@ import Guild from '../guild/Guild'
 export default class Role {
   constructor (
     public id: Snowflake,
-    public name: string,
+    public label: string,
     public unicodeEmoji: string | null,
     public position: number,
     public permissions: string,
