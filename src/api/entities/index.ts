@@ -38,6 +38,7 @@ import MentionResolvable from './mention/MentionResolvable'
 import MessageAttachment from './message/MessageAttachment'
 import Button from './button'
 import EmbedRow from './embed/EmbedRow'
+import ModalRow from './modal/ModalRow'
 import SelectMenu from './select-menu'
 import EmbedAuthor from './embed/EmbedAuthor'
 import EmbedThumbnail from './embed/EmbedThumbnail'
@@ -105,6 +106,7 @@ export {
   MessageAttachment,
   ComponentType,
   EmbedRow,
+  ModalRow,
   Button,
   ButtonStyle,
   SelectMenu,

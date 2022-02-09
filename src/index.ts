@@ -16,6 +16,11 @@ import { MineralTask, Task } from './core/entities/tasks/Task'
 import { MineralContextMenu, ContextMenu } from './core/entities/ContextMenu'
 import Ignitor from './core/standalone/Ignitor'
 import MessageEmbed from './api/entities/embed/MessageEmbed'
+import ModalRow from './api/entities/modal/ModalRow'
+import Modal from './api/entities/modal'
+import Button from './api/entities/button/index'
+import Link from './api/entities/button/ButtonLink'
+import Select from './api/entities/select-menu'
 import Scheduler from './core/entities/tasks/Scheduler'
 import Application from './application/Application'
 
@@ -37,6 +42,11 @@ export {
   MineralProvider,
   Ignitor,
   MessageEmbed,
+  ModalRow,
+  Modal,
+  Select,
+  Button,
+  Link,
   Scheduler,
   MineralContextMenu,
   ContextMenu,

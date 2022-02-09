@@ -1,16 +1,11 @@
-import {
-  ComponentType,
-  InteractionType,
-  MessageComponentResolvable,
-  MessageOption,
-  Snowflake
-} from '../../types'
+import { ComponentType, InteractionType, MessageComponentResolvable, MessageOption, Snowflake } from '../../types'
 import Message from '../message'
 import GuildMember from '../guild/GuildMember'
 import EmbedRow from '../embed/EmbedRow'
 import CommandOptions from './CommandOptions'
 import Application from '../../../application/Application'
 import Guild from '../guild/Guild'
+import Modal from '../modal'
 
 export default class CommandInteraction {
   public options: CommandOptions
@@ -25,7 +20,7 @@ export default class CommandInteraction {
     public message: Message | undefined,
     public member: GuildMember,
     public guild: Guild | undefined,
-    public params: any,
+    public params: any
   ) {
     this.options = new CommandOptions(this.params, this.member)
   }
@@ -44,8 +39,17 @@ export default class CommandInteraction {
       data: {
         ...messageOption,
         components,
-        flags: messageOption.private ? 1 << 6 : undefined,
+        flags: messageOption.private ? 1 << 6 : undefined
       }
+    })
+  }
+
+  public async createModal (modal: Modal) {
+    const request = Application.createRequest()
+
+    await request.post(`/interactions/${this.id}/${this.token}/callback`, {
+      type: InteractionType.MODAL_SUBMIT,
+      data: modal.toJson()
     })
   }
 }

@@ -45,6 +45,7 @@ import EmbedThumbnail from '../entities/embed/EmbedThumbnail'
 import EmbedVideo from '../entities/embed/EmbedVideo'
 import EmbedFooter from '../entities/embed/EmbedFooter'
 import { Role } from '../../typing/interfaces'
+import Modal from '../entities/modal'
 
 export type Snowflake = string
 export type Milliseconds = number
@@ -175,7 +176,7 @@ export enum NotificationLevel {
   ONLY_MENTIONS
 }
 
-export type MessageComponentResolvable = Button | ButtonLink | SelectMenu
+export type MessageComponentResolvable = Button | ButtonLink | SelectMenu | Modal
 
 export enum Feature {
   ANIMATED_ICON,
@@ -361,6 +362,7 @@ export enum InteractionType {
   PING = 1,
   APPLICATION_COMMAND = 2,
   MESSAGE_COMPONENT = 3,
+  APPLICATION_COMMAND_AUTOCOMPLETE = 4,
 }
 
 export enum InteractionType {
@@ -370,12 +372,14 @@ export enum InteractionType {
   DEFERRED_UPDATE_MESSAGE = 6,
   UPDATE_MESSAGE =	7,
   APPLICATION_COMMAND_AUTOCOMPLETE_RESULT = 8,
+  MODAL_SUBMIT = 	9
 }
 
 export enum ComponentType {
   ACTION_ROW = 1,
   BUTTON = 2,
   SELECT_MENU = 3,
+  TEXT_INPUT = 4,
 }
 
 export interface EmbedField {
@@ -609,4 +613,20 @@ export enum PermissionFlag {
 export type PruneOption = {
   days?: number
   includeRoles?: Role[] | Snowflake[]
+}
+
+export enum InputStyle {
+  SHORT = 1,
+  LONG = 2,
+}
+
+export type InputOption = {
+  customId: string
+  style: keyof typeof InputStyle
+  label: string
+  minLength?: number
+  maxLength?: number
+  required?: boolean
+  defaultValue?: string
+  placeholder?: string
 }

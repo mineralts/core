@@ -3,6 +3,7 @@ import Message from '../message'
 import GuildMember from '../guild/GuildMember'
 import CommandOptions from './CommandOptions'
 import Guild from '../guild/Guild'
+import Modal from '../../../api/entities/modal'
 
 export default interface CommandInteraction {
   readonly options: CommandOptions
@@ -17,4 +18,5 @@ export default interface CommandInteraction {
   readonly guild: Guild | undefined
 
   reply (messageOption: MessageOption): Promise<void>
+  createModal (modal: Modal): Promise<void>
 }

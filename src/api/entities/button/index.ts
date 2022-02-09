@@ -1,11 +1,12 @@
 import Emoji from '../emoji'
-import { ButtonStyle, Snowflake } from '../../types'
+import { ButtonStyle, ComponentType, Snowflake } from '../../types'
 import { keyFromEnum } from '../../utils'
 import BaseButton from './BaseButton'
 import Application from '../../../application/Application'
 
 export default class Button extends BaseButton {
   public customId?: Snowflake
+  public type: keyof typeof ComponentType = 'BUTTON'
   public style: Exclude<keyof typeof ButtonStyle, 'LINK'>
 
   constructor (
@@ -55,6 +56,7 @@ export default class Button extends BaseButton {
 
     return {
       ...super.toJson(),
+      type: ComponentType[this.type],
       style: ButtonStyle[this.style],
       custom_id: this.customId
     }
