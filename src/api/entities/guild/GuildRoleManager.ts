@@ -26,7 +26,7 @@ export default class GuildRoleManager {
     const logger = Application.getLogger()
     const payload = {
       name: options.label,
-      permissions: options.permissions?.reduce((acc: number, current: keyof typeof PermissionFlag) => acc + PermissionFlag[current], 0),
+      permissions: options.permissions?.reduce((acc: number, current: keyof typeof PermissionFlag) => acc + parseInt(PermissionFlag[current]), 0),
       hoist: options.display || false,
       mentionable: options.isMentionable || false
     }
