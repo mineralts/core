@@ -26,6 +26,8 @@ import CommandInteractionPacket from './CommandInteractionPacket'
 import Collection from '../../api/utils/Collection'
 import MenuInteractionPacket from './MenuInteractionPacket'
 import EmojiCreatePacket from './EmojiCreatePacket'
+import EmojiDeletePacket from './EmojiDeletePacket'
+import EmojiUpdatePacket from './EmojiUpdatePacket'
 
 export default class PacketManager {
   public packets: Collection<string, Packet[]> = new Collection()
@@ -57,7 +59,9 @@ export default class PacketManager {
       new MemberTimeoutRemovePacket(),
       new CommandInteractionPacket(),
       new MenuInteractionPacket(),
-      new EmojiCreatePacket()
+      new EmojiUpdatePacket(),
+      new EmojiDeletePacket(),
+      new EmojiCreatePacket(),
     )
   }
 

@@ -226,6 +226,9 @@ export interface ClientEvents {
   messageReactionAdd: [message: Message, reaction: Reaction]
   messageReactionRemove: [message: Message, reaction: Reaction]
   presenceUpdate: [before: Presence | undefined, after: Presence]
+  emojiCreate: [emoji: Emoji]
+  emojiUpdate: [before: Emoji, after: Emoji]
+  emojiDelete: [emoji: Emoji]
   voiceJoin: [member: GuildMember]
   voiceLeave: [member: GuildMember]
   memberBoostAdd: [member: GuildMember]
@@ -262,6 +265,9 @@ export const clientEvents = [
   'messageReactionAdd',
   'messageReactionRemove',
   'presenceUpdate',
+  'emojiCreate',
+  'emojiUpdate',
+  'emojiDelete',
   'voiceJoin',
   'voiceLeave',
   'memberBoostAdd',
