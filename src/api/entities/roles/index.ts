@@ -104,10 +104,10 @@ export default class Role {
       })
     }
 
-    await request.patch(`/guilds/${this.guild.id}/roles`, {
+    await request.patch(`/guilds/${this.guild.id}/roles`, [{
       id: this.id,
       position
-    })
+    }])
 
     request.resetHeaders('X-Audit-Log-Reason')
   }
