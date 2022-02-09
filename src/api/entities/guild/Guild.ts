@@ -6,7 +6,7 @@ import {
   GuildFeature,
   LocalPath,
   Milliseconds,
-  NotificationLevel,
+  NotificationLevel, PruneOption,
   Region,
   Snowflake,
   SystemChannelFlag,
@@ -356,6 +356,26 @@ export default class Guild {
     if (result) {
       this.description = value
     }
+  }
+
+  public async getPotentiallyKick (options?: PruneOption): Promise<number | undefined> {
+    const request = Application.createRequest()
+    let url = `/guilds/${this.id}/prune?`
+
+    if (options?.days) {
+      url += `days=${options.days || 7}`
+    }
+
+    if (options?.includeRoles) {
+      url += '&include_roles='
+      options.includeRoles.forEach((role) => {
+        const id = typeof role === 'string' ? role : role.id
+        url += `${id};`
+      })
+    }
+
+    const payload = await request.get(url.slice(0, url.length - 1))
+    return payload?.pruned
   }
 
   public async registerCommands (assembler: Assembler) {

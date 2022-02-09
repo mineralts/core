@@ -1,7 +1,7 @@
 import Collection from '../../../api/utils/Collection'
 import {
   ExplicitContentLevel, Feature, GuildFeature, LocalPath, Milliseconds,
-  NotificationLevel,
+  NotificationLevel, PruneOption,
   Region,
   Snowflake, SystemChannelFlag,
   VerificationLevel
@@ -90,4 +90,6 @@ export default interface Guild {
   setSystemChannelFlag (flag: keyof typeof SystemChannelFlag): Promise<void>
   setRuleChannel (channel: TextChannel | Snowflake): Promise<void>
   setPublicUpdateChannel (channel: TextChannel | Snowflake): Promise<void>
+  getPotentiallyKick (options?: PruneOption): Promise<number | undefined>
+  pruned (options?: PruneOption & { pruneCount: boolean, reason?: string })
 }

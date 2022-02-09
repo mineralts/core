@@ -9,7 +9,6 @@
  */
 
 import { DateTime } from 'luxon'
-import Role from '../entities/roles'
 import Invite from '../entities/invitation/Invite'
 import GuildMember from '../entities/guild/GuildMember'
 import TextChannelResolvable from '../entities/channels/TextChannelResolvable'
@@ -45,6 +44,7 @@ import EmbedImage from '../entities/embed/EmbedImage'
 import EmbedThumbnail from '../entities/embed/EmbedThumbnail'
 import EmbedVideo from '../entities/embed/EmbedVideo'
 import EmbedFooter from '../entities/embed/EmbedFooter'
+import { Role } from '../../typing/interfaces'
 
 export type Snowflake = string
 export type Milliseconds = number
@@ -604,4 +604,9 @@ export enum PermissionFlag {
   SEND_MESSAGES_IN_THREADS = '1 << 38',
   START_EMBEDDED_ACTIVITIES = '1 << 39',
   MODERATE_MEMBERS = '1 << 40',
+}
+
+export type PruneOption = {
+  days?: number
+  includeRoles?: Role[] | Snowflake[]
 }
