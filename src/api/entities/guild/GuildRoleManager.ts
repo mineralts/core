@@ -1,5 +1,5 @@
 import Collection from '../../utils/Collection'
-import { RoleOption, Snowflake } from '../../types'
+import { PermissionFlag, RoleOption, Snowflake } from '../../types'
 import Role from '../roles'
 import Guild from './Guild'
 import Application from '../../../application/Application'
@@ -7,6 +7,7 @@ import { Color } from '../index'
 import { join } from 'path'
 import fs from 'fs'
 import { RoleBuilder } from '../../../assembler/builders'
+import { resolveColor } from '../../utils'
 
 export default class GuildRoleManager {
   public cache: Collection<Snowflake, Role> = new Collection()
@@ -26,13 +27,17 @@ export default class GuildRoleManager {
     const logger = Application.getLogger()
     const payload = {
       name: options.label,
-      // permissions: options.everyone,
+      permissions: options.permissions?.reduce((acc: number, current: keyof typeof PermissionFlag) => acc + PermissionFlag[current], 0),
       hoist: options.display || false,
       mentionable: options.isMentionable || false
     }
 
     if (options.color) {
-      payload['color'] = Color[options.color] || options.color
+      payload['color'] = resolveColor(
+        !options.color.startsWith('#')
+          ? Color[options.color]
+          : options.color
+      )
     }
 
     if (options.icon) {
