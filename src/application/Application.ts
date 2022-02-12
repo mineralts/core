@@ -25,6 +25,7 @@ export default class Application {
   public environment: Environment = new Environment()
   public logger: Logger = new Logger()
   public request!: Http
+  public apiSequence: number
 
   public readonly appName: string
   public readonly version: string
