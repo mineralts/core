@@ -1,17 +1,18 @@
 import Packet from '../entities/Packet'
+import Assembler from '../../assembler/Assembler'
 
 export default class MemberTimeoutRemovePacket extends Packet {
   public packetType = 'GUILD_MEMBER_UPDATE'
 
-  public async handle (assembler, payload: any) {
+  public async handle (assembler: Assembler, payload: any) {
     const client = assembler.application.client
     const guild = client.guilds.cache.get(payload.guild_id)
 
-    const guildMember = guild?.members.cache.get(payload.user.id)
+    const member = guild?.members.cache.get(payload.user.id)
 
-    if (guildMember && !payload.communication_disabled_until) {
-      guildMember!.communicationTimeout = null
-      assembler.eventListener.emit('memberTimeoutRemove', guildMember)
+    if (member?.communicationTimeout !== payload.communication_disabled_until) {
+      member!.communicationTimeout = null
+      assembler.eventListener.emit('memberTimeoutRemove', member)
     }
   }
 }
