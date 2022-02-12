@@ -21,6 +21,7 @@ import Entity from '../core/entities/Entity'
 import { MineralTask } from '../core/entities/tasks/Task'
 import Scheduler from '../core/entities/tasks/Scheduler'
 import { MineralContextMenu } from '../core/entities/ContextMenu'
+import Packet from '../core/entities/Packet'
 
 export default class Assembler {
   public readonly eventListener: EventsListener = new EventsListener()
@@ -31,15 +32,23 @@ export default class Assembler {
 
   public async build () {
     this.connector = new Connector(this.application)
-    this.connector.http.defineHeaders({ Authorization: `Bot ${this.application.environment.cache.get('TOKEN')}` })
+    this.connector.http.defineHeaders({
+      Authorization: `Bot ${this.application.environment.cache.get('TOKEN')}`
+    })
 
     await this.connector.socket.connect()
+    this.connector.socket.authenticate()
+
     this.connector.socket.dispatch(async (payload) => {
-      const packets = this.packetManager.resolve(payload.t)
+      const packets: Packet[] | undefined = this.packetManager.resolve(payload.t)
+
+      if (payload.s) {
+        this.application.apiSequence = payload.s
+      }
 
       if (packets?.length) {
         await Promise.all(
-          packets.map(async (packet) => (
+          packets.map(async (packet: Packet) => (
             packet?.handle(this, payload.d)
           ))
         )
@@ -88,7 +97,7 @@ export default class Assembler {
     }
   }
 
-  protected registerEvent (path, item: { new(): MineralEvent, event: string }): void {
+  protected registerEvent (path, item: { new (): MineralEvent, event: string }): void {
     const event = new item() as MineralEvent & { event: string }
     event.logger = this.application.logger
     event.client = this.application.client
@@ -107,7 +116,7 @@ export default class Assembler {
     })
   }
 
-  protected registerContextMenu (path, item: { new(): MineralContextMenu } & { permissions: any }): void {
+  protected registerContextMenu (path, item: { new (): MineralContextMenu } & { permissions: any }): void {
     const menuContainer = this.application.container.menus
     const menu = new item() as MineralContextMenu & { name: string, permissions: any[] }
 
@@ -126,7 +135,7 @@ export default class Assembler {
     menuContainer.set(menu.name, menu)
   }
 
-  protected registerTask (path, item: { new(): MineralTask, id: string, cron: string }): void {
+  protected registerTask (path, item: { new (): MineralTask, id: string, cron: string }): void {
     const task = new item() as MineralTask
 
     const scheduler = new Scheduler(item.id, item.cron, task.run)
