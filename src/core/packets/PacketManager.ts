@@ -29,6 +29,8 @@ import EmojiCreatePacket from './EmojiCreatePacket'
 import EmojiDeletePacket from './EmojiDeletePacket'
 import EmojiUpdatePacket from './EmojiUpdatePacket'
 import ModalInteractionPacket from './ModalInteractionPacket'
+import MemberRoleAddPacket from './MemberRoleAddPacket'
+import MemberRoleRemovePacket from './MemberRoleRemovePacket'
 
 export default class PacketManager {
   public packets: Collection<string, Packet[]> = new Collection()
@@ -64,6 +66,8 @@ export default class PacketManager {
       new EmojiUpdatePacket(),
       new EmojiDeletePacket(),
       new EmojiCreatePacket(),
+      new MemberRoleRemovePacket(),
+      new MemberRoleAddPacket(),
     )
   }
 

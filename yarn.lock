@@ -31,10 +31,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@mineralts/connector-preview@^1.1.6":
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/@mineralts/connector-preview/-/connector-preview-1.1.6.tgz#a5acdb23057d722c6be7aa64670e517ea5031635"
-  integrity sha512-YTFq/ZekGzQSOF7v26CnIJF/HIvK+qZ+uBIBTUKvjE9x5eZKOPKbinsskRnLbPo0D0LAo/lPDf1fYT4mms3a6A==
+"@mineralts/connector-preview@^1.1.7":
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/@mineralts/connector-preview/-/connector-preview-1.1.7.tgz#689a484a0f5752f8bf865d02eb68ed75f0922809"
+  integrity sha512-EXCtdPcj2ZgKfXtAIzM+8t13hSqXQYJiTZV9n6dmuOCCddolrhnB2Vz2BjSNqszNXKzI5nRLCroAOPcEM0Ak2g==
   dependencies:
     "@mineralts/logger" "^1.0.2"
     "@types/luxon" "^2.0.5"
@@ -60,11 +60,10 @@
     typescript "^4.5.4"
 
 "@mineralts/logger@^1.0.2":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@mineralts/logger/-/logger-1.1.1.tgz#e8e3471cdb1c422119c78b85fc4fde16c3543a95"
-  integrity sha512-P2xuqLN1BRkOt/Rrhjvx6qWN9c1ElwSfdzW3yxl3BUJeYdY5GO+CAXOLNYyUrKdVlSV5XalTSEbj43g5wusJtA==
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/@mineralts/logger/-/logger-1.1.7.tgz#172bb0674b4f766cfef6e3af8db6dc6a318839b8"
+  integrity sha512-yqvRmd0eWIRiMZTJqVqv2cLIh/iFcCxAvtYR5elG/PXUw4Rc8MUVW6CB8lwl5mDa6t4E1ZghDcUWKFrpQmxBTg==
   dependencies:
-    "@types/pino" "^7.0.5"
     esbuild "^0.14.5"
     pino "^7.5.1"
     pino-pretty "^7.3.0"
@@ -119,21 +118,14 @@
   integrity sha512-BkMHHonDT8NJUE/pQ3kr5v2GLDKm5or9btLBoBx4F2MB2cuqYC748LYMDC55VlrLI5qZZv+Qgc3m4P3dBPcmeg==
 
 "@types/node@*":
-  version "17.0.10"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.10.tgz#616f16e9d3a2a3d618136b1be244315d95bd7cab"
-  integrity sha512-S/3xB4KzyFxYGCppyDt68yzBU9ysL88lSdIah4D6cptdcltc4NCPCAMc0+PCpg/lLIyC7IPvj2Z52OJWeIUkog==
+  version "17.0.17"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.17.tgz#a8ddf6e0c2341718d74ee3dc413a13a042c45a0c"
+  integrity sha512-e8PUNQy1HgJGV3iU/Bp2+D/DXh3PYeyli8LgIwsQcs1Ar1LoaWHSIT6Rw+H2rNJmiq6SNWiDytfx8+gYj7wDHw==
 
 "@types/node@^16.11.6", "@types/node@^16.3.3":
   version "16.11.21"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.21.tgz#474d7589a30afcf5291f59bd49cca9ad171ffde4"
   integrity sha512-Pf8M1XD9i1ksZEcCP8vuSNwooJ/bZapNmIzpmsMaL+jMI+8mEYU3PKvs+xDNuQcJWF/x24WzY4qxLtB0zNow9A==
-
-"@types/pino@^7.0.5":
-  version "7.0.5"
-  resolved "https://registry.yarnpkg.com/@types/pino/-/pino-7.0.5.tgz#1c84a81b924a6a9e263dbb581dffdbad7a3c60c4"
-  integrity sha512-wKoab31pknvILkxAF8ss+v9iNyhw5Iu/0jLtRkUD74cNfOOLJNnqfFKAv0r7wVaTQxRZtWrMpGfShwwBjOcgcg==
-  dependencies:
-    pino "*"
 
 "@types/uuid@^8.3.0":
   version "8.3.4"
@@ -1458,7 +1450,7 @@ pino-std-serializers@^4.0.0:
   resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-4.0.0.tgz#1791ccd2539c091ae49ce9993205e2cd5dbba1e2"
   integrity sha512-cK0pekc1Kjy5w9V2/n+8MkZwusa6EyyxfeQCB799CQRhRt/CqYKiWs5adeu8Shve2ZNffvfC/7J64A2PJo1W/Q==
 
-pino@*, pino@^7.5.1:
+pino@^7.5.1:
   version "7.6.4"
   resolved "https://registry.yarnpkg.com/pino/-/pino-7.6.4.tgz#f82421fd7a16d82a70b398e1687c4bd86ae48db2"
   integrity sha512-ktibPg3ttWONxYQ2Efk1zYbIvofD5zdd/ReoujK84ggEp0REflb9TsXavSjt8u1CdT2mMJe9QQ3ZpyOQxUKipA==
@@ -1580,9 +1572,9 @@ run-parallel@^1.1.9:
     queue-microtask "^1.2.2"
 
 rxjs@^7.4.0:
-  version "7.5.2"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.5.2.tgz#11e4a3a1dfad85dbf7fb6e33cbba17668497490b"
-  integrity sha512-PwDt186XaL3QN5qXj/H9DGyHhP3/RYYgZZwqBv9Tv8rsAaiwFH1IsJJlcgD37J7UW5a6O67qX0KWKS3/pu0m4w==
+  version "7.5.4"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.5.4.tgz#3d6bd407e6b7ce9a123e76b1e770dc5761aa368d"
+  integrity sha512-h5M3Hk78r6wAheJF0a5YahB1yRQKCsZ4MsGdZ5O9ETbVtjPcScGfrMmoOq7EBsCRzd4BDkvDJ7ogP8Sz5tTFiQ==
   dependencies:
     tslib "^2.1.0"
 
@@ -1847,9 +1839,9 @@ wrappy@1:
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
 ws@^8.2.0:
-  version "8.4.2"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.4.2.tgz#18e749868d8439f2268368829042894b6907aa0b"
-  integrity sha512-Kbk4Nxyq7/ZWqr/tarI9yIt/+iNNFOjBXEWgTb4ydaNHBNGgvf2QHbS9fdfsndfjFlFwEd4Al+mw83YkaD10ZA==
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.5.0.tgz#bfb4be96600757fe5382de12c670dab984a1ed4f"
+  integrity sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==
 
 y18n@^5.0.5:
   version "5.0.8"

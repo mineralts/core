@@ -47,6 +47,7 @@ import EmbedFooter from '../entities/embed/EmbedFooter'
 import { Role } from '../../typing/interfaces'
 import Modal from '../entities/modal'
 import ModalInteraction from '../../typing/interfaces/interaction/ModalInteraction'
+import Collection from '../utils/Collection'
 
 export type Snowflake = string
 export type Milliseconds = number
@@ -254,6 +255,8 @@ export interface ClientEvents {
   rulesAccept: [member: GuildMember]
   guildMemberJoin: [member: GuildMember, invitation?: Invite]
   guildMemberLeave: [member: GuildMember]
+  guildMemberRoleAdd: [member: GuildMember, before: Collection<Snowflake, Role>, after: Collection<Snowflake, Role>]
+  guildMemberRoleRemove: [member: GuildMember, before: Collection<Snowflake, Role>, after: Collection<Snowflake, Role>]
   inviteCreate: [invite: Invite]
   inviteDelete: [invite: Invite]
   roleCreate: [role: Role]
@@ -291,6 +294,8 @@ export const clientEvents = [
   'rulesAccept',
   'guildMemberJoin',
   'guildMemberLeave',
+  'guildMemberRoleAdd',
+  'guildMemberRoleRemove',
   'inviteCreate',
   'inviteDelete',
   'roleCreate',

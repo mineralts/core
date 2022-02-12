@@ -23,6 +23,7 @@ import Link from './api/entities/button/ButtonLink'
 import Select from './api/entities/select-menu'
 import Scheduler from './core/entities/tasks/Scheduler'
 import Application from './application/Application'
+import Collection from './api/utils/Collection'
 
 export * from './typing/interfaces'
 
@@ -51,4 +52,5 @@ export {
   MineralContextMenu,
   ContextMenu,
   Application,
+  Collection,
 }
