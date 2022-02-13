@@ -16,10 +16,11 @@ import Environment from '../../environment/Environment'
 class Forge {
   private logger: Logger = new Logger()
   private environment: Environment = new Environment()
-  private kernel: Kernel = new Kernel()
+  private kernel: Kernel = new Kernel(process.cwd())
 
   public async handle () {
-    this.environment.registerEnvironment()
+    const rootDir: string | undefined = this.environment.cache.get('ROOT_PROJECT')
+    this.environment.registerEnvironment(rootDir || process.cwd())
 
     await this.kernel.application.registerCliCommands()
 

@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import fs from 'fs'
 import PacketManager from './packets/PacketManager'
 import Application from '../application/Application'
@@ -10,20 +10,20 @@ export default class Kernel {
   private readonly assembler: Assembler
   private readonly packetManager: PacketManager
 
-  constructor () {
-    const JSON_PACKAGE = this.loadFile(join(process.cwd(), 'package.json'))
-    const rcFile = this.loadRcFile()
+  constructor (private projectDir: string) {
+    const JSON_PACKAGE = this.loadFileSync(this.projectDir, 'package.json')
+    const rcFile = this.loadFileSync(this.projectDir, '.mineralrc.json', 'The .mineralrc.json file was not found at the root of the project.')
 
-    this.application = Application.create(process.cwd(), {
+    this.application = Application.create(this.projectDir, {
       appName: JSON_PACKAGE.name,
       version: JSON_PACKAGE.version,
-      rcFile,
+      rcFile
     })
 
     this.packetManager = new PacketManager()
-
     this.assembler = new Assembler(this.application, this.packetManager)
-    this.application.environment.registerEnvironment()
+    this.application.environment.cache.set('ROOT_PROJECT', this.projectDir)
+    this.application.environment.registerEnvironment(this.projectDir)
   }
 
   public async createApplication () {
@@ -39,17 +39,13 @@ export default class Kernel {
     )
   }
 
-
-  protected loadRcFile () {
+  protected loadFileSync (location: string, filename: string, message?: string) {
     try {
-      const path = join(process.cwd(), '.mineralrc.json')
-      return JSON.parse(fs.readFileSync(path, 'utf-8'))
+      return JSON.parse(fs.readFileSync(join(location, filename), 'utf-8'))
     } catch (error) {
-      throw new Error('Mineral expects ".mineralrc.json" file to exist in the application root')
+      throw new Error(
+        message || `The file ${filename} at location ${location} was not found.`
+      )
     }
-  }
-
-  protected loadFile (filePath: string) {
-    return JSON.parse(fs.readFileSync(filePath, 'utf-8'))
   }
 }

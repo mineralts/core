@@ -16,8 +16,8 @@ import Collection from '../api/utils/Collection'
 export default class Environment {
   public cache: Collection<string, unknown> = new Collection()
 
-  public registerEnvironment () {
-    const environmentContent = fs.readFileSync(path.join(process.cwd(), 'env.yaml'), 'utf-8')
+  public registerEnvironment (projectDir: string) {
+    const environmentContent = fs.readFileSync(path.join(projectDir, 'env.yaml'), 'utf-8')
     const environment = YAML.load(environmentContent) as object
 
     Object.entries(environment).forEach(([key, value]: [string, unknown]) => {

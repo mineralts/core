@@ -22,6 +22,8 @@
   ],
   "exclude": [
     "build",
-    "tests"
+    "tests",
+    "mocks",
+    "vitest.config.ts"
   ],
 }

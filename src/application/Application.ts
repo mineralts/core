@@ -29,6 +29,7 @@ export default class Application {
 
   public readonly appName: string
   public readonly version: string
+  public readonly rootDir: string
   public readonly debug: boolean
 
   public readonly mode: string = 'development'
@@ -48,10 +49,11 @@ export default class Application {
   public readonly intents: number
 
   constructor (public readonly appRoot: string, environment: any) {
-    this.environment.registerEnvironment()
+    this.environment.registerEnvironment(this.appRoot || process.cwd())
 
     this.appName = environment.appName
     this.version = environment.version
+    this.rootDir = environment.rootDir
     this.debug = this.environment.cache.get('DEBUG') || false
     this.rcFile = environment.rcFile
     this.preloads = this.rcFile.preloads

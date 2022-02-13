@@ -40,7 +40,7 @@ export default class Ignitor {
       return
     }
 
-    this.environment.registerEnvironment()
+    this.environment.registerEnvironment(this.environment.cache.get('ROOT_PROJECT')!)
     if (command.settings?.loadApp) {
       await this.execTypescript(commandName, ...args)
     } else {
@@ -76,7 +76,7 @@ export default class Ignitor {
       process.exit(1)
     }
 
-    const kernel = new Kernel()
+    const kernel = new Kernel(process.cwd())
     await kernel.application.registerCliCommands()
 
     const command = kernel.application.commands.get(commandName)
