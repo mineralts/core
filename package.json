@@ -8,11 +8,12 @@
   "scripts": {
     "dev": "esbuild-dev src/index.ts --supervise --commands --watch",
     "build": "tsc",
+    "test": "vitest",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "@mineralts/connector-preview": "^1.1.7",
+    "@mineralts/connector-preview": "^1.1.8",
     "@mineralts/logger": "1.1.5",
     "@types/luxon": "^2.0.5",
     "@types/node": "^16.11.6",
@@ -30,7 +31,8 @@
   },
   "devDependencies": {
     "@nas-service/eslint-config": "1.1.0",
-    "eslint": "^8.3.0"
+    "eslint": "^8.3.0",
+    "vitest": "^0.3.4"
   },
   "@mineralts": {
     "commands": [
