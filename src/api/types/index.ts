@@ -48,6 +48,7 @@ import { Role } from '../../typing/interfaces'
 import Modal from '../entities/modal'
 import ModalInteraction from '../../typing/interfaces/interaction/ModalInteraction'
 import Collection from '../utils/Collection'
+import { WebsocketPayload } from '@mineralts/connector-preview'
 
 export type Snowflake = string
 export type Milliseconds = number
@@ -263,6 +264,7 @@ export interface ClientEvents {
   roleDelete: [role: Role]
   roleUpdate: [before: Role, after: Role]
   typingStart: [member: GuildMember, channel: TextChannelResolvable]
+  wss: [payload: WebsocketPayload]
 }
 
 export const clientEvents = [
@@ -301,7 +303,8 @@ export const clientEvents = [
   'roleCreate',
   'roleDelete',
   'roleUpdate',
-  'typingStart'
+  'typingStart',
+  'wss',
 ]
 
 export enum ButtonStyle {
