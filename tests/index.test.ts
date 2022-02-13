@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest'
+import { afterAll, describe, expect, test } from 'vitest'
 import fs from 'fs'
 import mineralrc from '../mocks/mineralrc'
 import { join } from 'node:path'
@@ -38,5 +38,9 @@ describe('Create Kernel application', async () => {
 
   test('Create Kernel', async () => {
     new Kernel(tmpFolder)
+  })
+
+  afterAll(async () => {
+    await fs.promises.rmdir(tmpFolder, { recursive: true })
   })
 })
