@@ -46,6 +46,8 @@ export default class Assembler {
         this.application.apiSequence = payload.s
       }
 
+      this.eventListener.emit('wss', payload)
+
       if (packets?.length) {
         await Promise.all(
           packets.map(async (packet: Packet) => (
