@@ -11,7 +11,6 @@ export default class EmojiUpdatePacket extends Packet {
     const guild: Guild | undefined = assembler.application.client.guilds.cache.get(payload.guild_id)
 
     if (payload.emojis.length === guild?.emojis.cache.size) {
-      console.log('Update', payload.emojis.length === guild?.emojis.cache.size, payload.emojis.length, guild?.emojis.cache.size)
       const emojis: Collection<Snowflake, Emoji> = new Collection()
 
       const emojiBuilder = new EmojiBuilder(guild)
