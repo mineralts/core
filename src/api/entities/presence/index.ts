@@ -1,6 +1,7 @@
 import Activity from '../activity'
 import GuildMember from '../guild/GuildMember'
 import { PresenceStatus } from '../../types'
+import Game from './Game'
 
 export default class Presence {
   constructor (
@@ -9,7 +10,8 @@ export default class Presence {
     public web: string | null,
     public desktop: string | null,
     public mobile: string | null,
-    public activities: Activity[]
+    public activities: Activity[],
+    public game: Game | undefined
   ) {
   }
 }
