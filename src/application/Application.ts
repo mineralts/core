@@ -68,7 +68,7 @@ export default class Application {
     console.log('this.withReflect', this.withReflect)
     if (this.withReflect) {
       this.reflect = new Reflect()
-      this.reflect.createServer()
+      this.reflect.createClient()
     }
 
     const intents: 'ALL' | Exclude<keyof typeof Intent, 'ALL'>[] = 'ALL'

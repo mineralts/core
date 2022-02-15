@@ -6,7 +6,6 @@ export default class MemberJoinPacket extends Packet {
   public packetType = 'GUILD_MEMBER_ADD'
 
   public async handle (assembler: Assembler, payload: any) {
-    console.log(1)
     const client = assembler.application.client
     const guild = client.guilds.cache.get(payload.guild_id)
 
