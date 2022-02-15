@@ -5,6 +5,7 @@ export default class InviteDeletePacket extends Packet {
   public packetType = 'INVITE_DELETE'
 
   public async handle (assembler: Assembler, payload: any) {
+    console.log(2)
     const guild = assembler.application.client.guilds.cache.get(payload.guild_id)
     const invite = guild!.invites.cache.get(payload.code)
 

@@ -22,7 +22,9 @@ export default class InviteCreatePacket extends Packet {
       DateTime.fromISO(payload.created_at)
     )
 
-    guild?.invites.cache.set(payload.code, invite as any)
+    guild?.invites.cache.set(payload.code, invite)
+
+    console.log(guild?.invites.cache)
 
     assembler.eventListener.emit('inviteCreate', invite)
   }

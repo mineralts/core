@@ -39,6 +39,10 @@ export default class Assembler {
     await this.connector.socket.connect()
     this.connector.socket.authenticate()
 
+    this.connector.socket.websocket.on('close', () => {
+      this.application.reflect?.sendNotification('LOST_DISCORD_SOCKET', 'Loss of connection to the Discord API')
+    })
+
     this.connector.socket.dispatch(async (payload) => {
       const packets: Packet[] | undefined = this.packetManager.resolve(payload.t)
 

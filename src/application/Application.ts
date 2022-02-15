@@ -18,12 +18,14 @@ import Collection from '../api/utils/Collection'
 import { Client } from '../api/entities'
 import Helper from '../helper'
 import Container from './Container'
+import Reflect from '../reflect/Reflect'
 
 export default class Application {
   private static $instance: Application
 
   public environment: Environment = new Environment()
   public logger: Logger = new Logger()
+  public reflect: Reflect | undefined
   public request!: Http
   public apiSequence: number
 
@@ -31,6 +33,8 @@ export default class Application {
   public readonly version: string
   public readonly rootDir: string
   public readonly debug: boolean
+
+  public readonly withReflect: boolean
 
   public readonly mode: string = 'development'
   public static cdn = 'https://cdn.discordapp.com'
@@ -55,10 +59,17 @@ export default class Application {
     this.version = environment.version
     this.rootDir = environment.rootDir
     this.debug = this.environment.cache.get('DEBUG') || false
+    this.withReflect = this.environment.cache.get('REFLECT') || false
     this.rcFile = environment.rcFile
     this.preloads = this.rcFile.preloads
     this.statics = this.rcFile.statics
     this.aliases = new Map(Object.entries(this.rcFile.aliases))
+
+    console.log('this.withReflect', this.withReflect)
+    if (this.withReflect) {
+      this.reflect = new Reflect()
+      this.reflect.createServer()
+    }
 
     const intents: 'ALL' | Exclude<keyof typeof Intent, 'ALL'>[] = 'ALL'
     this.intents = this.getIntentValue(intents)

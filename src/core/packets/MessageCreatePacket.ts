@@ -24,5 +24,6 @@ export default class MessageCreatePacket extends Packet {
     }
 
     assembler.eventListener.emit('messageCreate', message)
+    assembler.application.reflect?.sendEvent('messageCreate', message)
   }
 }
