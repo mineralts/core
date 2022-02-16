@@ -8,12 +8,6 @@ export default class Reflect {
   public createClient () {
     this.server.on('connection', (client: WebSocket) => {
       this.clients.push(client)
-      this.clients.forEach((client: WebSocket) => {
-        client.send(JSON.stringify({
-          type: 'CLIENT_JOIN',
-          date: DateTime.now().toISO(),
-        }))
-      })
     })
 
     this.server.on('close', () => {
