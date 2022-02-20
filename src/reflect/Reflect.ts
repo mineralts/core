@@ -22,6 +22,14 @@ export default class Reflect {
     }))
   }
 
+  public sendAction (packetType: string, value: any) {
+    this.webSocket.send(this.safeStringify({
+      type: 'ACTION',
+      date: DateTime.now().toISO(),
+      payload: value
+    }))
+  }
+
   public sendNotification (action: string, message: any) {
     this.webSocket.send(JSON.stringify({
       type: 'NOTIFICATION',
