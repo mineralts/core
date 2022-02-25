@@ -13,9 +13,9 @@ export default class MemberJoinPacket extends Packet {
     const guildMember = guildMemberBuilder.build(payload)
 
     if (guildMember.user.isBot()) {
-      guild?.bots.cache.set(guildMember.id, guildMember as any)
+      guild?.bots.cache.set(guildMember.id, guildMember)
     } else {
-      guild?.members.cache.set(guildMember.id, guildMember as any)
+      guild?.members.cache.set(guildMember.id, guildMember)
     }
 
     // const request = await assembler.connector.http.get(`/guilds/${guild!.id}/invites`) as any[]

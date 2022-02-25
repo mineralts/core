@@ -3,11 +3,20 @@ import Packet from '../entities/Packet'
 import Assembler from '../../assembler/Assembler'
 import { Client, User } from '../../api/entities'
 import Collection from '../../api/utils/Collection'
+import UserFlags from '../../api/entities/user/UserFlags'
+import { FlagIdentifier, FlagLabel } from '../../api/types'
 
 export default class ReadyPacket extends Packet {
   public packetType = 'READY'
 
   public async handle (assembler: Assembler, payload: any) {
+    console.log(payload)
+    const flag = new UserFlags(
+      FlagIdentifier[payload.user.public_flags || 0],
+      FlagLabel[payload.user.public_flags || 0],
+      payload.user.public_flags ||0
+    )
+
     const user = new User(
       payload.user.id,
       payload.user.username,
@@ -17,7 +26,7 @@ export default class ReadyPacket extends Packet {
       DateTime.fromISO(payload.user.premium_since),
       payload.user.verified,
       payload.user.mfa_enabled,
-      payload.user.flags,
+      flag,
       payload.user.email,
       payload.user.avatar,
       payload.user.banner,

@@ -24,8 +24,6 @@ export default class InviteCreatePacket extends Packet {
 
     guild?.invites.cache.set(payload.code, invite)
 
-    console.log(guild?.invites.cache)
-
     assembler.eventListener.emit('inviteCreate', invite)
   }
 }

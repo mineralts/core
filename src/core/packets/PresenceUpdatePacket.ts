@@ -18,7 +18,6 @@ export default class PresenceUpdatePacket extends Packet {
     const member = guild.members.cache.get(payload.user.id)
 
     if (!member) {
-      assembler.application.logger.error('The member was not found.')
       return
     }
 

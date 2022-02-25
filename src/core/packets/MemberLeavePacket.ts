@@ -11,8 +11,6 @@ export default class MemberLeavePacket extends Packet {
 
     const guildMember: GuildMember | undefined = guild?.members.cache.get(payload.user.id) || guild?.bots.cache.get(payload.user.id)
 
-    console.log('guildMember', guildMember)
-
     assembler.eventListener.emit('guildMemberLeave', guildMember)
 
     if (guildMember!.user.isBot()) {

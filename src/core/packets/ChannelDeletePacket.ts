@@ -10,6 +10,11 @@ export default class ChannelDeletePacket extends Packet {
 
     assembler.eventListener.emit('channelDelete', channel)
 
-    guild?.channels.cache.delete(channel!.id)
+    if (!channel) {
+      assembler.application.logger.error('Channel is missing')
+      return
+    }
+
+    guild?.channels.cache.delete(channel.id)
   }
 }

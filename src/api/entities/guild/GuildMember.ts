@@ -44,7 +44,7 @@ export default class GuildMember {
     }
 
     await request.patch(`/guilds/${this.guild.id}/members/${this.id}`, {
-      communication_disabled_until: date
+      communication_disabled_until: date.toISO()
     })
 
     request.resetHeaders('X-Audit-Log-Reason')

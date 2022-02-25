@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { Snowflake } from '../../types'
 import Presence from '../presence'
 import Application from '../../../application/Application'
+import UserFlags from './UserFlags'
 
 export default class User {
   constructor (
@@ -13,7 +14,7 @@ export default class User {
     public premiumSince: DateTime | undefined,
     public verified: boolean,
     public mfaEnabled: boolean,
-    public flags: number,
+    public publicFlags: UserFlags,
     public email: string | null,
     public avatar: string | null,
     public banner: string | null,

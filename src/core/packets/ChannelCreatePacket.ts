@@ -13,7 +13,7 @@ export default class ChannelCreatePacket extends Packet {
     const channelBuilder = new ChannelBuilder(assembler.application.client, assembler.application.logger, guild as any)
     const channel = channelBuilder.build(payload)
 
-    guild?.channels.cache.set(channel.id, channel as any)
+    guild?.channels.cache.set(channel.id, channel)
 
     if (channel instanceof TextChannelResolvable) {
       channel.parent = guild?.channels.cache.get(payload.parent_id)

@@ -74,6 +74,40 @@ export enum Intent {
   ALL = 32767,
 }
 
+export const FlagLabel = {
+  0: 'None',
+  1: 'Discord employee',
+  2: 'Partnered owner server',
+  4: 'HypeSquad events',
+  8: 'Bug Hunter 1',
+  64: 'House Bravery',
+  128: 'House Brillance',
+  256: 'House Balance',
+  512: 'Early supporter',
+  16384: 'Bug Hunter 2',
+  131072: 'Early verified bot developer',
+}
+
+export const FlagIdentifier = {
+  0: 'NONE',
+  1: 'DISCORD_EMPLOYEE',
+  2: 'PARTNERED_SERVER_OWNER',
+  4: 'HYPESQUAD_EVENTS',
+  8: 'BUG_HUNTER_LEVEL_1',
+  64: 'HOUSE_BRAVERY',
+  128: 'HOUSE_BRILLANCE',
+  256: 'HOUSE_BALANCE',
+  512: 'EARLY_SUPPORTER',
+  16384: 'BUG_HUNTER_LEVEL_2',
+  131072: 'EARLY_VERIFIED_BOT_DEVELOPER',
+}
+
+export const PremiumType = {
+  0: 'None',
+  1: 'Nitro Classic',
+  2: 'Nitro'
+}
+
 export type ClientOptions = {
   shardCount?: 1
   messageCacheLifetime?: 0

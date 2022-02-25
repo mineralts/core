@@ -65,7 +65,6 @@ export default class Application {
     this.statics = this.rcFile.statics
     this.aliases = new Map(Object.entries(this.rcFile.aliases))
 
-    console.log('this.withReflect', this.withReflect)
     if (this.withReflect) {
       this.reflect = new Reflect()
       this.reflect.createClient()
