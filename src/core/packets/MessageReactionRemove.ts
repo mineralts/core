@@ -1,6 +1,7 @@
 import Packet from '../entities/Packet'
 import Assembler from '../../assembler/Assembler'
-import { Reaction, TextChannel } from '../../api/entities'
+import TextChannel from '../../api/entities/channels/TextChannel'
+import Reaction from '../../api/entities/reaction/Reaction'
 
 export default class MessageReactionRemove extends Packet {
   public packetType = 'MESSAGE_REACTION_REMOVE'
@@ -29,7 +30,7 @@ export default class MessageReactionRemove extends Packet {
         message.reactions.cache.delete(payload.user_id)
       }
 
-      assembler.eventListener.emit('messageReactionRemove', message, reaction[0])
+      assembler.eventListener.emit('remove:MessageReaction', message, reaction[0])
     }
   }
 }
