@@ -1,11 +1,19 @@
-import { Client, Collection, Guild, GuildMember, Presence, PresenceStatus, Snowflake } from '../../api/entities'
+import { PresenceStatus, Snowflake } from '../../api/types'
 import { keyFromEnum } from '../../api/utils'
 import ActivityBuilder from './ActivityBuilder'
 import Game from '../../api/entities/presence/Game'
 import { DateTime } from 'luxon'
+import Client from '../../api/entities/client'
+import Guild from '../../api/entities/guild/Guild'
+import Collection from '../../api/utils/Collection'
+import GuildMember from '../../api/entities/guild/GuildMember'
+import Presence from '../../api/entities/presence'
 
 export default class PresenceBuilder {
-  constructor (private client: Client, private guild: Guild | undefined, private readonly guildMembers: Collection<Snowflake, GuildMember>) {
+  constructor (
+    private client: Client,
+    private guild: Guild | undefined,
+    private readonly guildMembers: Collection<Snowflake, GuildMember>) {
   }
 
   public build (payload: any) {
