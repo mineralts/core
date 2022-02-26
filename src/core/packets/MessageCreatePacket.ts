@@ -1,7 +1,7 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
-import { TextChannel } from '../../api/entities'
 import { MessageBuilder } from '../../assembler/builders'
+import TextChannel from '../../api/entities/channels/TextChannel'
 
 export default class MessageCreatePacket extends Packet {
   public packetType = 'MESSAGE_CREATE'
@@ -23,7 +23,7 @@ export default class MessageCreatePacket extends Packet {
       channel.messages.cache.set(message.id, message)
     }
 
-    assembler.eventListener.emit('messageCreate', message)
+    assembler.eventListener.emit('create:Message', message)
     if (assembler.application.reflect) {
       assembler.application.reflect.sendEvent('MessageCreate', message)
     }
