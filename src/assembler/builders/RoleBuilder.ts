@@ -1,4 +1,4 @@
-import { Role } from '../../api/entities'
+import Role from '../../api/entities/roles'
 
 export default class RoleBuilder {
   public build (payload: any) {
