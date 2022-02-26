@@ -2,7 +2,6 @@ import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import Collection from '../../api/utils/Collection'
 import { ChannelResolvable, Snowflake } from '../../api/types'
-import { CategoryChannel, Emoji, Guild, GuildChannelManager, GuildMember, Presence, Role } from '../../api/entities'
 import {
   ChannelBuilder,
   EmojiBuilder,
@@ -12,6 +11,13 @@ import {
   PresenceBuilder,
   RoleBuilder
 } from '../../assembler/builders'
+import GuildMember from '../../api/entities/guild/GuildMember'
+import Presence from '../../api/entities/presence'
+import Role from '../../api/entities/roles'
+import Emoji from '../../api/entities/emoji'
+import Guild from '../../api/entities/guild/Guild'
+import GuildChannelManager from '../../api/entities/guild/GuildChannelManager'
+import CategoryChannel from '../../api/entities/channels/CategoryChannel'
 
 export default class GuildCreatePacket extends Packet {
   public packetType = 'GUILD_CREATE'
@@ -104,6 +110,6 @@ export default class GuildCreatePacket extends Packet {
 
     assembler.application.client.guilds.cache.set(this.guild.id, this.guild as any)
 
-    assembler.eventListener.emit('guildCreate', this.guild)
+    assembler.eventListener.emit('create:Guild', this.guild)
   }
 }
