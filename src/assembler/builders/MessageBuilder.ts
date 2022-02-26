@@ -1,24 +1,24 @@
 import {
   Button,
   ButtonStyle,
-  Client,
-  Collection,
   ComponentType,
-  EmbedAuthor,
-  EmbedFooter,
-  EmbedImage,
   EmbedRow,
-  EmbedThumbnail,
-  MentionResolvable,
-  Message,
-  MessageAttachment,
   MessageEmbed,
   SelectMenu,
   Snowflake,
-  TextChannel
 } from '../../api/entities'
 import { DateTime } from 'luxon'
 import { keyFromEnum } from '../../api/utils'
+import Client from '../../api/entities/client'
+import TextChannel from '../../api/entities/channels/TextChannel'
+import Collection from '../../api/utils/Collection'
+import MentionResolvable from '../../api/entities/mention/MentionResolvable'
+import Message from '../../api/entities/message'
+import MessageAttachment from '../../api/entities/message/MessageAttachment'
+import EmbedAuthor from '../../api/entities/embed/EmbedAuthor'
+import EmbedImage from '../../api/entities/embed/EmbedImage'
+import EmbedThumbnail from '../../api/entities/embed/EmbedThumbnail'
+import EmbedFooter from '../../api/entities/embed/EmbedFooter'
 
 export default class MessageBuilder {
   constructor (private client: Client) {
