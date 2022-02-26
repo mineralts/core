@@ -1,7 +1,11 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
-import { Client, Guild, GuildMember, Role, Snowflake } from '../../api/entities'
+import { Snowflake } from '../../api/types'
 import Collection from '../../api/utils/Collection'
+import Client from '../../api/entities/client'
+import Guild from '../../api/entities/guild/Guild'
+import GuildMember from '../../api/entities/guild/GuildMember'
+import Role from '../../api/entities/roles'
 
 export default class MemberRoleRemovePacket extends Packet {
   public packetType = 'GUILD_MEMBER_UPDATE'
@@ -29,7 +33,7 @@ export default class MemberRoleRemovePacket extends Packet {
       })
 
       assembler.eventListener.emit(
-        'guildMemberRoleRemove',
+        'remove:MemberRole',
         member,
         currentRoles,
         targetRoles
