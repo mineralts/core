@@ -1,7 +1,7 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { MessageBuilder } from '../../assembler/builders'
-import { TextChannel } from '../../api/entities'
+import TextChannel from '../../api/entities/channels/TextChannel'
 
 export default class MessageUpdatePacket extends Packet {
   public packetType = 'MESSAGE_UPDATE'
@@ -15,7 +15,7 @@ export default class MessageUpdatePacket extends Packet {
     const after = messageBuilder.build(payload)
 
 
-    assembler.eventListener.emit('messageUpdate', before || undefined, after)
+    assembler.eventListener.emit('update:Message', before || undefined, after)
 
     channel.messages.cache.set(after.id, after)
   }
