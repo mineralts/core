@@ -1,6 +1,7 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
-import { Guild, Role } from '../../api/entities'
+import Guild from '../../api/entities/guild/Guild'
+import Role from '../../api/entities/roles'
 
 export default class RoleDeletePacket extends Packet {
   public packetType = 'GUILD_ROLE_DELETE'
@@ -13,7 +14,7 @@ export default class RoleDeletePacket extends Packet {
       return
     }
 
-    assembler.eventListener.emit('roleDelete', role)
+    assembler.eventListener.emit('delete:Role', role)
 
     guild?.roles.cache.delete(role.id)
   }
