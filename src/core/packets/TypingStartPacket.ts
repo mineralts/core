@@ -1,7 +1,9 @@
 
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
-import { Guild, GuildMember, TextChannelResolvable } from '../../api/entities'
+import TextChannelResolvable from '../../api/entities/channels/TextChannelResolvable'
+import Guild from '../../api/entities/guild/Guild'
+import GuildMember from '../../api/entities/guild/GuildMember'
 
 export default class TypingStartPacket extends Packet {
   public packetType = 'TYPING_START'
@@ -12,7 +14,7 @@ export default class TypingStartPacket extends Packet {
     const member: GuildMember | undefined = guild?.members.cache.get(payload.user_id)
 
     if (member) {
-      assembler.eventListener.emit('typingStart', member!, channel)
+      assembler.eventListener.emit('start:typing', member!, channel)
     }
   }
 }
