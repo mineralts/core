@@ -1,7 +1,7 @@
 import { CommandType, Snowflake } from '../../api/types'
 import Logger from '@mineralts/logger'
-import { Client } from '../../api/entities'
 import MenuInteraction from '../../typing/interfaces/interaction/MenuInteraction'
+import { Client } from '../../typing/interfaces'
 
 export function ContextMenu (type: Exclude<keyof typeof CommandType, 'CHAT_INPUT'>, name: string) {
   return (target: any) => {
