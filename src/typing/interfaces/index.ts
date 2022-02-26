@@ -48,7 +48,6 @@ import {
   ActivityType,
   ButtonStyle,
   ChannelTypeResolvable,
-  ClientEvents,
   clientEvents,
   CommandOption,
   ComponentType,
@@ -64,13 +63,14 @@ import StageChannel from '../../typing/interfaces/channels/StageChannel'
 import NewsChannel from '../../typing/interfaces/channels/NewsChannel'
 import DMChannel from '../../typing/interfaces/channels/DMChannel'
 import StoreChannel from '../../typing/interfaces/channels/StoreChannel'
+import Collection from '../../api/utils/Collection'
+import { WebsocketPayload } from '@mineralts/connector-preview'
 
 export type ChannelResolvable = TextChannel | VoiceChannel | CategoryChannel | StageChannel | NewsChannel | DMChannel | StoreChannel
 
 export {
   Client,
   User,
-  ClientEvents,
   clientEvents,
   Snowflake,
   GuildMember,
@@ -118,4 +118,82 @@ export {
   CommandInteraction,
   ModalInteraction,
   InteractionType
+}
+
+export interface ClientEvents {
+  ready: [client: Client],
+
+  'create:Guild': [guild: Guild]
+  'update:Guild': [guild: Guild]
+  'delete:Guild': [guild: Guild]
+
+  'create:Message': [message: Message],
+  'update:Message': [before: Message | undefined, after: Message]
+  'delete:Message': [message: Message]
+
+  'create:Channel': [channel: Channel]
+  'update:Channel': [channel: Channel]
+  'delete:Channel': [channel: Channel]
+
+  'create:TextChannel': [channel: TextChannel]
+  'update:TextChannel': [channel: TextChannel]
+  'delete:TextChannel': [channel: TextChannel]
+
+  'create:DmChannel': [channel: DMChannel]
+  'update:DmChannel': [channel: DMChannel]
+  'delete:DmChannel': [channel: DMChannel]
+
+  'create:VoiceChannel': [channel: VoiceChannel]
+  'update:VoiceChannel': [channel: VoiceChannel]
+  'delete:VoiceChannel': [channel: VoiceChannel]
+
+  'create:StageChannel': [channel: StageChannel]
+  'update:StageChannel': [channel: StageChannel]
+  'delete:StageChannel': [channel: StageChannel]
+
+  'create:NewsChannel': [channel: NewsChannel]
+  'update:NewsChannel': [channel: NewsChannel]
+  'delete:NewsChannel': [channel: NewsChannel]
+
+  'create:CategoryChannel': [channel: CategoryChannel]
+  'update:CategoryChannel': [channel: CategoryChannel]
+  'delete:CategoryChannel': [channel: CategoryChannel]
+
+  'add:MessageReaction': [message: Message, reaction: Reaction]
+  'remove:MessageReaction': [message: Message, reaction: Reaction]
+
+  'update:Presence': [before: Presence | undefined, after: Presence]
+
+  'create:Emoji': [emoji: Emoji]
+  'update:Emoji': [before: Emoji, after: Emoji]
+  'delete:Emoji': [emoji: Emoji]
+
+  'join:VoiceMember': [member: GuildMember]
+  'leave:VoiceMember': [member: GuildMember]
+
+  'add:MemberBoost': [member: GuildMember]
+  'remove:MemberBoost': [member: GuildMember]
+
+  'add:MemberTimeout': [member: GuildMember, duration: number]
+  'remove:MemberTimeout': [member: GuildMember]
+
+  'accept:Rules': [member: GuildMember]
+
+  'join:Member': [member: GuildMember, invitation?: Invite]
+  'leave:Member': [member: GuildMember]
+
+  'add:MemberRole': [member: GuildMember, before: Collection<Snowflake, Role>, after: Collection<Snowflake, Role>]
+  'remove:MemberRole': [member: GuildMember, before: Collection<Snowflake, Role>, after: Collection<Snowflake, Role>]
+
+  'create:Invite': [invite: Invite]
+  'delete:Invite': [invite: Invite]
+
+  'create:Role': [role: Role]
+  'update:Role': [before: Role, after: Role]
+  'delete:Role': [role: Role]
+
+  'create:Interaction:Modal': [interaction: ModalInteraction]
+
+  'start:typing': [member: GuildMember, channel: TextChannelResolvable]
+  'wss': [payload: WebsocketPayload]
 }
