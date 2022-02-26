@@ -15,6 +15,6 @@ export default class VoiceLeavePacket extends Packet {
 
     const after = guild?.members.cache.get(payload.member.user.id)
 
-    assembler.eventListener.emit('voiceLeave', after!)
+    assembler.eventListener.emit('leave:VoiceMember', after!)
   }
 }
