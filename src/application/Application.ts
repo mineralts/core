@@ -15,10 +15,10 @@ import path from 'path'
 import fs from 'fs'
 import Environment from '../environment/Environment'
 import Collection from '../api/utils/Collection'
-import { Client } from '../api/entities'
 import Helper from '../helper'
 import Container from './Container'
 import Reflect from '../reflect/Reflect'
+import Client from '../api/entities/client'
 
 export default class Application {
   private static $instance: Application
