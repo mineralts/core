@@ -1,4 +1,5 @@
-import { Emoji, Guild } from '../../api/entities'
+import Guild from '../../api/entities/guild/Guild'
+import Emoji from '../../api/entities/emoji'
 
 export default class EmojiBuilder {
   constructor (private guild?: Guild) {
