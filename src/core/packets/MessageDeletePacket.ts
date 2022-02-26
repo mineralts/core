@@ -1,6 +1,6 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
-import { TextChannel } from '../../api/entities'
+import TextChannel from '../../api/entities/channels/TextChannel'
 
 export default class MessageDeletePacket extends Packet {
   public packetType = 'MESSAGE_DELETE'
@@ -14,7 +14,7 @@ export default class MessageDeletePacket extends Packet {
       return
     }
 
-    assembler.eventListener.emit('messageDelete', message)
+    assembler.eventListener.emit('delete:Message', message)
 
     channel.messages.cache.delete(payload.id)
   }
