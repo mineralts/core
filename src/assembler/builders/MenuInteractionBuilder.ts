@@ -1,6 +1,8 @@
-import { Client, GuildMember, TextChannelResolvable } from '../../api/entities'
 import MenuInteraction from '../../api/entities/interaction/MenuInteraction'
 import MessageBuilder from './MessageBuilder'
+import TextChannelResolvable from '../../api/entities/channels/TextChannelResolvable'
+import GuildMember from '../../api/entities/guild/GuildMember'
+import Client from '../../api/entities/client'
 
 export default class MenuInteractionBuilder {
   constructor (private client: Client, private member: GuildMember) {
