@@ -26,6 +26,6 @@ export default class MemberJoinPacket extends Packet {
     //
     // invite.count++
 
-    assembler.eventListener.emit('guildMemberJoin', guildMember)
+    assembler.eventListener.emit('join:Member', guildMember)
   }
 }
