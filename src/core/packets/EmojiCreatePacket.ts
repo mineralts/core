@@ -1,8 +1,10 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
-import { Emoji, Guild, Snowflake } from '../../api/entities'
+import { Snowflake } from '../../api/types'
 import { EmojiBuilder } from '../../assembler/builders'
 import Collection from '../../api/utils/Collection'
+import Emoji from '../../api/entities/emoji'
+import Guild from '../../api/entities/guild/Guild'
 
 export default class EmojiCreatePacket extends Packet {
   public packetType = 'GUILD_EMOJIS_UPDATE'
@@ -24,7 +26,7 @@ export default class EmojiCreatePacket extends Packet {
 
       guild?.emojis.cache.set(emoji.id, emoji)
 
-      assembler.eventListener.emit('emojiCreate', emoji)
+      assembler.eventListener.emit('create:Emoji', emoji)
     }
   }
 }
