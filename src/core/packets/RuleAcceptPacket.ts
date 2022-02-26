@@ -1,6 +1,7 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
-import { Guild, GuildMember } from '../../api/entities'
+import GuildMember from '../../api/entities/guild/GuildMember'
+import Guild from '../../api/entities/guild/Guild'
 
 export default class RuleAcceptPacket extends Packet {
   public packetType = 'GUILD_MEMBER_UPDATE'
@@ -16,7 +17,7 @@ export default class RuleAcceptPacket extends Packet {
 
     if (member.isPending() !== payload.pending) {
       member.pending = false
-      assembler.eventListener.emit('rulesAccept', client)
+      assembler.eventListener.emit('accept:Rules', client)
     }
   }
 }
