@@ -1,7 +1,7 @@
 import Logger from '@mineralts/logger'
 import { CommandOption, CommandOptionType, PermissionType, Snowflake } from '../../api/types'
-import { Client } from '../../api/entities'
 import Application from '../../application/Application'
+import { Client } from '../../typing/interfaces'
 
 export function Command (name: string, description: string, scope: 'GUILDS' | Snowflake) {
   return (target: any) => {
