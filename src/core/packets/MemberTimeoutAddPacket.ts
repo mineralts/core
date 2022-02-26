@@ -16,7 +16,7 @@ export default class MemberTimeoutAddPacket extends Packet {
       const duration = expire.diffNow().toMillis()
 
       guildMember!.communicationTimeout = expire
-      assembler.eventListener.emit('memberTimeoutAdd', guildMember, duration)
+      assembler.eventListener.emit('add:MemberTimeout', guildMember, duration)
     }
   }
 }
