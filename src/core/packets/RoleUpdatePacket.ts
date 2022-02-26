@@ -1,7 +1,8 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
-import { Guild, Role } from '../../api/entities'
 import { RoleBuilder } from '../../assembler/builders'
+import Guild from '../../api/entities/guild/Guild'
+import Role from '../../api/entities/roles'
 
 export default class RoleUpdatePacket extends Packet {
   public packetType = 'GUILD_ROLE_UPDATE'
@@ -13,7 +14,7 @@ export default class RoleUpdatePacket extends Packet {
     const roleBuilder: RoleBuilder = new RoleBuilder()
     const after: Role = roleBuilder.build(payload.role)
 
-    assembler.eventListener.emit('roleUpdate', before, after)
+    assembler.eventListener.emit('update:Role', before, after)
 
     guild?.roles.cache.set(after.id, after)
   }
