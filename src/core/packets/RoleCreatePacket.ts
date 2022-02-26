@@ -1,7 +1,8 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
-import { Guild, Role } from '../../api/entities'
 import { RoleBuilder } from '../../assembler/builders'
+import Guild from '../../api/entities/guild/Guild'
+import Role from '../../api/entities/roles'
 
 export default class RoleCreatePacket extends Packet {
   public packetType = 'GUILD_ROLE_CREATE'
@@ -14,6 +15,6 @@ export default class RoleCreatePacket extends Packet {
 
     guild?.roles.cache.set(role.id, role)
 
-    assembler.eventListener.emit('roleCreate', role)
+    assembler.eventListener.emit('create:Role', role)
   }
 }
