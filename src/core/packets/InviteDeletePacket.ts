@@ -12,7 +12,7 @@ export default class InviteDeletePacket extends Packet {
       return
     }
 
-    assembler.eventListener.emit('inviteDelete', invite)
+    assembler.eventListener.emit('delete:Invite', invite)
 
     guild?.invites.cache.delete(invite.code)
   }
