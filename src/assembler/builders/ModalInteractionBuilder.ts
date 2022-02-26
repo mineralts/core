@@ -1,6 +1,8 @@
-import { Client, ComponentType, GuildMember } from '../../api/entities'
+import { ComponentType } from '../../api/types'
 import ModalInteraction from '../../api/entities/interaction/ModalInteraction'
 import { keyFromEnum } from '../../api/utils'
+import Client from '../../api/entities/client'
+import GuildMember from '../../api/entities/guild/GuildMember'
 
 export default class ModalInteractionBuilder {
   constructor (private client: Client, private member: GuildMember) {
