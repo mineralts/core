@@ -1,6 +1,5 @@
 import Logger from '@mineralts/logger'
-import { ClientEvents } from '../../api/types'
-import { Client } from '../../api/entities'
+import { Client, ClientEvents } from '../../typing/interfaces'
 
 export function Event (event: keyof ClientEvents) {
   return (target: any) => {
