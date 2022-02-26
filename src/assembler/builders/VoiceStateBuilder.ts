@@ -1,4 +1,8 @@
-import { Client, Guild, GuildMember, VoiceState, VoiceChannel } from '../../api/entities'
+import VoiceChannel from '../../api/entities/channels/VoiceChannel'
+import GuildMember from '../../api/entities/guild/GuildMember'
+import Guild from '../../api/entities/guild/Guild'
+import Client from '../../api/entities/client'
+import VoiceState from '../../api/entities/voice/VoiceState'
 
 export default class VoiceStateBuilder {
   constructor (
