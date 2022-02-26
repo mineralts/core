@@ -1,7 +1,10 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { VoiceStateBuilder } from '../../assembler/builders'
-import { Guild, GuildMember, VoiceChannel, VoiceState } from '../../api/entities'
+import VoiceChannel from '../../api/entities/channels/VoiceChannel'
+import Guild from '../../api/entities/guild/Guild'
+import GuildMember from '../../api/entities/guild/GuildMember'
+import VoiceState from '../../api/entities/voice/VoiceState'
 
 export default class VoiceJoinPacket extends Packet {
   public packetType = 'VOICE_STATE_UPDATE'
@@ -23,6 +26,6 @@ export default class VoiceJoinPacket extends Packet {
       member.voice = voiceState
     }
 
-    assembler.eventListener.emit('voiceJoin', member!)
+    assembler.eventListener.emit('join:VoiceMember', member!)
   }
 }
