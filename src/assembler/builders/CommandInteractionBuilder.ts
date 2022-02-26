@@ -1,5 +1,8 @@
-import { Client, GuildMember, CommandInteraction, InteractionType } from '../../api/entities'
+import { InteractionType } from '../../api/types'
 import { keyFromEnum } from '../../api/utils'
+import CommandInteraction from '../../api/entities/interaction/CommandInteraction'
+import Client from '../../api/entities/client'
+import GuildMember from '../../api/entities/guild/GuildMember'
 
 export default class CommandInteractionBuilder {
   constructor (private client: Client, private member: GuildMember) {
