@@ -1,7 +1,10 @@
 import Packet from '../entities/Packet'
 import Assembler from '../../assembler/Assembler'
-import { Emoji, GuildMember, Reaction, TextChannel } from '../../api/entities'
 import { EmojiBuilder, ReactionBuilder } from '../../assembler/builders'
+import TextChannel from '../../api/entities/channels/TextChannel'
+import GuildMember from '../../api/entities/guild/GuildMember'
+import Emoji from '../../api/entities/emoji'
+import Reaction from '../../api/entities/reaction/Reaction'
 
 export default class MessageReactionAdd extends Packet {
   public packetType = 'MESSAGE_REACTION_ADD'
@@ -24,7 +27,7 @@ export default class MessageReactionAdd extends Packet {
 
       message.reactions.addReaction(emoji, member!)
 
-      assembler.eventListener.emit('messageReactionAdd', message, reaction)
+      assembler.eventListener.emit('add:MessageReaction', message, reaction)
     }
   }
 }
