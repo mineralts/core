@@ -289,6 +289,7 @@ export const clientEvents = [
   'delete:Emoji',
   'join:VoiceMember',
   'leave:VoiceMember',
+  'update:VoiceState',
   'add:MemberBoost',
   'remove:MemberBoost',
   'add:MemberTimeout',

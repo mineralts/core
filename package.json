@@ -13,11 +13,11 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "@mineralts/connector-preview": "^1.1.8",
     "@mineralts/logger": "1.1.5",
     "@types/luxon": "^2.0.5",
     "@types/node": "^16.11.6",
     "@types/node-cron": "^3.0.1",
+    "@types/ws": "^8.5.1",
     "axios": "^0.24.0",
     "change-case": "^4.1.2",
     "enquirer": "^2.3.6",
@@ -27,7 +27,8 @@
     "node-cron": "^3.0.0",
     "pluralize": "^8.0.0",
     "truncatise": "^0.0.8",
-    "typescript": "^4.4.4"
+    "typescript": "^4.4.4",
+    "ws": "^8.5.0"
   },
   "devDependencies": {
     "@nas-service/eslint-config": "1.1.0",

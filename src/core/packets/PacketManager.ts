@@ -32,6 +32,8 @@ import ModalInteractionPacket from './ModalInteractionPacket'
 import MemberRoleAddPacket from './MemberRoleAddPacket'
 import MemberRoleRemovePacket from './MemberRoleRemovePacket'
 import PresenceUpdatePacket from './PresenceUpdatePacket'
+import VoiceStateUpdatePacket from './VoiceStateUpdatePacket'
+import GuildUpdatePacket from './GuildUpdatePacket'
 
 export default class PacketManager {
   public packets: Collection<string, Packet[]> = new Collection()
@@ -40,6 +42,7 @@ export default class PacketManager {
     this.register(
       new ReadyPacket(),
       new GuildCreatePacket(),
+      new GuildUpdatePacket(),
       new MessageCreatePacket(),
       new MessageDeletePacket(),
       new MessageUpdatePacket(),
@@ -57,6 +60,7 @@ export default class PacketManager {
       new RoleDeletePacket(),
       new RuleAcceptPacket(),
       new TypingStartPacket(),
+      new VoiceStateUpdatePacket(),
       new VoiceJoinPacket(),
       new VoiceLeavePacket(),
       new MemberTimeoutAddPacket(),

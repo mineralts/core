@@ -67,6 +67,7 @@ import Collection from '../../api/utils/Collection'
 import { WebsocketPayload } from '@mineralts/connector-preview'
 
 export type ChannelResolvable = TextChannel | VoiceChannel | CategoryChannel | StageChannel | NewsChannel | DMChannel | StoreChannel
+export type OnlyKeys<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 
 export {
   Client,
@@ -124,7 +125,7 @@ export interface ClientEvents {
   ready: [client: Client],
 
   'create:Guild': [guild: Guild]
-  'update:Guild': [guild: Guild]
+  'update:Guild': [before: Omit<Guild, OnlyKeys<Guild>>, after: Guild]
   'delete:Guild': [guild: Guild]
 
   'create:Message': [message: Message],
@@ -170,6 +171,7 @@ export interface ClientEvents {
 
   'join:VoiceMember': [member: GuildMember]
   'leave:VoiceMember': [member: GuildMember]
+  'update:VoiceState': [before: VoiceState | undefined, after: VoiceState]
 
   'add:MemberBoost': [member: GuildMember]
   'remove:MemberBoost': [member: GuildMember]
