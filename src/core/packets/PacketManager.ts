@@ -34,6 +34,7 @@ import MemberRoleRemovePacket from './MemberRoleRemovePacket'
 import PresenceUpdatePacket from './PresenceUpdatePacket'
 import VoiceStateUpdatePacket from './VoiceStateUpdatePacket'
 import GuildUpdatePacket from './GuildUpdatePacket'
+import GuildDeletePacket from './GuildDeletePacket'
 
 export default class PacketManager {
   public packets: Collection<string, Packet[]> = new Collection()
@@ -42,6 +43,7 @@ export default class PacketManager {
     this.register(
       new ReadyPacket(),
       new GuildCreatePacket(),
+      new GuildDeletePacket(),
       new GuildUpdatePacket(),
       new MessageCreatePacket(),
       new MessageDeletePacket(),
