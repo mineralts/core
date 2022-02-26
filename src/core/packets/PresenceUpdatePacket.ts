@@ -21,7 +21,7 @@ export default class PresenceUpdatePacket extends Packet {
       return
     }
 
-    assembler.eventListener.emit('presenceCreate', presence)
+    assembler.eventListener.emit('update:Presence', presence)
     member.user.presence = presence
   }
 }
