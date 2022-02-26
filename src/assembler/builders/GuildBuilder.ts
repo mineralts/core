@@ -1,18 +1,18 @@
 import {
-  Client,
-  Guild,
-  GuildChannelManager,
-  GuildMember,
-  GuildMemberManager,
-  GuildRoleManager,
   Region,
   Snowflake,
-  GuildEmojiManager,
-  InviteManager,
-  Collection
-} from '../../api/entities'
+} from '../../api/types'
 import { keyFromEnum } from '../../api/utils'
 import { DateTime } from 'luxon'
+import Client from '../../api/entities/client'
+import Collection from '../../api/utils/Collection'
+import Guild from '../../api/entities/guild/Guild'
+import GuildMember from '../../api/entities/guild/GuildMember'
+import GuildChannelManager from '../../api/entities/guild/GuildChannelManager'
+import GuildMemberManager from '../../api/entities/guild/GuildMemberManager'
+import GuildEmojiManager from '../../api/entities/guild/GuildEmojiManager'
+import InviteManager from '../../api/entities/invitation/InviteManager'
+import GuildRoleManager from '../../api/entities/guild/GuildRoleManager'
 
 export default class GuildBuilder {
   constructor (private client: Client, private readonly payload: any) {
@@ -73,7 +73,6 @@ export default class GuildBuilder {
     )
 
     guild.emojis.defineContext({ guild })
-
     guild.setRoles(new GuildRoleManager(guild))
 
     return guild
