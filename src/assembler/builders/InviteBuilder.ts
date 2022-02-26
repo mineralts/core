@@ -1,5 +1,7 @@
-import { Client, Guild, Invite } from '../../api/entities'
 import { DateTime } from 'luxon'
+import Invite from '../../api/entities/invitation/Invite'
+import Client from '../../api/entities/client'
+import Guild from '../../api/entities/guild/Guild'
 
 export default class InviteBuilder {
   constructor (private client: Client, private guild: Guild) {
