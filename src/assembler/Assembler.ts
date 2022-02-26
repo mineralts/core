@@ -102,7 +102,7 @@ export default class Assembler {
   protected registerEvent (path, item: { new (): MineralEvent, event: string }): void {
     const event = new item() as MineralEvent & { event: string }
     event.logger = this.application.logger
-    event.client = this.application.client
+    event.client = this.application.client as any
 
     const eventContainer = this.application.container.events.get(item.event)
 
@@ -123,7 +123,7 @@ export default class Assembler {
     const menu = new item() as MineralContextMenu & { name: string, permissions: any[] }
 
     menu.logger = this.application.logger
-    menu.client = this.application.client
+    menu.client = this.application.client as any
 
     menu.data = {
       permissions: item.permissions
