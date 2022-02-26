@@ -1,7 +1,9 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
-import { Emoji, Guild, Snowflake } from '../../api/entities'
+import { Snowflake } from '../../api/types'
 import Collection from '../../api/utils/Collection'
+import Guild from '../../api/entities/guild/Guild'
+import Emoji from '../../api/entities/emoji'
 
 export default class EmojiDeletePacket extends Packet {
   public packetType = 'GUILD_EMOJIS_UPDATE'
@@ -18,7 +20,7 @@ export default class EmojiDeletePacket extends Packet {
         }
       })
 
-      assembler.eventListener.emit('emojiDelete', guildEmojis.first())
+      assembler.eventListener.emit('delete:Emoji', guildEmojis.first())
       guild?.emojis.cache.delete(guildEmojis.first()!.id)
     }
   }
