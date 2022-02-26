@@ -1,9 +1,10 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { CommandInteractionBuilder } from '../../assembler/builders'
-import { CommandInteraction, OptionType } from '../../api/entities'
+import { OptionType } from '../../api/types'
 import { MineralBaseCommand } from '../entities/Command'
 import { CommandType } from '../../api/types'
+import CommandInteraction from '../../api/entities/interaction/CommandInteraction'
 
 export default class CommandInteractionPacket extends Packet {
   public packetType = 'INTERACTION_CREATE'
