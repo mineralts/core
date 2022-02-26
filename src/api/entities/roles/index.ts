@@ -2,9 +2,9 @@ import { PermissionFlag, RoleUpdateOption, Snowflake } from '../../types'
 import Guild from '../guild/Guild'
 import Application from '../../../application/Application'
 import { resolveColor } from '../../utils'
-import { Color } from '../index'
 import { join } from 'path'
 import fs from 'fs'
+import Color from '../colors'
 
 export default class Role {
   constructor (
