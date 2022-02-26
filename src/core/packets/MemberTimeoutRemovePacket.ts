@@ -12,7 +12,7 @@ export default class MemberTimeoutRemovePacket extends Packet {
 
     if (member?.communicationTimeout !== payload.communication_disabled_until) {
       member!.communicationTimeout = null
-      assembler.eventListener.emit('memberTimeoutRemove', member)
+      assembler.eventListener.emit('remove:MemberTimeout', member)
     }
   }
 }
