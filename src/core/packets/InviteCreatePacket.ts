@@ -1,7 +1,7 @@
 import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { DateTime } from 'luxon'
-import { Invite } from '../../api/entities'
+import Invite from '../../api/entities/invitation/Invite'
 
 export default class InviteCreatePacket extends Packet {
   public packetType = 'INVITE_CREATE'
@@ -24,6 +24,6 @@ export default class InviteCreatePacket extends Packet {
 
     guild?.invites.cache.set(payload.code, invite)
 
-    assembler.eventListener.emit('inviteCreate', invite)
+    assembler.eventListener.emit('create:Invite', invite)
   }
 }
