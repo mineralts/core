@@ -1,7 +1,8 @@
-import { Client, User } from '../../api/entities'
 import { DateTime } from 'luxon'
 import UserFlags from '../../api/entities/user/UserFlags'
 import { FlagIdentifier, FlagLabel } from '../../api/types'
+import Client from '../../api/entities/client'
+import User from '../../api/entities/user'
 
 export class UserBuilder {
   constructor (private client: Client, private readonly payload: any) {
