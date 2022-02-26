@@ -1,15 +1,9 @@
 import {
-  CategoryChannel,
   ChannelResolvable,
   ChannelTypeResolvable,
-  Client,
-  Guild,
-  MessageManager,
   RTC_Region,
-  TextChannel,
   VideoQuality,
-  VoiceChannel
-} from '../../api/entities'
+} from '../../api/types'
 import Logger from '@mineralts/logger'
 import { keyFromEnum } from '../../api/utils'
 import StageChannel from '../../api/entities/channels/StageChannel'
@@ -17,6 +11,12 @@ import NewsChannel from '../../api/entities/channels/NewsChannel'
 import DMChannel from '../../api/entities/channels/DMChannel'
 import DmUser from '../../api/entities/user/DmUser'
 import StoreChannel from '../../api/entities/channels/StoreChannel'
+import Client from '../../api/entities/client'
+import Guild from '../../api/entities/guild/Guild'
+import TextChannel from '../../api/entities/channels/TextChannel'
+import MessageManager from '../../api/entities/message/MessageManager'
+import VoiceChannel from '../../api/entities/channels/VoiceChannel'
+import CategoryChannel from '../../api/entities/channels/CategoryChannel'
 
 export default class ChannelBuilder {
   constructor (private client: Client, private logger: Logger, private guild: Guild) {
