@@ -1,18 +1,20 @@
-import {
-  Client,
-  GuildMember,
-  Role,
-  Snowflake,
-  GuildMemberRoleManager,
-  Guild,
-  VoiceState,
-  Collection
-} from '../../api/entities'
 import { UserBuilder } from './UserBuilder'
 import { DateTime } from 'luxon'
+import Collection from '../../api/utils/Collection'
+import { Snowflake } from '../../api/types'
+import Role from '../../api/entities/roles'
+import Client from '../../api/entities/client'
+import Guild from '../../api/entities/guild/Guild'
+import GuildMemberRoleManager from '../../api/entities/guild/GuildMemberRoleManager'
+import GuildMember from '../../api/entities/guild/GuildMember'
+import VoiceState from '../../api/entities/voice/VoiceState'
 
 export default class GuildMemberBuilder {
-  constructor (private client: Client, private readonly roles: Collection<Snowflake, Role>, private guild: Guild) {
+  constructor (
+    private client: Client,
+    private readonly roles: Collection<Snowflake, Role>,
+    private guild: Guild
+  ) {
   }
 
   public build (payload: any) {
