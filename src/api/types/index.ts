@@ -9,14 +9,6 @@
  */
 
 import { DateTime } from 'luxon'
-import Invite from '../entities/invitation/Invite'
-import GuildMember from '../entities/guild/GuildMember'
-import TextChannelResolvable from '../entities/channels/TextChannelResolvable'
-import Presence from '../entities/presence'
-import Reaction from '../entities/reaction/Reaction'
-import Message from '../entities/message'
-import Guild from '../entities/guild/Guild'
-import Client from '../entities/client'
 import StringArgument from '../command/StringArgument'
 import NumberArgument from '../command/NumberArgument'
 import ChoiceArgument from '../command/ChoiceArgument'
@@ -24,10 +16,6 @@ import TextChannel from '../entities/channels/TextChannel'
 import VoiceChannel from '../entities/channels/VoiceChannel'
 import CategoryChannel from '../entities/channels/CategoryChannel'
 import StageChannel from '../entities/channels/StageChannel'
-import RateLimit from '../entities/rateLimit'
-import ButtonInteraction from '../entities/interaction/ButtonInteraction'
-import SelectMenuInteraction from '../entities/interaction/SelectMenuInteraction'
-import CommandInteraction from '../entities/interaction/CommandInteraction'
 import Button from '../entities/button'
 import ButtonLink from '../entities/button/ButtonLink'
 import SelectMenu from '../entities/select-menu'
@@ -46,9 +34,6 @@ import EmbedVideo from '../entities/embed/EmbedVideo'
 import EmbedFooter from '../entities/embed/EmbedFooter'
 import { Role } from '../../typing/interfaces'
 import Modal from '../entities/modal'
-import ModalInteraction from '../../typing/interfaces/interaction/ModalInteraction'
-import Collection from '../utils/Collection'
-import { WebsocketPayload } from '@mineralts/connector-preview'
 
 export type Snowflake = string
 export type Milliseconds = number
@@ -251,93 +236,75 @@ export enum SystemChannelFlag {
   SUPPRESS_GUILD_REMINDER_NOTIFICATIONS = 1 << 2,
 }
 
-export interface ClientEvents {
-  ready: [client: Client]
-  guildCreate: [guild: Guild]
-  messageCreate: [message: Message]
-  messageUpdate: [before: Message | undefined, after: Message]
-  messageDelete: [message: Message]
-  channelCreate: [channel: ChannelResolvable]
-  channelDelete: [channel: ChannelResolvable]
-  channelUpdate: [before: ChannelResolvable, after: ChannelResolvable]
-  rateLimit: [rateLimit: RateLimit]
-  messageReactionAdd: [message: Message, reaction: Reaction]
-  messageReactionRemove: [message: Message, reaction: Reaction]
-  presenceUpdate: [before: Presence | undefined, after: Presence]
-  emojiCreate: [emoji: Emoji]
-  emojiUpdate: [before: Emoji, after: Emoji]
-  emojiDelete: [emoji: Emoji]
-  voiceJoin: [member: GuildMember]
-  voiceLeave: [member: GuildMember]
-  memberBoostAdd: [member: GuildMember]
-  memberBoostRemove: [member: GuildMember]
-  memberTimeoutAdd: [member: GuildMember, duration: number]
-  memberTimeoutRemove: [member: GuildMember]
-  interactionButtonCreate: [interaction: ButtonInteraction]
-
-  [key: `interactionButton::${string}`]: [interaction: ButtonInteraction]
-
-  interactionSelectMenuCreate: [interaction: SelectMenuInteraction]
-
-  [key: `interactionSelectMenu::${string}`]: [interaction: SelectMenuInteraction]
-
-  interactionCommandCreate: [interaction: CommandInteraction]
-
-  [key: `interactionCommand::${string}`]: [interaction: CommandInteraction]
-
-  interactionModalCreate: [interaction: ModalInteraction]
-
-  rulesAccept: [member: GuildMember]
-  guildMemberJoin: [member: GuildMember, invitation?: Invite]
-  guildMemberLeave: [member: GuildMember]
-  guildMemberRoleAdd: [member: GuildMember, before: Collection<Snowflake, Role>, after: Collection<Snowflake, Role>]
-  guildMemberRoleRemove: [member: GuildMember, before: Collection<Snowflake, Role>, after: Collection<Snowflake, Role>]
-  inviteCreate: [invite: Invite]
-  inviteDelete: [invite: Invite]
-  roleCreate: [role: Role]
-  roleDelete: [role: Role]
-  roleUpdate: [before: Role, after: Role]
-  typingStart: [member: GuildMember, channel: TextChannelResolvable]
-  wss: [payload: WebsocketPayload]
-}
+// export interface ClientEvents {
+//   rateLimit: [rateLimit: RateLimit]
+//
+//   interactionButtonCreate: [interaction: ButtonInteraction]
+//
+//   [key: `interactionButton::${string}`]: [interaction: ButtonInteraction]
+//
+//   interactionSelectMenuCreate: [interaction: SelectMenuInteraction]
+//
+//   [key: `interactionSelectMenu::${string}`]: [interaction: SelectMenuInteraction]
+//
+//   interactionCommandCreate: [interaction: CommandInteraction]
+//
+//   [key: `interactionCommand::${string}`]: [interaction: CommandInteraction]
+// }
 
 export const clientEvents = [
   'ready',
-  'guildCreate',
-  'messageCreate',
-  'messageUpdate',
-  'messageDelete',
-  'channelCreate',
-  'channelDelete',
-  'channelUpdate',
-  'rateLimit',
-  'messageReactionAdd',
-  'messageReactionRemove',
-  'presenceUpdate',
-  'emojiCreate',
-  'emojiUpdate',
-  'emojiDelete',
-  'voiceJoin',
-  'voiceLeave',
-  'memberBoostAdd',
-  'memberBoostRemove',
-  'memberTimeoutAdd',
-  'memberTimeoutRemove',
-  'interactionButtonCreate',
-  'interactionSelectMenuCreate',
-  'interactionCommandCreate',
-  'interactionModalCreate',
-  'rulesAccept',
-  'guildMemberJoin',
-  'guildMemberLeave',
-  'guildMemberRoleAdd',
-  'guildMemberRoleRemove',
-  'inviteCreate',
-  'inviteDelete',
-  'roleCreate',
-  'roleDelete',
-  'roleUpdate',
-  'typingStart',
+  'create:Guild',
+  'update:Guild',
+  'delete:Guild',
+  'create:Message',
+  'update:Message',
+  'delete:Message',
+  'create:Channel',
+  'update:Channel',
+  'delete:Channel',
+  'create:TextChannel',
+  'update:TextChannel',
+  'delete:TextChannel',
+  'create:DmChannel',
+  'update:DmChannel',
+  'delete:DmChannel',
+  'create:VoiceChannel',
+  'update:VoiceChannel',
+  'delete:VoiceChannel',
+  'create:StageChannel',
+  'update:StageChannel',
+  'delete:StageChannel',
+  'create:NewsChannel',
+  'update:NewsChannel',
+  'delete:NewsChannel',
+  'create:CategoryChannel',
+  'update:CategoryChannel',
+  'delete:CategoryChannel',
+  'add:MessageReaction',
+  'remove:MessageReaction',
+  'update:Presence',
+  'create:Emoji',
+  'update:Emoji',
+  'delete:Emoji',
+  'join:VoiceMember',
+  'leave:VoiceMember',
+  'add:MemberBoost',
+  'remove:MemberBoost',
+  'add:MemberTimeout',
+  'remove:MemberTimeout',
+  'accept:Rules',
+  'join:Member',
+  'leave:Member',
+  'add:MemberRole',
+  'remove:MemberRole',
+  'create:Invite',
+  'delete:Invite',
+  'create:Role',
+  'update:Role',
+  'delete:Role',
+  'create:Interaction:Modal',
+  'start:typing',
   'wss',
 ]
 
