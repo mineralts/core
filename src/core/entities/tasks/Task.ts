@@ -1,6 +1,6 @@
 import Logger from '@mineralts/logger'
-import { Client } from '../../../api/entities'
 import { ScheduledTask } from 'node-cron'
+import Client from '../../../api/entities/client'
 
 export function Task (name: string, cron: string) {
   return (target: any) => {
