@@ -1,5 +1,8 @@
 import { DateTime } from 'luxon'
-import { Activity, ActivityType, Emoji, Guild } from '../../api/entities'
+import { ActivityType } from '../../api/types'
+import Guild from '../../api/entities/guild/Guild'
+import Emoji from '../../api/entities/emoji'
+import Activity from '../../api/entities/activity'
 
 export default class ActivityBuilder {
   constructor (private guild: Guild | undefined) {
