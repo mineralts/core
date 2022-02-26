@@ -1,16 +1,16 @@
 import { DateTime } from 'luxon'
 import Packet from '../entities/Packet'
 import Assembler from '../../assembler/Assembler'
-import { Client, User } from '../../api/entities'
 import Collection from '../../api/utils/Collection'
 import UserFlags from '../../api/entities/user/UserFlags'
 import { FlagIdentifier, FlagLabel } from '../../api/types'
+import User from '../../api/entities/user'
+import Client from '../../api/entities/client'
 
 export default class ReadyPacket extends Packet {
   public packetType = 'READY'
 
   public async handle (assembler: Assembler, payload: any) {
-    console.log(payload)
     const flag = new UserFlags(
       FlagIdentifier[payload.user.public_flags || 0],
       FlagLabel[payload.user.public_flags || 0],
