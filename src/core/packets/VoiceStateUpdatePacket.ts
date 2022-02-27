@@ -20,5 +20,7 @@ export default class VoiceStateUpdatePacket extends Packet {
     const voiceState: VoiceState = voiceStateBuilder.build(payload)
 
     assembler.eventListener.emit('update:VoiceState', before, voiceState)
+
+    member!.voice = voiceState
   }
 }

@@ -31,7 +31,7 @@ export default class Assembler {
   }
 
   public async build () {
-    this.connector = new Connector(this.application)
+    this.connector = new Connector(this.application, this.eventListener)
     this.connector.http.defineHeaders({
       Authorization: `Bot ${this.application.environment.cache.get('TOKEN')}`
     })

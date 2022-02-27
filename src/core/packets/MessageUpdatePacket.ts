@@ -17,6 +17,6 @@ export default class MessageUpdatePacket extends Packet {
 
     assembler.eventListener.emit('update:Message', before || undefined, after)
 
-    channel.messages.cache.set(after.id, after)
+    channel.messages.cache.set(after!.id, after!)
   }
 }

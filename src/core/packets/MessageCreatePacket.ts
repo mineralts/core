@@ -18,9 +18,9 @@ export default class MessageCreatePacket extends Packet {
     const message = messageBuilder.build(payload)
 
     if (channel) {
-      channel.lastMessageId = message.id
+      channel.lastMessageId = message!.id
       channel.lastMessage = message
-      channel.messages.cache.set(message.id, message)
+      channel.messages.cache.set(message!.id, message!)
     }
 
     assembler.eventListener.emit('create:Message', message)

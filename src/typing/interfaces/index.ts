@@ -65,6 +65,8 @@ import DMChannel from '../../typing/interfaces/channels/DMChannel'
 import StoreChannel from '../../typing/interfaces/channels/StoreChannel'
 import Collection from '../../api/utils/Collection'
 import { WebsocketPayload } from '@mineralts/connector-preview'
+import RateLimit from './rateLimit'
+import HttpRequest from './http'
 
 export type ChannelResolvable = TextChannel | VoiceChannel | CategoryChannel | StageChannel | NewsChannel | DMChannel | StoreChannel
 export type OnlyKeys<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
@@ -118,11 +120,15 @@ export {
   OptionType,
   CommandInteraction,
   ModalInteraction,
-  InteractionType
+  InteractionType,
+  RateLimit,
+  HttpRequest,
 }
 
 export interface ClientEvents {
   ready: [client: Client],
+  rateLimit: [limit: RateLimit]
+  http: [httpRequest: HttpRequest]
 
   'create:Guild': [guild: Guild]
   'update:Guild': [before: Omit<Guild, OnlyKeys<Guild>>, after: Guild]
@@ -172,6 +178,9 @@ export interface ClientEvents {
   'join:VoiceMember': [member: GuildMember]
   'leave:VoiceMember': [member: GuildMember]
   'update:VoiceState': [before: VoiceState | undefined, after: VoiceState]
+
+  'add:MemberMute': [member: GuildMember]
+  'remove:MemberMute': [member: GuildMember]
 
   'add:MemberBoost': [member: GuildMember]
   'remove:MemberBoost': [member: GuildMember]

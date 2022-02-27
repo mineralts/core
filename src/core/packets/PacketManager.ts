@@ -35,6 +35,8 @@ import PresenceUpdatePacket from './PresenceUpdatePacket'
 import VoiceStateUpdatePacket from './VoiceStateUpdatePacket'
 import GuildUpdatePacket from './GuildUpdatePacket'
 import GuildDeletePacket from './GuildDeletePacket'
+import VoiceMuteAddPacket from './VoiceMuteAddPacket'
+import VoiceMuteRemovePacket from './VoiceMuteRemovePacket'
 
 export default class PacketManager {
   public packets: Collection<string, Packet[]> = new Collection()
@@ -62,9 +64,11 @@ export default class PacketManager {
       new RoleDeletePacket(),
       new RuleAcceptPacket(),
       new TypingStartPacket(),
-      new VoiceStateUpdatePacket(),
       new VoiceJoinPacket(),
       new VoiceLeavePacket(),
+      new VoiceMuteAddPacket(),
+      new VoiceMuteRemovePacket(),
+      new VoiceStateUpdatePacket(),
       new MemberTimeoutAddPacket(),
       new MemberTimeoutRemovePacket(),
       new CommandInteractionPacket(),

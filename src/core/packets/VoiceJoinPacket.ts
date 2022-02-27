@@ -19,13 +19,15 @@ export default class VoiceJoinPacket extends Packet {
     const voiceChannel: VoiceChannel | undefined = guild?.channels.cache.get(payload.channel_id)
     const member: GuildMember | undefined = guild?.members.cache.get(payload.member.user.id)
 
-    const voiceStateBuilder: VoiceStateBuilder = new VoiceStateBuilder(client as any, guild!, member!, voiceChannel!)
-    const voiceState: VoiceState = voiceStateBuilder.build(payload)
+    if (!member?.voice.channelId) {
+      const voiceStateBuilder: VoiceStateBuilder = new VoiceStateBuilder(client as any, guild!, member!, voiceChannel!)
+      const voiceState: VoiceState = voiceStateBuilder.build(payload)
 
-    if (member) {
-      member.voice = voiceState
+      if (member) {
+        member.voice = voiceState
+      }
+
+      assembler.eventListener.emit('join:VoiceMember', member!)
     }
-
-    assembler.eventListener.emit('join:VoiceMember', member!)
   }
 }

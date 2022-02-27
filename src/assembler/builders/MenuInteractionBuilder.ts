@@ -17,7 +17,7 @@ export default class MenuInteractionBuilder {
         ...payload.data.resolved.messages[payload.data.target_id],
         guild_id: this.member.guild.id,
       })
-      channel?.messages.cache.set(message.id, message)
+      channel?.messages.cache.set(message!.id, message!)
     }
 
     return new MenuInteraction(

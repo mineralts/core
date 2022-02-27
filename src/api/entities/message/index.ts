@@ -24,7 +24,7 @@ export default class Message {
     public updatedAt: DateTime | null,
     public referencedMessage: Message | null | undefined,
     public pinned: boolean,
-    public mentions: MentionResolvable,
+    public mentions: MentionResolvable | undefined,
     public author: GuildMember | undefined,
     public guild: Guild | undefined,
     public channel: TextChannel,

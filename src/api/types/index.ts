@@ -70,7 +70,7 @@ export const FlagLabel = {
   256: 'House Balance',
   512: 'Early supporter',
   16384: 'Bug Hunter 2',
-  131072: 'Early verified bot developer',
+  131072: 'Early verified bot developer'
 }
 
 export const FlagIdentifier = {
@@ -84,7 +84,7 @@ export const FlagIdentifier = {
   256: 'HOUSE_BALANCE',
   512: 'EARLY_SUPPORTER',
   16384: 'BUG_HUNTER_LEVEL_2',
-  131072: 'EARLY_VERIFIED_BOT_DEVELOPER',
+  131072: 'EARLY_VERIFIED_BOT_DEVELOPER'
 }
 
 export const PremiumType = {
@@ -254,6 +254,8 @@ export enum SystemChannelFlag {
 
 export const clientEvents = [
   'ready',
+  'rateLimit',
+  'http',
   'create:Guild',
   'update:Guild',
   'delete:Guild',
@@ -292,6 +294,8 @@ export const clientEvents = [
   'update:VoiceState',
   'add:MemberBoost',
   'remove:MemberBoost',
+  'add:MemberBoost',
+  'remove:MemberBoost',
   'add:MemberTimeout',
   'remove:MemberTimeout',
   'accept:Rules',
@@ -306,7 +310,7 @@ export const clientEvents = [
   'delete:Role',
   'create:Interaction:Modal',
   'start:typing',
-  'wss',
+  'wss'
 ]
 
 export enum ButtonStyle {

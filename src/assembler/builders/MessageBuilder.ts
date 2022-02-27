@@ -25,10 +25,14 @@ export default class MessageBuilder {
   }
 
   public build (payload: any) {
+    if (!('author' in payload && 'mention_roles' in payload && 'embeds' in payload && 'components' in payload)) {
+      return
+    }
+
     const guild = this.client.guilds.cache.get(payload.guild_id)!
     const channel = guild.channels.cache.get(payload.channel_id) as TextChannel
 
-    const author = guild.members.cache.get(payload.author.id) || guild.bots.cache.get(payload.author.id)
+    const author = guild.members.cache.get(payload.author?.id) || guild.bots.cache.get(payload.author?.id)
 
     const mentionChannel: Collection<Snowflake, any> = new Collection()
     const channelMentions = payload.content

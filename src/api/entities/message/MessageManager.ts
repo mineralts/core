@@ -47,7 +47,7 @@ export default class MessageManager {
       guild_id: this.channel!.guild!.id
     })
 
-    this.cache.set(message.id, message)
-    return message
+    this.cache.set(message!.id, message!)
+    return message!
   }
 }

@@ -24,10 +24,12 @@ import Select from './api/entities/select-menu'
 import Scheduler from './core/entities/tasks/Scheduler'
 import Application from './application/Application'
 import Collection from './api/utils/Collection'
+import { WebsocketPayload } from '@mineralts/connector-preview'
 
 export * from './typing/interfaces'
 
 export {
+  WebsocketPayload,
   Kernel,
   MineralCommand,
   MineralSubcommand,
