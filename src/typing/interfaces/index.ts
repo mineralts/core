@@ -1,5 +1,5 @@
 /*
- * packages/index.ts
+ * packages/WebSocketManager.ts
  *
  * (c) Parmantier Baptiste
  *

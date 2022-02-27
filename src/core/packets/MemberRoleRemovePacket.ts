@@ -16,7 +16,6 @@ export default class MemberRoleRemovePacket extends Packet {
     const member: GuildMember | undefined = guild?.members.cache.get(payload.user.id)
 
     if (!member) {
-      assembler.application.logger.error('The member was not found.')
       return
     }
 

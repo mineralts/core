@@ -95,7 +95,7 @@ export default class GuildCreatePacket extends Packet {
     this.guild.emojis.register(this.emojis)
     this.guild.roles.register(this.roles)
 
-    const invites = await assembler.connector.http.get(`/guilds/${this.guild.id}/invites`)
+    const { data: invites } = await assembler.connector.http.get(`/guilds/${this.guild.id}/invites`)
 
     const inviteBuilder = new InviteBuilder(assembler.application.client as any, this.guild)
     invites.forEach((item) => {

@@ -12,7 +12,7 @@ import { fetch } from 'fs-recursive'
 import { join } from 'path'
 import EventsListener from './EventsListener'
 import fs from 'fs'
-import { Connector } from '@mineralts/connector-preview'
+// import { Connector } from '@mineralts/connector-preview'
 import Application from '../application/Application'
 import PacketManager from '../core/packets/PacketManager'
 import { MineralEvent } from '../core/entities/Event'
@@ -22,6 +22,7 @@ import { MineralTask } from '../core/entities/tasks/Task'
 import Scheduler from '../core/entities/tasks/Scheduler'
 import { MineralContextMenu } from '../core/entities/ContextMenu'
 import Packet from '../core/entities/Packet'
+import Connector from '../connector/Connector'
 
 export default class Assembler {
   public readonly eventListener: EventsListener = new EventsListener()
@@ -36,10 +37,9 @@ export default class Assembler {
       Authorization: `Bot ${this.application.environment.cache.get('TOKEN')}`
     })
 
-    await this.connector.socket.connect()
-    this.connector.socket.authenticate()
+    await this.connector.websocketManager.connect()
 
-    this.connector.socket.dispatch(async (payload) => {
+    this.connector.websocketManager.dispatch(async (payload) => {
       const packets: Packet[] | undefined = this.packetManager.resolve(payload.t)
 
       if (payload.s) {
@@ -56,6 +56,27 @@ export default class Assembler {
         )
       }
     })
+
+    // await this.connector.socket.connect()
+    // this.connector.socket.authenticate()
+    //
+    // this.connector.socket.dispatch(async (payload) => {
+    //   const packets: Packet[] | undefined = this.packetManager.resolve(payload.t)
+    //
+    //   if (payload.s) {
+    //     this.application.apiSequence = payload.s
+    //   }
+    //
+    //   this.eventListener.emit('wss', payload)
+    //
+    //   if (packets?.length) {
+    //     await Promise.all(
+    //       packets.map(async (packet: Packet) => (
+    //         packet?.handle(this, payload.d)
+    //       ))
+    //     )
+    //   }
+    // })
   }
 
   public async register () {

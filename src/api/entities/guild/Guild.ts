@@ -6,7 +6,8 @@ import {
   GuildFeature,
   LocalPath,
   Milliseconds,
-  NotificationLevel, PruneOption,
+  NotificationLevel,
+  PruneOption,
   Region,
   Snowflake,
   SystemChannelFlag,
@@ -87,20 +88,22 @@ export default class Guild {
 
   public async setName (value: string): Promise<void> {
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, { name: value })
+    const { status } = await request.patch(`/guilds/${this.id}`, { name: value })
 
-    if (result) {
+    if (status === 200) {
       this.name = value
     }
   }
 
   public async setPreferredLocale (region: keyof typeof Region): Promise<void> {
     const request = Application.createRequest()
-    await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       preferred_locale: region
     })
 
-    this.region = region
+    if (status === 200) {
+      this.region = region
+    }
   }
 
   public async leave (): Promise<void> {
@@ -110,8 +113,9 @@ export default class Guild {
     }
 
     const request = Application.createRequest()
-    const result = await request.delete(`/guilds/${this.id}`)
-    if (result) {
+    const { status } = await request.delete(`/guilds/${this.id}`)
+
+    if (status === 200) {
       client.guilds.cache.delete(this.id)
     }
   }
@@ -128,11 +132,11 @@ export default class Guild {
     const value = voiceChannel instanceof VoiceChannel ? voiceChannel.id : voiceChannel
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       afk_channel_id: value
     })
 
-    if (result) {
+    if (status === 200) {
       this.afkChannelId = value
     }
   }
@@ -141,22 +145,22 @@ export default class Guild {
     const value = VerificationLevel[level]
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       verification_level: value
     })
 
-    if (result) {
+    if (status === 200) {
       this.verificationLevel = value
     }
   }
 
   public async setNotificationLevel (level: keyof typeof NotificationLevel): Promise<void> {
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       default_message_notifications: NotificationLevel[level]
     })
 
-    if (result) {
+    if (status === 200) {
       this.defaultMessageNotifications = level
     }
   }
@@ -165,22 +169,22 @@ export default class Guild {
     const explicitContentFilter = ExplicitContentLevel[level]
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       explicit_content_filter: explicitContentFilter
     })
 
-    if (result) {
+    if (status === 200) {
       this.explicitContentFilter = explicitContentFilter
     }
   }
 
   public async setAfkTimeout (value: Milliseconds): Promise<void> {
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       afk_timeout: value
     })
 
-    if (result) {
+    if (status === 200) {
       this.afkTimeout = value
     }
   }
@@ -224,15 +228,15 @@ export default class Guild {
     const value = member instanceof GuildMember ? member.id : member
 
     if (this.ownerId === client.user.id) {
-      throw new Error('OWNERISALREADYMEMBER')
+      throw new Error('OWNER_IS_ALREADY_MEMBER')
     }
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       owner_id: value
     })
 
-    if (result) {
+    if (status === 200) {
       this.ownerId = value
       this.owner = this.members.cache.get(value)!
     }
@@ -248,12 +252,12 @@ export default class Guild {
     const file = await fs.promises.readFile(filePath, 'base64')
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status, data } = await request.patch(`/guilds/${this.id}`, {
       splash: `data:image/png;base64,${file}`
     })
 
-    if (result) {
-      this.splash = result.splash
+    if (status === 200) {
+      this.splash = data.splash
     }
   }
 
@@ -267,12 +271,12 @@ export default class Guild {
     const file = await fs.promises.readFile(filePath, 'base64')
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status, data } = await request.patch(`/guilds/${this.id}`, {
       discovery_splash: `data:image/png;base64,${file}`
     })
 
-    if (result) {
-      this.discoverySplash = result.splash
+    if (status === 200) {
+      this.discoverySplash = data.splash
     }
   }
 
@@ -286,12 +290,12 @@ export default class Guild {
     const file = await fs.promises.readFile(filePath, 'base64')
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status, data } = await request.patch(`/guilds/${this.id}`, {
       banner: `data:image/png;base64,${file}`
     })
 
-    if (result) {
-      this.banner = result
+    if (status === 200) {
+      this.banner = data
     }
   }
 
@@ -299,12 +303,12 @@ export default class Guild {
     const value = channel instanceof TextChannel ? channel.id : channel
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status, data } = await request.patch(`/guilds/${this.id}`, {
       system_channel_id: value
     })
 
-    if (result) {
-      this.systemChannelId = result
+    if (status === 200) {
+      this.systemChannelId = data
     }
   }
 
@@ -312,11 +316,11 @@ export default class Guild {
     const value = SystemChannelFlag[flag]
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       system_channel_flags: value
     })
 
-    if (result) {
+    if (status === 200) {
       this.systemChannelFlags = value
     }
   }
@@ -325,11 +329,11 @@ export default class Guild {
     const value = channel instanceof TextChannel ? channel.id : channel
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       rules_channel_id: value
     })
 
-    if (result) {
+    if (status === 200) {
       this.ruleChannelId = value
     }
   }
@@ -338,22 +342,22 @@ export default class Guild {
     const value = channel instanceof TextChannel ? channel.id : channel
 
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       public_updates_channel_id: value
     })
 
-    if (result) {
+    if (status === 200) {
       this.publicUpdateChannelId = value
     }
   }
 
   public async setDescription (value: string): Promise<void> {
     const request = Application.createRequest()
-    const result = await request.patch(`/guilds/${this.id}`, {
+    const { status } = await request.patch(`/guilds/${this.id}`, {
       description: value
     })
 
-    if (result) {
+    if (status === 200) {
       this.description = value
     }
   }
@@ -424,14 +428,14 @@ export default class Guild {
         permissions: menu.permissions || [],
         default_permission: menu.permissions
           ? menu.permissions?.length === 0
-          : true,
+          : true
       }
     })
 
     const permissions: { id: Snowflake, permissions: { id: Snowflake, type: number, permission: boolean } }[] = []
-    const payload = await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, [...serializedCommands, ...serializedMenus])
-    if (payload) {
-      payload.forEach((item) => {
+    const { status, data } = await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, [...serializedCommands, ...serializedMenus])
+    if (status === 200) {
+      data.forEach((item) => {
         const command = item.type === CommandType.CHAT_INPUT
           ? container.commands.get(item.name)
           : container.menus.get(item.name)
@@ -441,7 +445,7 @@ export default class Guild {
           if (command.data) {
             permissions.push({
               id: command.id,
-              permissions: command.data.permissions,
+              permissions: command.data.permissions
             })
           }
         }

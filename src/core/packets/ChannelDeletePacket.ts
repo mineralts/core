@@ -14,7 +14,6 @@ export default class ChannelDeletePacket extends Packet {
     const guild = assembler.application.client.guilds.cache.get(payload.guild_id)
     const channel = guild?.channels.cache.get(payload.id)
 
-
     if (!channel) {
       assembler.application.logger.error('Channel is missing')
       return
