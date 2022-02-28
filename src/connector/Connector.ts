@@ -4,10 +4,11 @@ import EventsListener from '../assembler/EventsListener'
 import Application from '../application/Application'
 
 export default class Connector {
-  public http: Http = new Http()
+  public http: Http
   public websocketManager: WebSocketManager
 
   constructor (private application: Application, private eventEmitter: EventsListener) {
-    this.websocketManager = new WebSocketManager(application, this.http, eventEmitter)
+    this.http = new Http(eventEmitter)
+    this.websocketManager = new WebSocketManager(application, this.http, { shards: 'auto' })
   }
 }

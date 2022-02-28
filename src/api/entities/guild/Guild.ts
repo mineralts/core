@@ -433,36 +433,42 @@ export default class Guild {
     })
 
     const permissions: { id: Snowflake, permissions: { id: Snowflake, type: number, permission: boolean } }[] = []
-    const { status, data } = await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, [...serializedCommands, ...serializedMenus])
-    if (status === 200) {
-      data.forEach((item) => {
-        const command = item.type === CommandType.CHAT_INPUT
-          ? container.commands.get(item.name)
-          : container.menus.get(item.name)
+    try {
+      const { status, data } = await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, [...serializedCommands, ...serializedMenus])
+      if (status === 200) {
+        data.forEach((item) => {
+          const command = item.type === CommandType.CHAT_INPUT
+            ? container.commands.get(item.name)
+            : container.menus.get(item.name)
 
-        if (command) {
-          command.id = item.id
-          if (command.data) {
-            permissions.push({
-              id: command.id,
-              permissions: command.data.permissions
-            })
+          if (command) {
+            command.id = item.id
+            if (command.data) {
+              permissions.push({
+                id: command.id,
+                permissions: command.data.permissions
+              })
+            }
           }
-        }
-      })
+        })
+      }
 
       await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands/permissions`, permissions)
-    }
+    } catch (e) {}
   }
 
   public async removeBulkGlobalCommand (assembler: Assembler) {
     const request = Application.createRequest()
-    await request.put(`/applications/${assembler.application.client.application.id}/commands`, {})
+    try {
+      await request.put(`/applications/${assembler.application.client.application.id}/commands`, {})
+    } catch (e) {}
   }
 
   public async removeBulkCommand (assembler: Assembler) {
     const request = Application.createRequest()
-    await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, {})
+    try {
+      await request.put(`/applications/${assembler.application.client.application.id}/guilds/${this.id}/commands`, {})
+    } catch (e) {}
   }
 
   public toString (): string {

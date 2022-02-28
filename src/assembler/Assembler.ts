@@ -23,6 +23,7 @@ import Scheduler from '../core/entities/tasks/Scheduler'
 import { MineralContextMenu } from '../core/entities/ContextMenu'
 import Packet from '../core/entities/Packet'
 import Connector from '../connector/Connector'
+import Shard from '../connector/shards/Shard'
 
 export default class Assembler {
   public readonly eventListener: EventsListener = new EventsListener()
@@ -39,44 +40,21 @@ export default class Assembler {
 
     await this.connector.websocketManager.connect()
 
-    this.connector.websocketManager.dispatch(async (payload) => {
-      const packets: Packet[] | undefined = this.packetManager.resolve(payload.t)
+    this.connector.websocketManager.shards.forEach((shard: Shard) => {
+      shard.dispatch(async (payload) => {
+        const packets: Packet[] | undefined = this.packetManager.resolve(payload.t)
 
-      if (payload.s) {
-        this.application.apiSequence = payload.s
-      }
+        this.eventListener.emit('wss', payload)
 
-      this.eventListener.emit('wss', payload)
-
-      if (packets?.length) {
-        await Promise.all(
-          packets.map(async (packet: Packet) => (
-            packet?.handle(this, payload.d)
-          ))
-        )
-      }
+        if (packets?.length) {
+          await Promise.all(
+            packets.map(async (packet: Packet) => (
+              packet?.handle(this, payload.d)
+            ))
+          )
+        }
+      })
     })
-
-    // await this.connector.socket.connect()
-    // this.connector.socket.authenticate()
-    //
-    // this.connector.socket.dispatch(async (payload) => {
-    //   const packets: Packet[] | undefined = this.packetManager.resolve(payload.t)
-    //
-    //   if (payload.s) {
-    //     this.application.apiSequence = payload.s
-    //   }
-    //
-    //   this.eventListener.emit('wss', payload)
-    //
-    //   if (packets?.length) {
-    //     await Promise.all(
-    //       packets.map(async (packet: Packet) => (
-    //         packet?.handle(this, payload.d)
-    //       ))
-    //     )
-    //   }
-    // })
   }
 
   public async register () {

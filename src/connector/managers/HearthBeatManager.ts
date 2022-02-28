@@ -8,30 +8,28 @@
  *
  */
 
-import WebSocketManager from './WebSocketManager'
 import { Opcode } from '../types'
+import Shard from '../shards/Shard'
 
 export default class HearthBeatManager {
   private scheduler: any
-  constructor (private socketManager: WebSocketManager) {
+  constructor (private shard: Shard) {
   }
 
   public watchSession (sessionId: string) {
     if (sessionId) {
-      this.socketManager.sessionId = sessionId
+      this.shard.manager.sessionId = sessionId
     }
   }
 
   public beat (interval: number) {
     this.scheduler = setInterval(() => {
-      const request = this.socketManager.request(Opcode.HEARTBEAT, {
-        session_id: this.socketManager.sessionId
-      })
+      const request = this.shard.request(Opcode.HEARTBEAT, this.shard.sequence)
 
-      this.socketManager.websocket.send(request)
+      this.shard.manager.websocket?.send(request)
 
-      if (this.socketManager.application.debug) {
-        this.socketManager.application.logger.info('Sending a heartbeat')
+      if (this.shard.manager.application.debug) {
+        this.shard.manager.application.logger.info('Sending a heartbeat')
       }
     }, interval)
   }
