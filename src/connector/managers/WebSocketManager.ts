@@ -5,6 +5,8 @@ import Shard from '../shards/Shard'
 import WebSocket from 'ws'
 import Application from '../../application/Application'
 import { sleep } from '../../api/utils'
+import { Snowflake } from '../../api/types'
+import Guild from '../../api/entities/guild/Guild'
 
 export default class WebSocketManager {
   public websocket?: WebSocket
@@ -58,6 +60,7 @@ export default class WebSocketManager {
   }
 
   private async createShards () {
+    this.application.logger.info('Create shard with shard : ' + this.shardQueue.size)
     if (!this.shardQueue.size) {
       return false
     }
@@ -65,9 +68,16 @@ export default class WebSocketManager {
     const [shard] = this.shardQueue
     this.shardQueue.delete(shard)
 
-    this.shards.set(shard.id, shard)
+    shard.on('shards:ready', (guilds: Collection<Snowflake, Guild>) => {
+      this.websocket?.emit('ready:shard', shard, guilds)
 
-    shard.on('close:shard', async (event) => {
+      if (!this.shardQueue.size) {
+        this.reconnecting = false
+      }
+    })
+
+    shard.on('close', async (event) => {
+      console.log(1, event)
       if (event.code === 1_000) {
         this.websocket?.emit('disconnect:shard', event, shard)
         return
@@ -84,18 +94,27 @@ export default class WebSocketManager {
     })
 
     shard.on('delete:shard', () => {
-      this.websocket?.emit('reconnect:shard')
+      this.websocket?.emit('reconnect:shard', shard)
 
       this.shardQueue.add(shard)
       this.reconnect()
     })
 
+    this.shards.set(shard.id, shard)
+
     try {
       await shard.connect()
     } catch (error) {}
+
+    if (this.shardQueue.size) {
+      this.application.logger.error(`Shard Queue Size: ${this.shardQueue.size}; continuing in 5 seconds...`)
+      await sleep(5000)
+      return this.createShards()
+    }
   }
 
   private async reconnect () {
+    console.log(2, this.reconnecting, this.status, this.status !== Status.READY)
     if (this.reconnecting || this.status !== Status.READY) {
       return
     }
@@ -105,6 +124,7 @@ export default class WebSocketManager {
     try {
       await this.createShards()
     } catch (error: any) {
+      this.application.logger.error('ERROR')
       if (error.httpStatus !== 401) {
         this.application.logger.error('Possible network error occurred. Retrying in 5s...')
 

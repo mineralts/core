@@ -35,6 +35,7 @@ export default class Shard extends EventEmitter {
     this.manager.websocket?.on('close', async (code: number) => {
       this.heartbeatManager.shutdown()
       this.manager.application.logger.fatal('Socket disconnected with ' + code + ' code.')
+      this.emit('close', code)
     })
 
     this.manager.websocket?.on('open', () => {
