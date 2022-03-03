@@ -19,7 +19,7 @@ export default class Interaction {
   }
 
   public async reply (messageOption: MessageOption): Promise<void> {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     const components = messageOption.components?.map((row: EmbedRow) => {
       row.components = row.components.map((component: MessageComponentResolvable) => {
         return component.toJson()
@@ -38,7 +38,7 @@ export default class Interaction {
   }
 
   public async createModal (modal: Modal) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     await request.post(`/interactions/${this.id}/${this.token}/callback`, {
       type: InteractionType.MODAL_SUBMIT,
