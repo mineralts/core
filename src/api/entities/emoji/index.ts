@@ -16,7 +16,7 @@ export default class Emoji {
   }
 
   public async update (options: { label: string, roles?: Role[] | Snowflake[], reason?: string }) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (options.reason) {
       request.defineHeaders({
@@ -35,7 +35,7 @@ export default class Emoji {
   }
 
   public async delete (reason?: string) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({
