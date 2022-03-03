@@ -1,15 +1,16 @@
 import Packet from '../entities/Packet'
-import Assembler from '../../assembler/Assembler'
 import TextChannel from '../../api/entities/channels/TextChannel'
 import Reaction from '../../api/entities/reaction/Reaction'
+import Application from '../../application/Application'
 
 export default class MessageReactionRemove extends Packet {
   public packetType = 'MESSAGE_REACTION_REMOVE'
 
-  public async handle (assembler: Assembler, payload: any) {
-    const client = assembler.application.client
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client.guilds.cache.get(payload.guild_id)
+    const guild = client?.guilds.cache.get(payload.guild_id)
     const channel = guild?.channels.cache.get(payload.channel_id) as TextChannel
     const message = channel.messages.cache.get(payload.message_id)
 
@@ -30,7 +31,7 @@ export default class MessageReactionRemove extends Packet {
         message.reactions.cache.delete(payload.user_id)
       }
 
-      assembler.eventListener.emit('remove:MessageReaction', message, reaction[0])
+      emitter.emit('remove:MessageReaction', message, reaction[0])
     }
   }
 }
