@@ -5,6 +5,7 @@ import { Data } from 'ws'
 import HearthBeatManager from '../managers/HearthBeatManager'
 import { keyFromEnum } from '../../api/utils'
 import { EventEmitter } from 'node:events'
+import Application from '../../application/Application'
 
 enum WebSocketState {
   OPEN,
@@ -46,12 +47,16 @@ export default class Shard extends EventEmitter {
   }
 
   private identify () {
+    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+    const intents = environment.resolveKey('intents')
+    const token = environment.resolveKey('token')
+
     const request = this.request(Opcode.IDENTIFY, {
-      token: this.manager.application.environment.cache.get('TOKEN'),
+      token,
       properties: { $os: process.arch },
       compress: false,
       large_threshold: 250,
-      intents: this.manager.application.intents,
+      intents: intents?.bitfield,
       shard: [this.id, Number(this.manager.totalShards)]
     })
 
