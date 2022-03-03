@@ -1,9 +1,15 @@
 import Collection from '../../../api/utils/Collection'
 import {
-  ExplicitContentLevel, Feature, GuildFeature, LocalPath, Milliseconds,
-  NotificationLevel, PruneOption,
+  ExplicitContentLevel,
+  Feature,
+  GuildFeature,
+  LocalPath,
+  Milliseconds,
+  NotificationLevel,
+  PruneOption,
   Region,
-  Snowflake, SystemChannelFlag,
+  Snowflake,
+  SystemChannelFlag,
   VerificationLevel
 } from '../../../api/types'
 import GuildMember from './GuildMember'
