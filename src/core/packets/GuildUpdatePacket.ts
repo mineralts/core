@@ -1,4 +1,3 @@
-import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import Collection from '../../api/utils/Collection'
 import { Region, Snowflake } from '../../api/types'
@@ -10,6 +9,7 @@ import GuildStickerManager from '../../api/entities/guild/GuildStickerManager'
 import GuildEmojiManager from '../../api/entities/guild/GuildEmojiManager'
 import GuildRoleManager from '../../api/entities/guild/GuildRoleManager'
 import { OnlyKeys } from '../../typing/interfaces'
+import Application from '../../application/Application'
 
 export default class GuildUpdatePacket extends Packet {
   public packetType = 'GUILD_UPDATE'
@@ -17,10 +17,12 @@ export default class GuildUpdatePacket extends Packet {
   private roles: Collection<Snowflake, Role> = new Collection()
   private emojis: Collection<Snowflake, Emoji> = new Collection()
 
-  public async handle (assembler: Assembler, payload: any) {
-    const client = assembler.application.client
-    const before = { ...client.guilds.cache.get(payload.guild_id) } as Omit<Guild, OnlyKeys<Guild>>
-    const guild = client.guilds.cache.clone().get(payload.guild_id)
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+
+    const before = { ...client?.guilds.cache.get(payload.guild_id) } as Omit<Guild, OnlyKeys<Guild>>
+    const guild = client?.guilds.cache.clone().get(payload.guild_id)
 
     guild.emojis = new GuildEmojiManager()
     guild.roles = new GuildRoleManager(guild)
@@ -65,7 +67,7 @@ export default class GuildUpdatePacket extends Packet {
     })
 
 
-    assembler.eventListener.emit('update:Guild', before, guild)
-    assembler.application.client.guilds.cache.set(guild.id, guild)
+    emitter.emit('update:Guild', before, guild)
+    client?.guilds.cache.set(guild.id, guild)
   }
 }
