@@ -35,7 +35,7 @@ export default class VoiceState {
   }
 
   public async setMute(value: boolean) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/guilds/${this.guild.id}/members/${this.member.id}`, {
       mute: value
     })
@@ -44,7 +44,7 @@ export default class VoiceState {
   }
 
   public async setDeaf(value: boolean) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/guilds/${this.guild.id}/members/${this.member.id}`, {
       deaf: value
     })
@@ -53,7 +53,7 @@ export default class VoiceState {
   }
 
   public async move(channel: VoiceChannel | Snowflake) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/guilds/${this.guild.id}/members/${this.member.id}`, {
       channel_id: typeof channel === 'string'
         ? channel
