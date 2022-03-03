@@ -11,23 +11,21 @@
 import Kernel from '../Kernel'
 import Logger from '@mineralts/logger'
 import path from 'path'
-import Environment from '../../environment/Environment'
+import Application from '../../application/Application'
 
 class Forge {
   private logger: Logger = new Logger()
-  private environment: Environment = new Environment()
-  private kernel: Kernel = new Kernel(process.cwd())
+  private kernel: Kernel = new Kernel()
 
   public async handle () {
-    const rootDir: string | undefined = this.environment.cache.get('ROOT_PROJECT')
-    this.environment.registerEnvironment(rootDir || process.cwd())
-
-    await this.kernel.application.registerCliCommands()
+    const cli = Application.singleton().resolveBinding('Mineral/Core/Cli')
+    await cli?.register()
 
     const { COMMAND_NAME, ARGS } = process.env
 
     if (COMMAND_NAME === 'generate:manifest' || COMMAND_NAME === 'help' || !COMMAND_NAME) {
-      const command = this.kernel.application.commands.get(COMMAND_NAME || 'help')
+      const commands = Application.singleton().resolveBinding('Mineral/Core/Cli')
+      const command = commands.resolveCommand(COMMAND_NAME || 'help')
       await command.run()
     } else {
       const forgeManifest = await import(path.join(process.cwd(), 'forge-manifest.json'))
@@ -43,6 +41,7 @@ class Forge {
       const location = forgeCommand.path.startsWith('/')
         ? path.join(process.cwd(), forgeCommand.path)
         : path.join(process.cwd(), 'node_modules', forgeCommand.path)
+
 
       const { default: Command } = await import(location)
       const command = new Command()
