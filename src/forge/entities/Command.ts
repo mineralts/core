@@ -9,11 +9,11 @@
  */
 
 import Logger from '@mineralts/logger'
-import Application from '../../application/Application'
+import Container from '../../application/Container'
 
 export abstract class Command {
-  public logger!: Logger
-  public application!: Application
+  public logger: Logger
+  public ioc: Container
   public static settings: { loadApp: boolean } = { loadApp: false }
   public abstract run (...args: string[]): Promise<void>
 }
