@@ -27,16 +27,6 @@ export interface DirectoriesNode {
   [key: string]: string
 }
 
-export type RcFile = {
-  preloads: any[]
-  commands: string[]
-  providers: string[]
-  statics: string[]
-  aliases: {
-    [key: string]: string
-  }
-}
-
 export interface ApplicationContract {
   container: any
 }
