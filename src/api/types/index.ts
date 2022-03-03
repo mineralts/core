@@ -8,6 +8,9 @@
  *
  */
 
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../../contracts/api.ts" />
+
 import { DateTime } from 'luxon'
 import StringArgument from '../command/StringArgument'
 import NumberArgument from '../command/NumberArgument'
