@@ -1,18 +1,19 @@
-import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { Snowflake } from '../../api/types'
 import Collection from '../../api/utils/Collection'
-import Client from '../../api/entities/client'
 import Guild from '../../api/entities/guild/Guild'
 import GuildMember from '../../api/entities/guild/GuildMember'
 import Role from '../../api/entities/roles'
+import Application from '../../application/Application'
 
 export default class MemberRoleRemovePacket extends Packet {
   public packetType = 'GUILD_MEMBER_UPDATE'
 
-  public async handle (assembler: Assembler, payload: any) {
-    const client: Client = assembler.application.client
-    const guild: Guild | undefined = client.guilds.cache.get(payload.guild_id)
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+
+    const guild: Guild | undefined = client?.guilds.cache.get(payload.guild_id)
     const member: GuildMember | undefined = guild?.members.cache.get(payload.user.id)
 
     if (!member) {
@@ -31,7 +32,7 @@ export default class MemberRoleRemovePacket extends Packet {
         }
       })
 
-      assembler.eventListener.emit(
+      emitter.emit(
         'remove:MemberRole',
         member,
         currentRoles,
