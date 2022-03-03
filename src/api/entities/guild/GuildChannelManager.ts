@@ -16,7 +16,7 @@ export default class GuildChannelManager {
 
   public async create (channel: ChannelOptionResolvable) {
     let payload: any
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     const baseChannel = {
       name: channel.name,
       type: ChannelTypeResolvable[channel.type],
