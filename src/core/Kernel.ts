@@ -1,5 +1,3 @@
-import { join } from 'node:path'
-import fs from 'fs'
 import PacketManager from './packets/PacketManager'
 import Application from '../application/Application'
 import Assembler from '../assembler/Assembler'
@@ -10,42 +8,30 @@ export default class Kernel {
   private readonly assembler: Assembler
   private readonly packetManager: PacketManager
 
-  constructor (private projectDir: string) {
-    const JSON_PACKAGE = this.loadFileSync(this.projectDir, 'package.json')
-    const rcFile = this.loadFileSync(this.projectDir, '.mineralrc.json', 'The .mineralrc.json file was not found at the root of the project.')
-
-    this.application = Application.create(this.projectDir, {
-      appName: JSON_PACKAGE.name,
-      version: JSON_PACKAGE.version,
-      rcFile
-    })
+  constructor () {
+    this.application = Application.create()
+    this.application.setup()
 
     this.packetManager = new PacketManager()
     this.assembler = new Assembler(this.application, this.packetManager)
-    this.application.environment.cache.set('ROOT_PROJECT', this.projectDir)
-    this.application.environment.registerEnvironment(this.projectDir)
   }
 
   public async createApplication () {
-    await this.application.registerCliCommands()
-    await this.assembler.build()
-    await this.assembler.registerProvider()
+    const providers = Application.singleton().resolveBinding('Mineral/Core/Providers')!
+    const cli = Application.singleton().resolveBinding('Mineral/Core/Providers')
 
-    this.application.registerBinding('request', this.assembler.connector.http)
+    await cli?.register()
+    await providers.register()
+    await this.assembler.build()
+
+    Application.singleton().registerBinding('Mineral/Core/Http', this.assembler.connector.http)
+    Application.singleton().registerBinding('Mineral/Core/Connector', this.assembler.connector)
+    Application.singleton().registerBinding('Mineral/Core/Assembler', this.assembler)
+
     await Promise.all(
-      this.application.container.providers.map(async (provider: MineralProvider) => {
+      providers.collection.map(async (provider: MineralProvider) => {
         await provider.boot()
       })
     )
-  }
-
-  protected loadFileSync (location: string, filename: string, message?: string) {
-    try {
-      return JSON.parse(fs.readFileSync(join(location, filename), 'utf-8'))
-    } catch (error) {
-      throw new Error(
-        message || `The file ${filename} at location ${location} was not found.`
-      )
-    }
   }
 }
