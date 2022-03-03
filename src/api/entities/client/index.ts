@@ -7,13 +7,13 @@ import Application from '../../../application/Application'
 import { serializeCommand } from '../../utils'
 import GuildManager from '../guild/GuildManager'
 import DmManager from '../private/DmManager'
+import { MineralBaseCommand } from '../../../core/entities/Command'
 
 export default class Client {
   public guilds: GuildManager = new GuildManager()
   public privates: DmManager = new DmManager()
 
   constructor (
-    public container: any,
     public token: string,
     public options: ClientOptions,
     public user: User,
@@ -24,10 +24,10 @@ export default class Client {
   ) {
   }
   
-  public async registerGlobalCommands (assembler) {
-    const request = Application.createRequest()
-    const commandContainer = assembler.application.container.commands
-    const commands = commandContainer.filter((command) => (
+  public async registerGlobalCommands () {
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const container = Application.singleton().resolveBinding('Mineral/Core/Commands')
+    const commands = container!.collection.filter((command: MineralBaseCommand) => (
       command.data.scope == 'GLOBAL'
     ))
 
