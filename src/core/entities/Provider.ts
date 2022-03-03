@@ -1,6 +1,6 @@
 import Logger from '@mineralts/logger'
 import Entity from './Entity'
-import Application from '../../application/Application'
+import Container from '../../application/Container'
 
 export function Provider () {
   return (target: any) => {
@@ -10,7 +10,7 @@ export function Provider () {
 
 export abstract class MineralProvider {
   public logger: Logger
-  public application: Application
+  public application: Container
 
   abstract boot (...args: any[]): Promise<void>
   abstract loadFile (entity: Entity): Promise<void>
