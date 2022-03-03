@@ -68,7 +68,7 @@ export default class Role {
       payload['unicode_emoji'] = options.emoji
     }
 
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (options.reason) {
       request.defineHeaders({
@@ -83,7 +83,7 @@ export default class Role {
   }
 
   public async delete (reason?: string): Promise<void> {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({
@@ -96,7 +96,7 @@ export default class Role {
   }
 
   public async setPosition (position: number, reason?: string): Promise<void> {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({
