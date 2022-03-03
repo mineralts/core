@@ -1,16 +1,19 @@
 import { DateTime } from 'luxon'
 import Packet from '../entities/Packet'
-import Assembler from '../../assembler/Assembler'
 import Collection from '../../api/utils/Collection'
 import UserFlags from '../../api/entities/user/UserFlags'
 import { FlagIdentifier, FlagLabel } from '../../api/types'
 import User from '../../api/entities/user'
 import Client from '../../api/entities/client'
+import Application from '../../application/Application'
 
 export default class ReadyPacket extends Packet {
   public packetType = 'READY'
 
-  public async handle (assembler: Assembler, payload: any) {
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+
     const flag = new UserFlags(
       FlagIdentifier[payload.user.public_flags || 0],
       FlagLabel[payload.user.public_flags || 0],
@@ -33,11 +36,17 @@ export default class ReadyPacket extends Packet {
       undefined
     )
 
-    const token = assembler.application.environment.cache.get('TOKEN') as string
+    const token = environment?.resolveKey('token')
+
+    if (!token) {
+      throw new Error('No token was provided')
+    }
+
     const client = new Client(
-      assembler.application.container,
       token,
-      {},
+      {
+        intents: environment?.resolveKey('intents')?.selected,
+      },
       user,
       payload.session_id,
       payload.presences,
@@ -45,11 +54,12 @@ export default class ReadyPacket extends Packet {
       new Collection()
     )
 
-    assembler.application.client = client as any
+    Application.singleton().registerBinding('Mineral/Core/Client', client)
 
+    const assembler = await Application.singleton().resolveBinding('Mineral/Core/Assembler')
     await assembler.register()
-    await client.registerGlobalCommands(assembler)
+    await client.registerGlobalCommands()
 
-    assembler.eventListener.emit('ready', client)
+    emitter.emit('ready', client)
   }
 }
