@@ -1,9 +1,4 @@
-import {
-  ChannelTypeResolvable,
-  MessageComponentResolvable, MessageOption,
-  Milliseconds,
-  Snowflake
-} from '../../types'
+import { ChannelTypeResolvable, MessageComponentResolvable, MessageOption, Milliseconds, Snowflake } from '../../types'
 import Guild from '../guild/Guild'
 import Channel from './Channel'
 import { DateTime } from 'luxon'
@@ -41,14 +36,14 @@ export default class TextChannelResolvable extends Channel {
       logger.error(`${value} cannot be value < 0 or value > 21600`)
     }
 
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, { rate_limit_per_user: value })
 
     this.cooldown = DateTime.fromMillis(value)
   }
 
   public async setDescription (value: string | null) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, { topic: value })
 
     this.description = value || ''
@@ -59,7 +54,7 @@ export default class TextChannelResolvable extends Channel {
   }
 
   public async setNSFW(bool: boolean) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, { nsfw: bool })
 
     this.isNsfw = bool
@@ -70,7 +65,7 @@ export default class TextChannelResolvable extends Channel {
   }
 
   public async send (messageOption: MessageOption) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     const components = messageOption.components?.map((row: EmbedRow) => {
       row.components = row.components.map((component: MessageComponentResolvable) => {
