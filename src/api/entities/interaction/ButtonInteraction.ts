@@ -19,7 +19,7 @@ export default class ButtonInteraction extends Interaction {
   }
 
   public async pass () {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.post(`/interactions/${this.id}/${this.token}/callback`, {
       type: InteractionType.DEFERRED_UPDATE_MESSAGE,
       data: {
@@ -29,7 +29,7 @@ export default class ButtonInteraction extends Interaction {
   }
 
   public async reply (messageOption: MessageOption): Promise<void> {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     const components = messageOption.components?.map((row: EmbedRow) => {
       row.components = row.components.map((component: MessageComponentResolvable) => {
         return component.toJson()
