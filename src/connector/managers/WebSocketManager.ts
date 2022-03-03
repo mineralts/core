@@ -23,10 +23,6 @@ export default class WebSocketManager {
   }
 
   public async connect () {
-    if (!this.application.environment.cache.get('TOKEN')) {
-      throw new Error('No token has been defined.')
-    }
-
     const version = '/v9/gateway/bot'
     const { endpoint, shards } = await this.getDiscordWebsocket(version)
 
