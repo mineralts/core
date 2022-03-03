@@ -22,8 +22,13 @@ export default class GenerateManifest extends Command {
 
   public async run (): Promise<void> {
     this.logger.info('Waiting to generate manifest file...')
+    const environment = this.ioc.resolveBinding('Mineral/Core/Environment')
+    const commandDirs = environment?.resolveKey('rcFile')?.commands
 
-    const commandDirs = this.application.rcFile.commands
+    if (!commandDirs) {
+      return
+    }
+
     const commands = await Promise.all(
       commandDirs.map(async (dir: string) => {
         const commandDirs: string[] = []
