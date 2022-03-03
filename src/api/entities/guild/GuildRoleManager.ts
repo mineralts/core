@@ -60,7 +60,7 @@ export default class GuildRoleManager {
       payload['unicode_emoji'] = options.emoji
     }
 
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (options.reason) {
       request.defineHeaders({
