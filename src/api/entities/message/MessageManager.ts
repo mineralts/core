@@ -14,7 +14,7 @@ export default class MessageManager {
   public async fetch (id: Snowflake): Promise<Message>
   public async fetch (options?: { before?: Snowflake, after?: Snowflake, around?: Snowflake, limit?: number }): Promise<void>
   public async fetch (value?: { before?: Snowflake, after?: Snowflake, around?: Snowflake, limit?: number } | Snowflake): Promise<Message | void>{
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (typeof value === 'string') {
       const payload = await request.get(`/channels/${this.channel?.id}/messages/${value}`)
@@ -35,8 +35,10 @@ export default class MessageManager {
       })
     }
 
-    const payload = await request.get(`/channels/${this.channel?.id}/messages?${query}`)
-    payload.forEach((item) => this.instantiate(item))
+    const { status, data } = await request.get(`/channels/${this.channel?.id}/messages?${query}`)
+    if (status === 200) {
+      data.forEach((item) => this.instantiate(item))
+    }
   }
 
   private instantiate (payload): Message {
