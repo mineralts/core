@@ -6,7 +6,6 @@
   "author": "leadcodedev <baptiste.parmantier.pro@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "esbuild-dev src/index.ts --supervise --commands --watch",
     "build": "tsc",
     "test": "vitest",
     "lint": "eslint \"{src,test}/**/*.ts\"",
