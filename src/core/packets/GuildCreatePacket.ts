@@ -1,4 +1,3 @@
-import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import Collection from '../../api/utils/Collection'
 import { ChannelResolvable, Snowflake } from '../../api/types'
@@ -18,6 +17,7 @@ import Emoji from '../../api/entities/emoji'
 import Guild from '../../api/entities/guild/Guild'
 import GuildChannelManager from '../../api/entities/guild/GuildChannelManager'
 import CategoryChannel from '../../api/entities/channels/CategoryChannel'
+import Application from '../../application/Application'
 
 export default class GuildCreatePacket extends Packet {
   public packetType = 'GUILD_CREATE'
@@ -31,17 +31,21 @@ export default class GuildCreatePacket extends Packet {
   private channels: Collection<Snowflake, ChannelResolvable> = new Collection()
   private guild!: Guild
 
-  public async handle (assembler: Assembler, payload: any) {
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const connector = Application.singleton().resolveBinding('Mineral/Core/Connector')!
+
     const roleBuilder = new RoleBuilder()
     payload.roles.forEach((item: any) => {
       const role = roleBuilder.build(item)
       this.roles.set(role.id, role)
     })
 
-    const guild = new GuildBuilder(assembler.application.client as any, payload)
+    const guild = new GuildBuilder(client!, payload)
     this.guild = guild.build(this.guildMembers)
 
-    const guildMemberBuilder = new GuildMemberBuilder(assembler.application.client as any, this.roles, this.guild)
+    const guildMemberBuilder = new GuildMemberBuilder(client!, this.roles, this.guild)
     payload.members.forEach((item: any) => {
       const guildMember = guildMemberBuilder.build(item)
 
@@ -58,13 +62,13 @@ export default class GuildCreatePacket extends Packet {
       this.emojis.set(emoji.id, emoji)
     })
 
-    const presenceBuilder = new PresenceBuilder(assembler.application.client, this.guild, this.guildMembers.concat(this.guildBots))
+    const presenceBuilder = new PresenceBuilder(client!, this.guild, this.guildMembers.concat(this.guildBots))
     payload.presences.forEach((item: any) => {
       const presence = presenceBuilder.build(item)
       this.presences.set(presence.member.user.id, presence)
     })
 
-    const channelBuilder = new ChannelBuilder(assembler.application.client as any, assembler.application.logger, this.guild)
+    const channelBuilder = new ChannelBuilder(client!, this.guild)
     payload.channels.forEach((item: any) => {
       const channel = channelBuilder.build(item)
 
@@ -95,9 +99,9 @@ export default class GuildCreatePacket extends Packet {
     this.guild.emojis.register(this.emojis)
     this.guild.roles.register(this.roles)
 
-    const { data: invites } = await assembler.connector.http.get(`/guilds/${this.guild.id}/invites`)
+    const { data: invites } = await connector.http.get(`/guilds/${this.guild.id}/invites`)
 
-    const inviteBuilder = new InviteBuilder(assembler.application.client as any, this.guild)
+    const inviteBuilder = new InviteBuilder(client!, this.guild)
     invites.forEach((item) => {
       const invite = inviteBuilder.build(item)
       this.guild.invites.cache.set(invite.code, invite)
@@ -105,11 +109,11 @@ export default class GuildCreatePacket extends Packet {
 
     // await this.guild.removeBulkGlobalCommand(assembler)
     // await this.guild.removeBulkCommand(assembler)
-    await this.guild.registerCommands(assembler)
+    await this.guild.registerCommands()
     // await this.guild.registerMenus(assembler)
 
-    assembler.application.client.guilds.cache.set(this.guild.id, this.guild as any)
+    client?.guilds.cache.set(this.guild.id, this.guild as any)
 
-    assembler.eventListener.emit('create:Guild', this.guild)
+    emitter.emit('create:Guild', this.guild)
   }
 }
