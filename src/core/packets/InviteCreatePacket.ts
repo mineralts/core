@@ -1,13 +1,16 @@
-import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { DateTime } from 'luxon'
 import Invite from '../../api/entities/invitation/Invite'
+import Application from '../../application/Application'
 
 export default class InviteCreatePacket extends Packet {
   public packetType = 'INVITE_CREATE'
 
-  public async handle (assembler: Assembler, payload: any) {
-    const guild = assembler.application.client.guilds.cache.get(payload.guild_id)
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+
+    const guild = client?.guilds.cache.get(payload.guild_id)
     const member = guild?.members.cache.get(payload.inviter.id)
     const channel = guild?.channels.cache.get(payload.channel_id)
 
@@ -24,6 +27,6 @@ export default class InviteCreatePacket extends Packet {
 
     guild?.invites.cache.set(payload.code, invite)
 
-    assembler.eventListener.emit('create:Invite', invite)
+    emitter.emit('create:Invite', invite)
   }
 }
