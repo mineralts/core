@@ -14,6 +14,7 @@ import { prompt } from 'enquirer'
 import { fetch, File } from 'fs-recursive'
 import { MineralCommand } from '../core/entities/Command'
 import FileFactory from '../forge/FileFactory'
+import Application from '../application/Application'
 
 export default class MakeSubcommand extends Command {
   public static commandName = 'make:subcommand'
@@ -58,12 +59,13 @@ export default class MakeSubcommand extends Command {
       })
     )
 
+    const helpers = Application.singleton().resolveBinding('Mineral/Core/Helpers')
     const parent = {
       type: 'autocomplete',
       name: 'parent',
       message: 'Please define the parent command',
       limit: 3,
-      choices: arr.map((command) => this.application.helper.capitalCase(command.data.label))
+      choices: arr.map((command) => helpers.capitalCase(command.data.label))
     }
 
     try {
