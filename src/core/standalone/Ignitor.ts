@@ -12,11 +12,9 @@ import { execSync } from 'child_process'
 import path from 'path'
 import Kernel from '../Kernel'
 import Logger from '@mineralts/logger'
-import Environment from '../../environment/Environment'
 
 export default class Ignitor {
   private logger: Logger = new Logger
-  private environment: Environment = new Environment()
 
   public async forge () {
     const [commandName, ...args] = process.argv.slice(2)
@@ -40,7 +38,6 @@ export default class Ignitor {
       return
     }
 
-    this.environment.registerEnvironment(this.environment.cache.get('ROOT_PROJECT')!)
     if (command.settings?.loadApp) {
       await this.execTypescript(commandName, ...args)
     } else {
@@ -48,7 +45,7 @@ export default class Ignitor {
     }
   }
 
-  private async execTypescript (commandName: string, ...args: string[]) {
+  protected async execTypescript (commandName: string, ...args: string[]) {
     const forgeFile = path.join('node_modules', '@mineralts', 'core-preview', 'build', 'core', 'standalone', 'Forge.js')
     const stringArgs = args.slice(1).join(' ')
 
@@ -59,27 +56,22 @@ export default class Ignitor {
       cwd: process.cwd(),
       stdio: 'inherit',
       env: {
-        TOKEN: this.environment.cache.get<string>('TOKEN'),
         COMMAND_NAME: commandName,
-        ARGS: stringArgs
+        ARGS: stringArgs,
+        NODE_ENV: 'development'
       }
     })
 
-    process.exit()
+    process.exit(0)
   }
 
   private async execJavascript (commandName: string, ...args: string[]) {
-    const token = this.environment.cache.get<string>('TOKEN')
+    process.env.NODE_ENV = 'development'
+    const kernel = new Kernel()
+    const cli = kernel.application.ioc.resolveBinding('Mineral/Core/Cli')
+    await cli?.register()
 
-    if (!token) {
-      this.logger.fatal('Token was not provided')
-      process.exit(1)
-    }
-
-    const kernel = new Kernel(process.cwd())
-    await kernel.application.registerCliCommands()
-
-    const command = kernel.application.commands.get(commandName)
+    const command = cli?.resolveCommand(commandName)
 
     if (!command) {
       this.logger.error('Command not found.')
