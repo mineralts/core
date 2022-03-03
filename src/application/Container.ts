@@ -1,14 +1,53 @@
 import Collection from '../api/utils/Collection'
+import EventsListener from '../assembler/EventsListener'
+import MineralEnvironmentService from '../core/services/MineralEnvironmentService'
+import MineralProviderService from '../core/services/MineralProviderService'
+import Logger from '@mineralts/logger'
+import MineralCliService from '../core/services/MineralCliService'
+import MineralEventService from '../core/services/MineralEventService'
+import MineralCommandService from '../core/services/MineralCommandService'
+import Client from '../api/entities/client'
+import Connector from '../connector/Connector'
+import Helper from '../helper'
+import Reflect from '../reflect/Reflect'
+import MineralContextMenusService from '../core/services/MineralContextMenusService'
+import MineralTaskService from '../core/services/MineralTaskService'
+import Http from '../connector/http'
+
+export interface ServiceContract {
+  'Mineral/Core/Client': Client | undefined
+  'Mineral/Core/Logger': Logger
+  'Mineral/Core/Emitter': EventsListener
+  'Mineral/Core/Events': MineralEventService
+  'Mineral/Core/Commands': MineralCommandService
+  'Mineral/Core/ContextMenus': MineralContextMenusService
+  'Mineral/Core/Tasks': MineralTaskService
+  'Mineral/Core/Cli': MineralCliService
+  'Mineral/Core/Environment': MineralEnvironmentService
+  'Mineral/Core/Providers': MineralProviderService
+  'Mineral/Core/Connector': Connector
+  'Mineral/Core/Http': Http
+  'Mineral/Core/Helpers': Helper
+  'Mineral/Core/Reflect': Reflect
+}
+
+type ServiceType<T> = T extends keyof ServiceContract ? ServiceContract[T] : any
 
 export default class Container {
   public services: Collection<string, unknown> = new Collection()
 
-  public resolveBinding (binding: string) {
-    return this.services.get(binding)
+  public resolveBinding<T extends keyof ServiceContract | string> (binding: T): ServiceType<T> {
+    const service = this.services.get(binding)
+
+    if (!service) {
+      throw new Error(`The ${binding} service was not found.`)
+    }
+
+    return service as ServiceType<T>
   }
 
-  public registerBinding<T> (binding: string, service: T) {
-    if (this.resolveBinding(binding)) {
+  public registerBinding<T extends keyof ServiceContract | string> (binding: T, service: ServiceType<T>): void {
+    if (this.services.get(binding)) {
       throw new Error(`The ${binding} service already exists.`)
     }
     this.services.set(binding, service)
