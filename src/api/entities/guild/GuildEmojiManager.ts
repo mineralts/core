@@ -27,7 +27,7 @@ export default class GuildEmojiManager {
     const filePath = join(process.cwd(), options.path)
     const file = await fs.promises.readFile(filePath, 'base64')
 
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (options.reason) {
       request.defineHeaders({
