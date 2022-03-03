@@ -1,18 +1,19 @@
 import Packet from '../entities/Packet'
-import Assembler from '../../assembler/Assembler'
 import { EmojiBuilder, ReactionBuilder } from '../../assembler/builders'
 import TextChannel from '../../api/entities/channels/TextChannel'
 import GuildMember from '../../api/entities/guild/GuildMember'
 import Emoji from '../../api/entities/emoji'
 import Reaction from '../../api/entities/reaction/Reaction'
+import Application from '../../application/Application'
 
 export default class MessageReactionAdd extends Packet {
   public packetType = 'MESSAGE_REACTION_ADD'
 
-  public async handle (assembler: Assembler, payload: any) {
-    const client = assembler.application.client
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client.guilds.cache.get(payload.guild_id)
+    const guild = client?.guilds.cache.get(payload.guild_id)
     const channel = guild?.channels.cache.get(payload.channel_id) as TextChannel
     const message = channel.messages.cache.get(payload.message_id)
 
@@ -27,7 +28,7 @@ export default class MessageReactionAdd extends Packet {
 
       message.reactions.addReaction(emoji, member!)
 
-      assembler.eventListener.emit('add:MessageReaction', message, reaction)
+      emitter.emit('add:MessageReaction', message, reaction)
     }
   }
 }
