@@ -1,29 +1,30 @@
-import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { CommandInteractionBuilder } from '../../assembler/builders'
-import { OptionType } from '../../api/types'
+import { CommandType, OptionType } from '../../api/types'
 import { MineralBaseCommand } from '../entities/Command'
-import { CommandType } from '../../api/types'
 import CommandInteraction from '../../api/entities/interaction/CommandInteraction'
+import Application from '../../application/Application'
 
 export default class CommandInteractionPacket extends Packet {
   public packetType = 'INTERACTION_CREATE'
 
-  public async handle (assembler: Assembler, payload: any) {
+  public async handle (payload: any) {
     if (payload.data.type !== CommandType.CHAT_INPUT) {
       return
     }
 
-    const client = assembler.application.client
-    const container = assembler.application.container
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const commands = Application.singleton().resolveBinding('Mineral/Core/Commands')
+    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
 
-    const guild = client.guilds.cache.get(payload.guild_id)
+    const guild = client?.guilds.cache.get(payload.guild_id)
     const member = guild?.members.cache.get(payload.member.user.id)
 
-    const interactionBuilder = new CommandInteractionBuilder(assembler.application.client as any, member as any)
+    const interactionBuilder = new CommandInteractionBuilder(client!, member!)
     let interaction: CommandInteraction
 
-    const command = container.commands.find((command: MineralBaseCommand) => (
+    const command = commands.collection.find((command: MineralBaseCommand) => (
       command.data.label === payload.data.name
     ))
 
@@ -53,13 +54,13 @@ export default class CommandInteractionPacket extends Packet {
       })
 
       if (!command['run']) {
-        assembler.application.logger.fatal('The "run" method does not exist within your command.')
+        logger.fatal('The "run" method does not exist within your command.')
         return
       }
 
       await command['run'](interaction)
     }
 
-    assembler.eventListener.emit('commandInteraction', interaction)
+    emitter.emit('commandInteraction', interaction)
   }
 }
