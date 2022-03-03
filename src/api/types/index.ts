@@ -265,6 +265,8 @@ export const clientEvents = [
   'create:Message',
   'update:Message',
   'delete:Message',
+  'pin:Message',
+  'unpin:Message',
   'create:Channel',
   'update:Channel',
   'delete:Channel',
