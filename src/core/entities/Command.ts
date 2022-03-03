@@ -8,7 +8,7 @@ export function Command (name: string, description: string, scope: 'GUILDS' | Sn
     target.identifier = 'command'
     target.label = name.toLowerCase()
 
-    const container = Application.getContainer()
+    const commands = Application.singleton().resolveBinding('Mineral/Core/Commands')
     const command = new target() as MineralBaseCommand & { data: any }
 
     command.hasSubcommands = target.prototype.subcommands
@@ -31,7 +31,7 @@ export function Command (name: string, description: string, scope: 'GUILDS' | Sn
         || []
     }
 
-    container.commands.set(command.data.label, command)
+    commands?.collection.set(command.data.label, command)
   }
 }
 
