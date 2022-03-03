@@ -9,69 +9,88 @@
  */
 
 import Logger from '@mineralts/logger'
-import { Intent, RcFile } from './types'
-import { Http } from '@mineralts/connector-preview'
-import path from 'path'
+import { Intent } from './types'
 import fs from 'fs'
-import Environment from '../environment/Environment'
 import Collection from '../api/utils/Collection'
 import Helper from '../helper'
 import Container from './Container'
 import Reflect from '../reflect/Reflect'
 import Client from '../api/entities/client'
+import { join } from 'node:path'
+import MineralEnvironmentService from '../core/services/MineralEnvironmentService'
+import EventsListener from '../assembler/EventsListener'
+import MineralCliService from '../core/services/MineralCliService'
+import MineralEventService from '../core/services/MineralEventService'
+import MineralCommandService from '../core/services/MineralCommandService'
+import MineralTaskService from '../core/services/MineralTaskService'
+import MineralContextMenusService from '../core/services/MineralContextMenusService'
+import MineralProviderService from '../core/services/MineralProviderService'
 
 export default class Application {
   private static $instance: Application
 
-  public environment: Environment = new Environment()
   public logger: Logger = new Logger()
   public reflect: Reflect | undefined
-  public request!: Http
-  public apiSequence: number
 
   public readonly appName: string
   public readonly version: string
-  public readonly rootDir: string
   public readonly debug: boolean
 
-  public readonly withReflect: boolean
-
-  public readonly mode: string = 'development'
   public static cdn = 'https://cdn.discordapp.com'
 
-  public rcFile: RcFile
-  public preloads: any[]
   public commands: Collection<string, any> = new Collection()
-  public statics: string[]
 
-  public aliases: Map<string, string> = new Map()
-
-  public container: Container = new Container()
+  public ioc: Container = new Container()
 
   public helper: Helper = new Helper()
   public client!: Client
   public readonly intents: number
 
-  constructor (public readonly appRoot: string, environment: any) {
-    this.environment.registerEnvironment(this.appRoot || process.cwd())
+  public setup () {
+    const jsonPackage = this.loadFileSync(process.cwd(), 'package.json')
+    const rcFile = this.loadFileSync(process.cwd(), '.mineralrc.json', 'The .mineralrc.json file was not found at the root of the project.')
 
-    this.appName = environment.appName
-    this.version = environment.version
-    this.rootDir = environment.rootDir
-    this.debug = this.environment.cache.get('DEBUG') || false
-    this.withReflect = this.environment.cache.get('REFLECT') || false
-    this.rcFile = environment.rcFile
-    this.preloads = this.rcFile.preloads
-    this.statics = this.rcFile.statics
-    this.aliases = new Map(Object.entries(this.rcFile.aliases))
+    this.ioc.registerBinding('Mineral/Core/Logger', new Logger())
+    this.ioc.registerBinding('Mineral/Core/Emitter', new EventsListener())
+    this.ioc.registerBinding('Mineral/Core/Environment', new MineralEnvironmentService())
+    this.ioc.registerBinding('Mineral/Core/Helpers', new Helper())
+    this.ioc.registerBinding('Mineral/Core/Providers', new MineralProviderService())
+    this.ioc.registerBinding('Mineral/Core/Cli', new MineralCliService())
+    this.ioc.registerBinding('Mineral/Core/Events', new MineralEventService())
+    this.ioc.registerBinding('Mineral/Core/Commands', new MineralCommandService())
+    this.ioc.registerBinding('Mineral/Core/Tasks', new MineralTaskService())
+    this.ioc.registerBinding('Mineral/Core/ContextMenus', new MineralContextMenusService())
 
-    if (this.withReflect) {
-      this.reflect = new Reflect()
-      this.reflect.createClient()
-    }
+    const environment = this.ioc.resolveBinding('Mineral/Core/Environment')
+
+    environment?.registerKey('appName', jsonPackage.name)
+    environment?.registerKey('appVersion', jsonPackage.version)
+    environment?.registerKey('root', process.cwd())
+    environment?.registerKey('debug', false)
+    environment?.registerKey('reflect', false)
+    environment?.registerKey('rcFile', rcFile)
+    environment?.registerKey('mode', process.env.NODE_ENV as any)
+
+    const dependencies: { [K: string]: unknown }[] = []
+    Object.entries(jsonPackage.dependencies).forEach(([key, version]) => {
+      if (key.startsWith('@mineralts')) {
+        dependencies.push({ [key]: version })
+      }
+    })
+
+    environment?.registerKey('mineralDependencies', dependencies)
+    environment?.resolveEnvironment()
 
     const intents: 'ALL' | Exclude<keyof typeof Intent, 'ALL'>[] = 'ALL'
-    this.intents = this.getIntentValue(intents)
+    environment?.registerKey('intents', { selected: intents, bitfield: this.getIntentValue(intents) })
+
+    const useReflect = environment?.resolveKey('reflect')
+    if (useReflect) {
+      const reflect = new Reflect()
+      reflect.createClient()
+
+      this.ioc.registerBinding('Mineral/Core/Reflect', reflect)
+    }
   }
 
   public getIntentValue (intents: 'ALL' | Exclude<keyof typeof Intent, 'ALL'>[]) {
@@ -82,76 +101,15 @@ export default class Application {
       : 0
   }
 
-  public registerBinding<T> (key: string, value: T) {
-    this[key] = value
-  }
-
-  public async registerCliCommands () {
-    const commands = this.rcFile.commands
-
-    const invalidLocation = commands.filter((location) => (
-      location.startsWith('./') || location.startsWith('/')
-    ))
-
-    if (invalidLocation.length) {
-      this.logger.fatal('The pre-loaded commands must be commands from npm packages.')
-    }
-
-    await Promise.all(
-      commands.map(async () => {
-        const baseLocation = path.join(__dirname, '..', '..')
-        const jsonPackageLocation = path.join(baseLocation, 'package.json')
-        const JsonPackage = await import(jsonPackageLocation)
-
-        const mineralSettings = JsonPackage['@mineralts']
-        if (!mineralSettings) {
-          return
-        }
-
-        return Promise.all(
-          mineralSettings.commands?.map(async (dir: string) => {
-            const location = path.join(baseLocation, dir)
-            const files = await fs.promises.readdir(location)
-
-            return fetchCommandFiles(files, this.logger, this, this.commands, location)
-          })
-        )
-      })
-    )
-
-    function fetchCommandFiles (files, logger, application, commands, location) {
-      return Promise.all(
-        files.map(async (file: string) => {
-          if (file.endsWith('.d.ts')) {
-            return
-          }
-
-          const { default: Command } = await import(path.join(location, file))
-          const command = new Command()
-
-          command.logger = logger
-          command.application = application
-
-          commands.set(Command.commandName, command)
-        })
-      )
-    }
-  }
-
   private static getInstance () {
     return this.$instance
   }
 
-  public static create (appRoot: string, environment: any) {
+  public static create () {
     if (!this.$instance) {
-      this.$instance = new Application(appRoot, environment)
+      this.$instance = new Application()
     }
     return this.$instance
-  }
-
-  public static inProduction () {
-    const instance = this.getInstance()
-    return instance.mode === 'production'
   }
 
   public static getClient () {
@@ -159,34 +117,14 @@ export default class Application {
     return instance.client
   }
 
-  public static createRequest () {
-    const instance = this.getInstance()
-    return instance.request
-  }
-
   public static getLogger () {
     const instance = this.getInstance()
     return instance.logger
   }
 
-  public static getContainer () {
+  public static singleton () {
     const instance = this.getInstance()
-    return instance.container
-  }
-
-  public static getToken () {
-    const instance = this.getInstance()
-    return instance.environment.cache.get('TOKEN')
-  }
-
-  public static getEnvironment (): Collection<string, unknown> {
-    const instance = this.getInstance()
-    return instance.environment.cache
-  }
-
-  public static getRcFile (): RcFile {
-    const instance = this.getInstance()
-    return instance.rcFile
+    return instance.ioc
   }
 
   public static getHelper (): Helper {
@@ -194,13 +132,13 @@ export default class Application {
     return instance.helper
   }
 
-  public static registerBinding (key: string, value: unknown) {
-    const instance = this.getInstance()
-    instance.registerBinding(key, value)
-  }
-
-  public static getBinding<T> (key: string): T | undefined {
-    const instance = this.getInstance()
-    return instance[key]
+  protected loadFileSync (location: string, filename: string, message?: string) {
+    try {
+      return JSON.parse(fs.readFileSync(join(location, filename), 'utf-8'))
+    } catch (error) {
+      throw new Error(
+        message || `The file ${filename} at location ${location} was not found.`
+      )
+    }
   }
 }
