@@ -9,22 +9,28 @@
  */
 
 import axios, { Axios, AxiosRequestConfig, AxiosResponse } from 'axios'
-import EventsListener from '../../assembler/EventsListener'
 import { DateTime } from 'luxon'
+import Application from '../../application/Application'
 
 export default class Http {
+  private emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
   private axios: Axios = axios.create({
     baseURL: 'https://discord.com/api'
   })
 
-  constructor (private eventEmitter: EventsListener) {
+  constructor () {
     this.axios.interceptors.response.use((response: AxiosResponse) => {
       return response
     }, (error) => {
       if (error.response.status === 429) {
         const { url, method } = error.config
         const { global, retry_after } = error.response.data
-        this.eventEmitter.emit('rateLimit', { global, url, method, retryAfter: DateTime.now().plus({ millisecond: retry_after }) })
+        this.emitter.emit('rateLimit', {
+          global,
+          url,
+          method,
+          retryAfter: DateTime.now().plus({ millisecond: retry_after })
+        })
         return
       } else {
         return Promise.reject(error)
