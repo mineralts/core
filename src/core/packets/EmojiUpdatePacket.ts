@@ -1,4 +1,3 @@
-import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { Snowflake } from '../../api/types'
 import { EmojiBuilder } from '../../assembler/builders'
@@ -6,12 +5,17 @@ import Collection from '../../api/utils/Collection'
 import Emoji from '../../api/entities/emoji'
 import Guild from '../../api/entities/guild/Guild'
 import Role from '../../api/entities/roles'
+import Application from '../../application/Application'
 
 export default class EmojiUpdatePacket extends Packet {
   public packetType = 'GUILD_EMOJIS_UPDATE'
 
-  public async handle (assembler: Assembler, payload: any) {
-    const guild: Guild | undefined = assembler.application.client.guilds.cache.get(payload.guild_id)
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+
+    const guild: Guild | undefined = client?.guilds.cache.get(payload.guild_id)
 
     if (payload.emojis.length === guild?.emojis.cache.size) {
       const emojis: Collection<Snowflake, Emoji> = new Collection()
@@ -39,11 +43,11 @@ export default class EmojiUpdatePacket extends Packet {
       }).filter((role: Emoji | undefined) => role)
 
       if (!emoji[0]) {
-        assembler.application.logger.error('An error has occurred (emoji not recognised)')
+        logger.error('An error has occurred (emoji not recognised)')
         return
       }
 
-      assembler.eventListener.emit('update:Emoji', emoji, guild?.emojis.cache.get(emoji[0].id))
+      emitter.emit('update:Emoji', emoji, guild?.emojis.cache.get(emoji[0].id))
     }
   }
 }
