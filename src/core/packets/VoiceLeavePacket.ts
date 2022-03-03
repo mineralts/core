@@ -1,12 +1,13 @@
-import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
+import Application from '../../application/Application'
 
 export default class VoiceLeavePacket extends Packet {
   public packetType = 'VOICE_STATE_UPDATE'
 
-  public async handle (assembler: Assembler, payload: any) {
-    const client = assembler.application.client
-    const guild = client.guilds.cache.get(payload.guild_id)
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const guild = client?.guilds.cache.get(payload.guild_id)
     const before = guild?.members.cache.get(payload.member.user.id)
 
     if (!before?.voice.channel || before.voice.channel.id === payload.channel_id) {
@@ -15,6 +16,6 @@ export default class VoiceLeavePacket extends Packet {
 
     const after = guild?.members.cache.get(payload.member.user.id)
 
-    assembler.eventListener.emit('leave:VoiceMember', after!)
+    emitter.emit('leave:VoiceMember', after!)
   }
 }
