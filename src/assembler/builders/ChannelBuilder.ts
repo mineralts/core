@@ -1,10 +1,4 @@
-import {
-  ChannelResolvable,
-  ChannelTypeResolvable,
-  RTC_Region,
-  VideoQuality,
-} from '../../api/types'
-import Logger from '@mineralts/logger'
+import { ChannelResolvable, ChannelTypeResolvable, RTC_Region, VideoQuality } from '../../api/types'
 import { keyFromEnum } from '../../api/utils'
 import StageChannel from '../../api/entities/channels/StageChannel'
 import NewsChannel from '../../api/entities/channels/NewsChannel'
@@ -17,12 +11,14 @@ import TextChannel from '../../api/entities/channels/TextChannel'
 import MessageManager from '../../api/entities/message/MessageManager'
 import VoiceChannel from '../../api/entities/channels/VoiceChannel'
 import CategoryChannel from '../../api/entities/channels/CategoryChannel'
+import Application from '../../application/Application'
 
 export default class ChannelBuilder {
-  constructor (private client: Client, private logger: Logger, private guild: Guild) {
+  constructor (private client: Client, private guild: Guild) {
   }
 
   public build (payload: any): ChannelResolvable {
+    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
     const channels = {
       [ChannelTypeResolvable.GUILD_TEXT]: () => this.createTextChannel(payload),
       [ChannelTypeResolvable.GUILD_VOICE]: () => this.createVoiceChannel(payload),
@@ -32,7 +28,7 @@ export default class ChannelBuilder {
       [ChannelTypeResolvable.DM]: () => this.createDMChannel(payload),
       [ChannelTypeResolvable.GUILD_STORE]: () => this.createStoreChannel(payload),
       unknown: () => {
-        this.logger.warn(`Channel not supported : ${payload.type}`)
+        logger?.warn(`Channel not supported : ${payload.type}`)
         return undefined
       }
     }
@@ -149,7 +145,7 @@ export default class ChannelBuilder {
       payload.parent_id,
       payload.nsfw,
       payload.permission_overwrites,
-      this.guild.channels.cache.get(payload.parent_id),
+      this.guild.channels.cache.get(payload.parent_id)
     )
   }
 }
