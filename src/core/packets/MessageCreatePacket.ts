@@ -1,20 +1,25 @@
-import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { MessageBuilder } from '../../assembler/builders'
 import TextChannel from '../../api/entities/channels/TextChannel'
+import Application from '../../application/Application'
 
 export default class MessageCreatePacket extends Packet {
   public packetType = 'MESSAGE_CREATE'
 
-  public async handle (assembler: Assembler, payload: any) {
+  public async handle (payload: any) {
     if (!payload.guild_id) {
       return
     }
 
-    const guild = assembler.application.client.guilds.cache.get(payload.guild_id)
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+    const useReflect = environment.resolveKey('reflect')
+
+    const guild = client?.guilds.cache.get(payload.guild_id)
     const channel = guild?.channels.cache.get(payload.channel_id) as TextChannel
 
-    const messageBuilder = new MessageBuilder(assembler.application.client as any)
+    const messageBuilder = new MessageBuilder(client!)
     const message = messageBuilder.build(payload)
 
     if (channel) {
@@ -23,9 +28,10 @@ export default class MessageCreatePacket extends Packet {
       channel.messages.cache.set(message!.id, message!)
     }
 
-    assembler.eventListener.emit('create:Message', message)
-    if (assembler.application.reflect) {
-      assembler.application.reflect.sendEvent('MessageCreate', message)
+    emitter.emit('create:Message', message)
+    if (useReflect) {
+      const reflect = Application.singleton().resolveBinding('Mineral/Core/Reflect')
+      reflect.sendEvent('MessageCreate', message)
     }
   }
 }
