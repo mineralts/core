@@ -1,13 +1,15 @@
-import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { GuildMemberBuilder } from '../../assembler/builders'
+import Application from '../../application/Application'
 
 export default class MemberJoinPacket extends Packet {
   public packetType = 'GUILD_MEMBER_ADD'
 
-  public async handle (assembler: Assembler, payload: any) {
-    const client = assembler.application.client
-    const guild = client.guilds.cache.get(payload.guild_id)
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+
+    const guild = client?.guilds.cache.get(payload.guild_id)
 
     const guildMemberBuilder = new GuildMemberBuilder(client as any, guild!.roles.cache as any, guild as any)
     const guildMember = guildMemberBuilder.build(payload)
@@ -26,6 +28,6 @@ export default class MemberJoinPacket extends Packet {
     //
     // invite.count++
 
-    assembler.eventListener.emit('join:Member', guildMember)
+    emitter.emit('join:Member', guildMember)
   }
 }
