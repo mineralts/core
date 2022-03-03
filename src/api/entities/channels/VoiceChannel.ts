@@ -24,7 +24,7 @@ export default class VoiceChannel extends Channel {
   }
 
   public async setBitrate (value: number) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     if (value >= 8000 && value <= 96000) {
       await request.patch(`/channels/${this.id}`, { bitrate: value })
       this.bitrate = value
@@ -35,7 +35,7 @@ export default class VoiceChannel extends Channel {
   }
 
   public async setRtcRegion (region: keyof typeof RTC_Region) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, {
       rtc_region: region !== 'AUTO'
         ? RTC_Region[region]
@@ -46,7 +46,7 @@ export default class VoiceChannel extends Channel {
   }
 
   public async setMaxMember (value: number | 'UNLIMITED') {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, {
       user_limit: value === 'UNLIMITED' ? 0 : value
     })
@@ -55,7 +55,7 @@ export default class VoiceChannel extends Channel {
   }
 
   public async setVideoQuality (quality: keyof typeof VideoQuality) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, {
       video_quality_mode: VideoQuality[quality]
     })
