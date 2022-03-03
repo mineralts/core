@@ -9,11 +9,11 @@
  */
 
 import Kernel from './core/Kernel'
-import { MineralCommand, MineralSubcommand, Subcommand, Command, Option, Permission } from './core/entities/Command'
-import { MineralEvent, Event } from './core/entities/Event'
+import { Command, MineralCommand, MineralSubcommand, Option, Permission, Subcommand } from './core/entities/Command'
+import { Event, MineralEvent } from './core/entities/Event'
 import { MineralProvider, Provider } from './core/entities/Provider'
 import { MineralTask, Task } from './core/entities/tasks/Task'
-import { MineralContextMenu, ContextMenu } from './core/entities/ContextMenu'
+import { ContextMenu, MineralContextMenu } from './core/entities/ContextMenu'
 import Ignitor from './core/standalone/Ignitor'
 import MessageEmbed from './api/entities/embed/MessageEmbed'
 import ModalRow from './api/entities/modal/ModalRow'
