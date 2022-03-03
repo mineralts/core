@@ -27,7 +27,7 @@ export default class GuildMember {
   }
 
   public async setUsername (value: string) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     await request.patch(`/guilds/${this.guild.id}/members/${this.id}`, {
       nick: value
@@ -35,7 +35,7 @@ export default class GuildMember {
   }
 
   public async exclude (date: DateTime, reason?: string) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({
@@ -51,7 +51,7 @@ export default class GuildMember {
   }
 
   public async sorry (reason?: string) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({
@@ -67,7 +67,7 @@ export default class GuildMember {
   }
   
   public async ban (options: { messageCount?: number, reason?: string }) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (options.messageCount && (options.messageCount < 0 || options.messageCount > 50)) {
       const logger = Application.getLogger()
@@ -90,7 +90,7 @@ export default class GuildMember {
   }
 
   public async unban (reason?: string) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({
@@ -103,7 +103,7 @@ export default class GuildMember {
   }
 
   public async kick (reason?: string) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({
