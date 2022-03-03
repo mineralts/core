@@ -9,8 +9,9 @@
  */
 
 import os from 'os'
-import path from 'path'
 import { Command } from '../forge/entities/Command'
+import Collection from '../api/utils/Collection'
+import { MineralEvent } from '../core/entities/Event'
 
 export default class MakeCommand extends Command {
   public static commandName = 'info'
@@ -21,7 +22,10 @@ export default class MakeCommand extends Command {
   }
 
   public async run (): Promise<void> {
-    const jsonPackage = await import(path.join(process.cwd(), 'package.json'))
+    const environment = this.ioc.resolveBinding('Mineral/Core/Environment')
+    const cli = this.ioc.resolveBinding('Mineral/Core/Cli')
+    const commands = this.ioc.resolveBinding('Mineral/Core/Commands')
+    const events = this.ioc.resolveBinding('Mineral/Core/Events')
 
     const result = {
       node_version: process.version,
@@ -31,19 +35,21 @@ export default class MakeCommand extends Command {
         platform: os.platform(),
         type: os.type()
       },
-      appName: jsonPackage.name,
-      appVersion: jsonPackage.version,
-      appIntents: this.application.intents,
-      packages: {},
-      rcFile: this.application.rcFile,
-      commands: this.application.commands
+      appName: environment?.resolveKey('appName'),
+      appVersion: environment?.resolveKey('appVersion'),
+      intents: environment?.resolveKey('intents'),
+      dependencies: environment?.resolveKey('mineralDependencies'),
+      rcFile: environment?.resolveKey('rcFile'),
+      cli: cli?.collection,
+      commands: commands?.collection,
+      events: events?.collection.map((events: Collection<string, MineralEvent>, identifier: string) => ({
+        identifier,
+        events: events.map((event, location: string) => ({
+          location,
+          event
+        }))
+      }))
     }
-
-    Object.entries(jsonPackage.dependencies).forEach(([key, version]) => {
-      if (key.startsWith('@mineralts')) {
-        result.packages[key] = version
-      }
-    })
 
     console.debug(result)
   }
