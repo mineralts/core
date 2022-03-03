@@ -1,7 +1,4 @@
-import {
-  Region,
-  Snowflake,
-} from '../../api/types'
+import { Region, Snowflake } from '../../api/types'
 import { keyFromEnum } from '../../api/utils'
 import { DateTime } from 'luxon'
 import Client from '../../api/entities/client'
