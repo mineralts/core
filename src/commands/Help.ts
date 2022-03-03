@@ -11,7 +11,7 @@
 import path from 'path'
 import { Command } from '../forge/entities/Command'
 
-export default class GenerateManifest extends Command {
+export default class Help extends Command {
   public static commandName = 'help'
   public static description = 'Generate manifest file'
 
