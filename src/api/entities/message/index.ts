@@ -45,7 +45,7 @@ export default class Message {
 
   public async crossPost () {
     if (this.channel.type === 'GUILD_NEWS') {
-      // const request = Application.createRequest()
+      // const request = Application.singleton().resolveBinding('Mineral/Core/Http')
       // const request = new Request(`/channels/${this.channel?.id}/messages/${this.id}/crosspost`)
       // console.log(await request.post(null, option))
     }
@@ -53,25 +53,25 @@ export default class Message {
 
   public async pin () {
     if (!this.isPinned) {
-      const request = Application.createRequest()
+      const request = Application.singleton().resolveBinding('Mineral/Core/Http')
       await request.patch(`/channels/${this.channel?.id}/pins/${this.id}`, {})
     }
   }
 
   public async unPin () {
     if (!this.isPinned) {
-      const request = Application.createRequest()
+      const request = Application.singleton().resolveBinding('Mineral/Core/Http')
       await request.delete(`/channels/${this.channel?.id}/pins/${this.id}`)
     }
   }
 
   public async delete () {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.delete(`/channels/${this.channel?.id}/messages/${this.id}`)
   }
 
   public async edit (message: MessageOption) {
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/channels/${this.channel?.id}/messages/${this.id}`, {
       content: message.content,
       embeds: message.embeds,
@@ -96,7 +96,7 @@ export default class Message {
       ? encodeURI(`${emoji.label}:${emoji.id}`)
       : encodeURI(emoji)
 
-    const request = Application.createRequest()
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     await request.patch(`/channels/${this.channel?.id}/messages/${this.id}/reactions/${encodedEmoji}/@me`, null)
     const client = Application.getClient()
 
