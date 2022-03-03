@@ -1,14 +1,15 @@
-import Assembler from '../../assembler/Assembler'
 import Packet from '../entities/Packet'
 import { DateTime } from 'luxon'
+import Application from '../../application/Application'
 
 export default class MemberTimeoutAddPacket extends Packet {
   public packetType = 'GUILD_MEMBER_UPDATE'
 
-  public async handle (assembler: Assembler, payload: any) {
-    const client = assembler.application.client
-    const guild = client.guilds.cache.get(payload.guild_id)
+  public async handle (payload: any) {
+    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
+    const guild = client?.guilds.cache.get(payload.guild_id)
     const guildMember = guild?.members.cache.get(payload.user.id)
 
     if (payload.communication_disabled_until) {
@@ -16,7 +17,7 @@ export default class MemberTimeoutAddPacket extends Packet {
       const duration = expire.diffNow().toMillis()
 
       guildMember!.communicationTimeout = expire
-      assembler.eventListener.emit('add:MemberTimeout', guildMember, duration)
+      emitter.emit('add:MemberTimeout', guildMember, duration)
     }
   }
 }
