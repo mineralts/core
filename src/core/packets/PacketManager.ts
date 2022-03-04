@@ -39,6 +39,7 @@ import VoiceMuteAddPacket from './VoiceMuteAddPacket'
 import VoiceMuteRemovePacket from './VoiceMuteRemovePacket'
 import MessagePinPacket from './MessagePinPacket'
 import MessageUnPinPacket from './MessageUnPinPacket'
+import MemberUpdatePacket from './MemberUpdatePacket'
 
 export default class PacketManager {
   public packets: Collection<string, Packet[]> = new Collection()
@@ -59,6 +60,7 @@ export default class PacketManager {
       new ChannelUpdatePacket(),
       new MemberJoinPacket(),
       new MemberLeavePacket(),
+      new MemberUpdatePacket(),
       new InviteCreatePacket(),
       new InviteDeletePacket(),
       new MessageReactionAdd(),

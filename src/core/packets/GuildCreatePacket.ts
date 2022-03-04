@@ -45,6 +45,9 @@ export default class GuildCreatePacket extends Packet {
     const guild = new GuildBuilder(client!, payload)
     this.guild = guild.build(this.guildMembers)
 
+    this.guild.emojis.register(this.emojis)
+    this.guild.roles.register(this.roles)
+
     const guildMemberBuilder = new GuildMemberBuilder(client!, this.roles, this.guild)
     payload.members.forEach((item: any) => {
       const guildMember = guildMemberBuilder.build(item)
@@ -96,8 +99,6 @@ export default class GuildCreatePacket extends Packet {
     this.guild.members.register(this.guildMembers)
     this.guild.bots.register(this.guildBots)
     this.guild.channels = new GuildChannelManager(this.guild).register(this.channels)
-    this.guild.emojis.register(this.emojis)
-    this.guild.roles.register(this.roles)
 
     const { data: invites } = await connector.http.get(`/guilds/${this.guild.id}/invites`)
 
@@ -107,10 +108,7 @@ export default class GuildCreatePacket extends Packet {
       this.guild.invites.cache.set(invite.code, invite)
     })
 
-    // await this.guild.removeBulkGlobalCommand(assembler)
-    // await this.guild.removeBulkCommand(assembler)
     await this.guild.registerCommands()
-    // await this.guild.registerMenus(assembler)
 
     client?.guilds.cache.set(this.guild.id, this.guild as any)
 

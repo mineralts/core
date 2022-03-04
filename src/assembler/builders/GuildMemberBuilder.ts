@@ -19,6 +19,7 @@ export default class GuildMemberBuilder {
 
   public build (payload: any) {
     const user = new UserBuilder(this.client, payload.user).build()
+
     const guildMember = new GuildMember(
       payload.user.id,
       payload.nick || user.username,
@@ -33,8 +34,13 @@ export default class GuildMemberBuilder {
       payload.communication_disabled_until
         ? DateTime.fromISO(payload.communication_disabled_until)
         : null,
-      DateTime.fromISO(payload.joined_at),
+      DateTime.fromISO(payload.joined_at)
     )
+
+    payload.roles.forEach((id: Snowflake) => {
+      const role = this.guild.roles.cache.get(id)
+      guildMember.roles.cache.set(role!.id, role!)
+    })
 
     guildMember.voice = new VoiceState(
       guildMember,
@@ -45,7 +51,7 @@ export default class GuildMemberBuilder {
       payload.deaf,
       undefined as any,
       undefined as any,
-      this.guild,
+      this.guild
     )
 
     return guildMember

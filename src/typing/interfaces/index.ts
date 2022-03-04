@@ -137,6 +137,8 @@ export interface ClientEvents {
   'create:Message': [message: Message],
   'update:Message': [before: Message | undefined, after: Message]
   'delete:Message': [message: Message]
+  'pin:Message': [message:Message]
+  'unpin:Message': [message: Message]
 
   'create:Channel': [channel: Channel]
   'update:Channel': [channel: Channel]
@@ -180,6 +182,7 @@ export interface ClientEvents {
   'update:VoiceState': [before: VoiceState | undefined, after: VoiceState]
 
   'add:MemberMute': [member: GuildMember]
+  'update:Member': [before: GuildMember, after: GuildMember]
   'remove:MemberMute': [member: GuildMember]
 
   'add:MemberBoost': [member: GuildMember]

@@ -7,7 +7,7 @@ export default class MessageCreatePacket extends Packet {
   public packetType = 'MESSAGE_CREATE'
 
   public async handle (payload: any) {
-    if (!payload.guild_id) {
+    if (!payload.guild_id || payload.type === 6) {
       return
     }
 
