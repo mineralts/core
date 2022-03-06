@@ -2,7 +2,7 @@ import Collection from '../../api/utils/Collection'
 import fs from 'fs'
 import path from 'path'
 import YAML from 'js-yaml'
-import { RcFile } from '../types'
+import { BuildOption, RcFile } from '../types'
 import { Intent } from '../../application/types'
 import Application from '../../application/Application'
 
@@ -16,6 +16,7 @@ interface Environment {
   rcFile: RcFile
   mode: 'production' | 'testing' | 'development'
   mineralDependencies: { [K: string]: unknown }[]
+  build?: BuildOption,
   intents: {
     selected: 'ALL' | Exclude<keyof typeof Intent, 'ALL'>[]
     bitfield: number

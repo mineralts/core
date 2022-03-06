@@ -4,3 +4,8 @@ export interface RcFile {
   preloads: string[]
   statics: []
 }
+
+export interface BuildOption {
+  MINIFY: boolean
+  OUT_DIR: string
+}

@@ -1,6 +1,6 @@
 {
   "name": "@mineralts/core-preview",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "main": "build/index.js",
   "repository": "git@github.com:Mineral-ts/core.git",
   "author": "leadcodedev <baptiste.parmantier.pro@gmail.com>",
@@ -20,6 +20,7 @@
     "axios": "^0.24.0",
     "change-case": "^4.1.2",
     "enquirer": "^2.3.6",
+    "esbuild": "^0.14.25",
     "fs-recursive": "^1.1.7",
     "js-yaml": "^4.1.0",
     "luxon": "^2.0.2",

@@ -6,11 +6,15 @@ export default class MemberUpdatePacket extends Packet {
   public packetType = 'GUILD_MEMBER_UPDATE'
 
   public async handle (payload: any) {
-    console.log(payload)
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
     const guild = client?.guilds.cache.get(payload.guild_id)
+
+    if (!guild) {
+      return
+    }
+
     const before = guild?.members.cache.get(payload.user.id)
 
     const guildMemberBuilder = new GuildMemberBuilder(client as any, guild!.roles.cache as any, guild as any)

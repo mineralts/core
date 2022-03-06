@@ -9,7 +9,6 @@
  */
 
 import { fetch } from 'fs-recursive'
-import { join } from 'node:path'
 import fs from 'node:fs'
 import Application from '../application/Application'
 import PacketManager from '../core/packets/PacketManager'
@@ -62,11 +61,10 @@ export default class Assembler {
     const root = environment?.resolveKey('root')
     const mode = environment?.resolveKey('mode')
 
-    const location = mode === 'production' ? join(root!, 'build') : root!
-    const extensions = [mode === 'production' ? 'js' : 'ts']
+    const extensions = [mode === 'development' ? 'ts': 'js']
 
     const files = await fetch(
-      location,
+      root!,
       extensions,
       'utf-8',
       ['node_modules', 'build', 'export']

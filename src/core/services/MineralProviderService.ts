@@ -1,8 +1,7 @@
 import Collection from '../../api/utils/Collection'
 import Application from '../../application/Application'
 import { fetch } from 'fs-recursive'
-import { join } from 'path'
-import fs from 'fs'
+import fs from 'node:fs'
 import { MineralProvider } from '../entities/Provider'
 
 export default class MineralProviderService {
@@ -16,11 +15,10 @@ export default class MineralProviderService {
     const root = environment?.resolveKey('root')
     const mode = environment?.resolveKey('mode')
 
-    const location = mode === 'production' ? join(root!, 'build') : root!
-    const extensions = [mode === 'production' ? 'js' : 'ts']
+    const extensions = [mode === 'development' ? 'ts': 'js']
 
     const files = await fetch(
-      location,
+      root!,
       extensions,
       'utf-8',
       ['node_modules', 'build', 'export']

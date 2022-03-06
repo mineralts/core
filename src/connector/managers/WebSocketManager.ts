@@ -79,6 +79,7 @@ export default class WebSocketManager {
         return
       }
 
+      this.status = Status.RECONNECTING
       this.websocket?.emit('reconnect:shard', shard)
       this.shardQueue.add(shard)
 

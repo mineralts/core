@@ -63,6 +63,19 @@ export default class Shard extends EventEmitter {
     this.manager.websocket?.send(request)
   }
 
+  private reconnect () {
+    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+    const token = environment.resolveKey('token')
+
+    const request = this.request(Opcode.RESUME, {
+      token,
+      session_id: this.sessionId,
+      seq: this.sequence
+    })
+
+    this.manager.websocket?.send(request)
+  }
+
 
   public dispatch (callback: (payload: WebsocketPayload) => any) {
     this.reactor.subscribe((payload: any) => {
@@ -88,6 +101,7 @@ export default class Shard extends EventEmitter {
 
   public destroy (closeCode: number = 1_000, reset: boolean = false) {
     this.heartbeatManager.shutdown()
+    console.log('state', this.manager.websocket?.readyState)
     if (this.manager.websocket?.readyState === WebSocketState.OPEN) {
       this.manager.websocket?.close(closeCode)
     } else {
@@ -124,6 +138,7 @@ export default class Shard extends EventEmitter {
     const reconnect = () => {
       this.manager.application.logger.info('Reconnecting..')
       this.destroy(4_000)
+      this.reconnect()
     }
 
     const op = keyFromEnum(Opcode, payload.op)
