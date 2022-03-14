@@ -8,12 +8,9 @@
  *
  */
 
-import { MineralCommand } from './Command'
-import { MineralEvent } from './Event'
-
 export default class Entity {
   constructor (
-    public readonly source: MineralCommand | MineralEvent,
+    public readonly source: any,
     public path: string,
   ) {
   }

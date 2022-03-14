@@ -11,7 +11,7 @@
 import Logger from '@mineralts/logger'
 import Container from '../../application/Container'
 
-export abstract class Command {
+export abstract class ForgeCommand {
   public logger: Logger
   public ioc: Container
   public static settings: { loadApp: boolean } = { loadApp: false }

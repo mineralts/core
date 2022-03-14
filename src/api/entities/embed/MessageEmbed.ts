@@ -62,6 +62,11 @@ export default class MessageEmbed {
     return this
   }
 
+  public setHexaColor (color: string) {
+    this.color = resolveColor(color)
+    return this
+  }
+
   public addField (name: string, value: string, inline = false) {
     this.fields.push({ name, value, inline })
     return this

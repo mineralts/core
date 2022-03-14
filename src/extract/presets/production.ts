@@ -7,8 +7,8 @@ import Alias from '../plugins/Alias'
 
 export default async function () {
   const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
-  const buildOptions = environment.resolveKey('build')
-  const alias = environment.resolveKey('rcFile')?.aliases
+  const buildOptions = environment.resolveKey('BUILD')
+  const alias = environment.resolveKey('RC_FILE')?.aliases
 
   const buildLocation = join(process.cwd(), buildOptions?.OUT_DIR || 'build')
   const buildDir = fs.existsSync(buildLocation)

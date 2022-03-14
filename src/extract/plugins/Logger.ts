@@ -4,7 +4,7 @@ import { BuildResult, PluginBuild } from 'esbuild'
 
 const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
 const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
-const appName = environment.resolveKey('appName')
+const appName = environment.resolveKey('APP_NAME')
 
 export default {
   name: 'logger',

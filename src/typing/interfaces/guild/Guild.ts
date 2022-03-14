@@ -23,8 +23,8 @@ import GuildThreadManager from './GuildThreadManager'
 import GuildEmojiManager from './GuildEmojiManager'
 import InviteManager from '../invitation/InviteManager'
 import GuildHashes from './GuildHashes'
-import { Command } from '../../../forge/entities/Command'
 import { DateTime } from 'luxon'
+import Command from '../../../api/command/Command'
 
 export default interface Guild {
   readonly commands: Collection<Snowflake, Command>

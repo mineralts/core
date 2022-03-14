@@ -10,9 +10,9 @@
 
 import path from 'path'
 import { execSync } from 'child_process'
-import { Command } from '../forge/entities/Command'
+import { ForgeCommand } from '../forge/entities/Command'
 
-export default class ApplicationDev extends Command {
+export default class ApplicationDev extends ForgeCommand {
   public static commandName = 'app:dev'
   public static description = 'Starting the application in development mode'
 
@@ -30,7 +30,6 @@ export default class ApplicationDev extends Command {
         NODE_ENV: 'development'
       }
     })
-
     process.exit()
   }
 }

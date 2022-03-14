@@ -4,8 +4,8 @@ import User from '../user'
 import Presence from '../presence'
 import { MineralEvent } from '../../../core/entities/Event'
 import { MineralCommand } from '../../../core/entities/Command'
-import { Command } from '../../../forge/entities/Command'
 import GuildManager from '../guild/GuildManager'
+import Command from '../../../api/command/Command'
 
 export default interface Client {
   readonly guilds: GuildManager

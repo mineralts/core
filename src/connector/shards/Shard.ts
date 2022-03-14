@@ -48,8 +48,8 @@ export default class Shard extends EventEmitter {
 
   private identify () {
     const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
-    const intents = environment.resolveKey('intents')
-    const token = environment.resolveKey('token')
+    const intents = environment.resolveKey('INTENTS')
+    const token = environment.resolveKey('TOKEN')
 
     const request = this.request(Opcode.IDENTIFY, {
       token,
@@ -65,7 +65,7 @@ export default class Shard extends EventEmitter {
 
   private reconnect () {
     const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
-    const token = environment.resolveKey('token')
+    const token = environment.resolveKey('TOKEN')
 
     const request = this.request(Opcode.RESUME, {
       token,

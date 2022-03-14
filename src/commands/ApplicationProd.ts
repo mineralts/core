@@ -8,14 +8,14 @@
  *
  */
 
-import { Command } from '../forge/entities/Command'
+import { ForgeCommand } from '../forge/entities/Command'
 import { build } from 'esbuild'
 import fs from 'node:fs'
 import { join } from 'node:path'
 import Application from '../application/Application'
 import production from '../extract/presets/production'
 
-export default class ApplicationProd extends Command {
+export default class ApplicationProd extends ForgeCommand {
   public static commandName = 'app:build'
   public static description = 'Starting the application in development mode'
 
@@ -25,7 +25,7 @@ export default class ApplicationProd extends Command {
 
   public async run (): Promise<void> {
     const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
-    const buildOptions = environment.resolveKey('build')
+    const buildOptions = environment.resolveKey('BUILD')
 
     const buildLocation = join(process.cwd(), buildOptions?.OUT_DIR || 'build')
     const preset = await production()
@@ -33,7 +33,7 @@ export default class ApplicationProd extends Command {
     await build(preset)
 
     await Promise.all([
-      this.copyToBuild(buildLocation, 'env.yaml'),
+      this.copyToBuild(buildLocation, '.env'),
       this.copyToBuild(buildLocation, 'package.json'),
       this.copyToBuild(buildLocation, '.mineralrc.json')
     ])

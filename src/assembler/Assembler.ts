@@ -32,7 +32,7 @@ export default class Assembler {
 
     this.connector = new Connector(this.application)
     this.connector.http.defineHeaders({
-      Authorization: `Bot ${environment.resolveKey('token')}`
+      Authorization: `Bot ${environment.resolveKey('TOKEN')}`
     })
 
     await this.connector.websocketManager.connect()
@@ -58,8 +58,8 @@ export default class Assembler {
     const providers = this.application.ioc.resolveBinding('Mineral/Core/Providers')
     const environment = this.application.ioc.resolveBinding('Mineral/Core/Environment')
 
-    const root = environment?.resolveKey('root')
-    const mode = environment?.resolveKey('mode')
+    const root = environment?.resolveKey('APP_ROOT')
+    const mode = environment?.resolveKey('APP_MODE')
 
     const extensions = [mode === 'development' ? 'ts': 'js']
 
@@ -98,13 +98,14 @@ export default class Assembler {
 
     if (item && item.identifier in identifiers) {
       identifiers[item.identifier]()
-      await Promise.all(
-        providers!.collection.map(async (provider: MineralProvider) => {
-          const entity = new Entity(item, path)
-          await provider.loadFile(entity)
-        })
-      )
     }
+
+    await Promise.all(
+      providers!.collection.map(async (provider: MineralProvider) => {
+        const entity = new Entity(item, path)
+        await provider.loadFile(entity)
+      })
+    )
   }
 
 

@@ -43,6 +43,12 @@ export default class GuildMember {
       })
     }
 
+    const durationObject = date.diffNow().toObject()
+    if (durationObject.days && durationObject.days > 28) {
+      // Log
+      return
+    }
+
     await request.patch(`/guilds/${this.guild.id}/members/${this.id}`, {
       communication_disabled_until: date.toISO()
     })

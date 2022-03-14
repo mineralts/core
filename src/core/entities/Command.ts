@@ -46,7 +46,9 @@ export function Subcommand (description: string) {
       name: propertyKey.toLowerCase(),
       description,
       permissions: target.permissions,
-      options: target.options.reverse()
+      options: target.options
+        ? target.options.reverse()
+        : []
     }
 
     target.options = []

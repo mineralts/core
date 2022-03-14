@@ -12,6 +12,7 @@ import { execSync } from 'child_process'
 import path from 'path'
 import Kernel from '../Kernel'
 import Logger from '@mineralts/logger'
+import Application from '../../application/Application'
 
 export default class Ignitor {
   private logger: Logger = new Logger
@@ -47,30 +48,25 @@ export default class Ignitor {
 
   protected async execTypescript (commandName: string, ...args: string[]) {
     const forgeFile = path.join('node_modules', '@mineralts', 'core-preview', 'build', 'core', 'standalone', 'Forge.js')
-    const stringArgs = args.slice(1).join(' ')
 
-    const esbuild = path.join(process.cwd(), 'node_modules', 'esbuild-dev', 'pkg', 'esbuild-dev.bin.js')
-    const command = `node ${esbuild} ${forgeFile} ${stringArgs}`
-
-    execSync(command, {
+    execSync(`ts-node ${forgeFile} --transpileOnly`, {
       cwd: process.cwd(),
       stdio: 'inherit',
       env: {
         COMMAND_NAME: commandName,
-        ARGS: stringArgs,
+        ARGS: args.join(' '),
         NODE_ENV: 'development'
       }
     })
 
-    process.exit(0)
   }
 
   private async execJavascript (commandName: string, ...args: string[]) {
     process.env.NODE_ENV = 'development'
     const kernel = new Kernel()
-    const cli = kernel.application.ioc.resolveBinding('Mineral/Core/Cli')
-    await cli?.register()
+    await kernel.createCliApplication()
 
+    const cli = Application.singleton().resolveBinding('Mineral/Core/Cli')
     const command = cli?.resolveCommand(commandName)
 
     if (!command) {

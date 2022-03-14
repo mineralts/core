@@ -10,9 +10,9 @@
 
 import fs from 'fs'
 import path from 'path'
-import { Command } from '../forge/entities/Command'
+import { ForgeCommand } from '../forge/entities/Command'
 
-export default class GenerateManifest extends Command {
+export default class GenerateManifest extends ForgeCommand {
   public static commandName = 'generate:manifest'
   public static description = 'Generate manifest file'
 
@@ -23,13 +23,21 @@ export default class GenerateManifest extends Command {
   public async run (): Promise<void> {
     this.logger.info('Waiting to generate manifest file...')
     const environment = this.ioc.resolveBinding('Mineral/Core/Environment')
-    const commandDirs = environment?.resolveKey('rcFile')?.commands
+    const commandDirs = environment?.resolveKey('RC_FILE')?.commands
 
     if (!commandDirs) {
       return
     }
 
-    const commands = await Promise.all(
+    const commands = await this.getCommands(commandDirs)
+    const manifest = this.syncManifest(commands)
+    await this.writeManifest(manifest)
+
+    this.logger.info('Manifest was create in the root folder.')
+  }
+
+  public async getCommands (commandDirs: string[]) {
+    return Promise.all(
       commandDirs.map(async (dir: string) => {
         const commandDirs: string[] = []
 
@@ -63,9 +71,10 @@ export default class GenerateManifest extends Command {
         )
       })
     )
+  }
 
-
-    const manifest = {
+  public syncManifest (commands: any[]) {
+    return {
       commands: commands.flat().filter((command) => command).map((item) => ({
         commandName: item!.command.commandName,
         description: item!.command.description,
@@ -76,12 +85,12 @@ export default class GenerateManifest extends Command {
           .replace(/\\/g, '/')
       }))
     }
+  }
 
+  public async writeManifest (manifest) {
     await fs.promises.writeFile(
       path.join(process.cwd(), 'forge-manifest.json'),
       JSON.stringify(manifest, null, 2)
     )
-
-    this.logger.info('Manifest was create in the root folder.')
   }
 }

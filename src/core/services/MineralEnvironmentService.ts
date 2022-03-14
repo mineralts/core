@@ -1,23 +1,22 @@
 import Collection from '../../api/utils/Collection'
 import fs from 'fs'
-import path from 'path'
-import YAML from 'js-yaml'
 import { BuildOption, RcFile } from '../types'
 import { Intent } from '../../application/types'
-import Application from '../../application/Application'
+import { join } from 'node:path'
+import { parse } from 'dotenv'
 
 interface Environment {
-  appName: string,
-  appVersion: string
-  token: string
-  root: string
-  debug: boolean
-  reflect: boolean
-  rcFile: RcFile
-  mode: 'production' | 'testing' | 'development'
-  mineralDependencies: { [K: string]: unknown }[]
-  build?: BuildOption,
-  intents: {
+  APP_NAME: string,
+  APP_VERSION: string
+  APP_ROOT: string
+  APP_DEBUG: boolean
+  APP_MODE: 'production' | 'testing' | 'development'
+  TOKEN: string
+  REFLECT: boolean
+  RC_FILE: RcFile
+  MINERAL_DEPENDENCIES: { [K: string]: unknown }[]
+  BUILD?: BuildOption,
+  INTENTS: {
     selected: 'ALL' | Exclude<keyof typeof Intent, 'ALL'>[]
     bitfield: number
   }
@@ -37,14 +36,25 @@ export default class MineralEnvironmentService {
   }
 
   public resolveEnvironment () {
-    const helpers = Application.singleton().resolveBinding('Mineral/Core/Helpers')
-    const root = this.resolveKey('root')!
+    const root = this.resolveKey('APP_ROOT')!
 
-    const environmentContent = fs.readFileSync(path.join(root, 'env.yaml'), 'utf-8')
-    const environment = YAML.load(environmentContent) as object
+    const environmentContent = fs.readFileSync(join(root, '.env'), 'utf-8')
+    const environment = parse(environmentContent)
 
-    Object.entries(environment).forEach(([key, value]: [string, unknown]) => {
-      this.registerKey(helpers.camelCase(key), value)
+
+    Object.entries(environment).forEach(([key, value]: [string, any]) => {
+      process.env[key] = value
+      this.registerKey(key, value)
     })
+  }
+
+  public loadFileSync (location: string, filename: string, message?: string) {
+    try {
+      return JSON.parse(fs.readFileSync(join(location, filename), 'utf-8'))
+    } catch (error) {
+      throw new Error(
+        message || `The file ${filename} at location ${location} was not found.`
+      )
+    }
   }
 }

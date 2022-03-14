@@ -20,7 +20,6 @@ export default class MemberRoleAddPacket extends Packet {
       return
     }
 
-    console.log(payload.roles.length, member.roles.cache.size, member.roles)
     if (payload.roles.length > member.roles.cache.size) {
       const currentRoles = member.roles.cache.clone()
       const targetRoles: Collection<Snowflake, Role> = new Collection()

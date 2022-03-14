@@ -25,8 +25,12 @@ import Scheduler from './core/entities/tasks/Scheduler'
 import Application from './application/Application'
 import Collection from './api/utils/Collection'
 import { WebsocketPayload } from '@mineralts/connector-preview'
+import { ForgeCommand } from './forge/entities/Command'
+import FileFactory from './forge/FileFactory'
+import Entity from './core/entities/Entity'
 
 export * from './typing/interfaces'
+export * from './core/entities/Plugin'
 
 export {
   WebsocketPayload,
@@ -55,4 +59,7 @@ export {
   ContextMenu,
   Application,
   Collection,
+  FileFactory,
+  ForgeCommand,
+  Entity
 }

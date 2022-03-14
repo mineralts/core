@@ -8,13 +8,13 @@
  *
  */
 
-import { Command } from '../forge/entities/Command'
+import { ForgeCommand } from '../forge/entities/Command'
 import { prompt } from 'enquirer'
 import path from 'path'
 import FileFactory from '../forge/FileFactory'
 import { clientEvents } from '../api/types'
 
-export default class GenerateManifest extends Command {
+export default class GenerateManifest extends ForgeCommand {
   public static commandName = 'make:event'
   public static description = 'Make a new event class'
 

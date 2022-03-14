@@ -24,7 +24,8 @@ export default class MineralCliService {
   public async register () {
     const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
     const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
-    const rcFile = environment!.resolveKey('rcFile')
+    const rcFile = environment!.resolveKey('RC_FILE')
+    const root = environment!.resolveKey('APP_ROOT')
 
     const invalidLocation = rcFile!.commands.filter((location) => (
       location.startsWith('./') || location.startsWith('/')
@@ -54,8 +55,8 @@ export default class MineralCliService {
 
 
     await Promise.all(
-      rcFile!.commands.map(async () => {
-        const baseLocation = path.join(__dirname, '..', '..', '..')
+      rcFile!.commands.map(async (moduleName: string) => {
+        const baseLocation = path.join(root!, 'node_modules', moduleName)
         const jsonPackageLocation = path.join(baseLocation, 'package.json')
         const JsonPackage = await import(jsonPackageLocation)
 

@@ -9,11 +9,11 @@
  */
 
 import os from 'os'
-import { Command } from '../forge/entities/Command'
+import { ForgeCommand } from '../forge/entities/Command'
 import Collection from '../api/utils/Collection'
 import { MineralEvent } from '../core/entities/Event'
 
-export default class MakeCommand extends Command {
+export default class MakeCommand extends ForgeCommand {
   public static commandName = 'info'
   public static description = 'Displays the current information about your project'
 
@@ -35,11 +35,11 @@ export default class MakeCommand extends Command {
         platform: os.platform(),
         type: os.type()
       },
-      appName: environment?.resolveKey('appName'),
-      appVersion: environment?.resolveKey('appVersion'),
-      intents: environment?.resolveKey('intents'),
-      dependencies: environment?.resolveKey('mineralDependencies'),
-      rcFile: environment?.resolveKey('rcFile'),
+      appName: environment?.resolveKey('APP_NAME'),
+      appVersion: environment?.resolveKey('APP_VERSION'),
+      intents: environment?.resolveKey('INTENTS'),
+      dependencies: environment?.resolveKey('MINERAL_DEPENDENCIES'),
+      rcFile: environment?.resolveKey('RC_FILE'),
       cli: cli?.collection,
       commands: commands?.collection,
       events: events?.collection.map((events: Collection<string, MineralEvent>, identifier: string) => ({

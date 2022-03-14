@@ -25,13 +25,10 @@ export default class Http {
       if (error.response.status === 429) {
         const { url, method } = error.config
         const { global, retry_after } = error.response.data
-        this.emitter.emit('rateLimit', {
-          global,
-          url,
-          method,
-          retryAfter: DateTime.now().plus({ millisecond: retry_after })
-        })
-        return
+        this.emitter.emit('rateLimit', { global, url, method, retryAfter: DateTime.now().plus({ millisecond: retry_after }) })
+        return { status: 429 }
+      } else if (error.response.status === 503) {
+        throw new Error(`[${error.response.status}] ${error.response.data}`)
       } else {
         return Promise.reject(error)
       }

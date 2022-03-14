@@ -36,7 +36,7 @@ export default class ReadyPacket extends Packet {
       undefined
     )
 
-    const token = environment?.resolveKey('token')
+    const token = environment?.resolveKey('TOKEN')
 
     if (!token) {
       throw new Error('No token was provided')
@@ -45,7 +45,7 @@ export default class ReadyPacket extends Packet {
     const client = new Client(
       token,
       {
-        intents: environment?.resolveKey('intents')?.selected,
+        intents: environment?.resolveKey('INTENTS')?.selected,
       },
       user,
       payload.session_id,

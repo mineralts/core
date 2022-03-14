@@ -10,10 +10,10 @@
 
 import path from 'path'
 import { prompt } from 'enquirer'
-import { Command } from '../forge/entities/Command'
+import { ForgeCommand } from '../forge/entities/Command'
 import FileFactory from '../forge/FileFactory'
 
-export default class MakeCommand extends Command {
+export default class MakeCommand extends ForgeCommand {
   public static commandName = 'make:command'
   public static description = 'Make a new command class'
 

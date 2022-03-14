@@ -9,9 +9,9 @@
  */
 
 import path from 'path'
-import { Command } from '../forge/entities/Command'
+import { ForgeCommand } from '../forge/entities/Command'
 
-export default class Help extends Command {
+export default class Help extends ForgeCommand {
   public static commandName = 'help'
   public static description = 'Generate manifest file'
 
