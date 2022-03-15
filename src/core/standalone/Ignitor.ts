@@ -74,6 +74,10 @@ export default class Ignitor {
       return
     }
 
-    await command.run(...args)
+    try {
+      await command.run(...args)
+    } catch {
+      this.logger.error('Order has been cancelled.')
+    }
   }
 }

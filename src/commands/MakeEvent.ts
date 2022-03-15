@@ -9,7 +9,6 @@
  */
 
 import { ForgeCommand } from '../forge/entities/Command'
-import { prompt } from 'enquirer'
 import path from 'path'
 import FileFactory from '../forge/FileFactory'
 import { clientEvents } from '../api/types'
@@ -22,77 +21,40 @@ export default class GenerateManifest extends ForgeCommand {
     const generator = new FileFactory(this.logger)
     await generator.loadFolders(path.join(process.cwd(), 'src'))
 
-    const confirm = {
-      type: 'confirm',
-      name: 'confirm',
-      message: 'Would you like to create a new folder ?',
+    const filename = await this.prompt.ask('Please define a name for your file')
+    const eventType = await this.prompt.autoComplete('Please select an event', clientEvents)
+    const confirm = await this.prompt.confirm('Would you like to create a new folder ?')
+
+    generator.setFilename(filename)
+
+    if (confirm) {
+      await this.createLocation(generator)
+    } else {
+      await this.useLocation(generator)
     }
 
-    const filename = {
-      type: 'input',
-      name: 'filename',
-      message: 'Please define a name for your file'
-    }
+    const templateLocation = path.join(__dirname, '..', '..', 'templates', 'event.txt')
+    generator.setTemplate(templateLocation, (content) => {
+      return content.replaceAll('$event', eventType)
+    })
 
-    const eventType = {
-      type: 'autocomplete',
-      name: 'event',
-      message: 'Please select an event',
-      limit: 5,
-      choices: clientEvents
-    }
-
-    try {
-      const answers = await prompt([filename, eventType, confirm]) as { filename, event, confirm }
-      generator.setFilename(answers.filename)
-
-      answers.confirm
-        ? await this.createLocation(generator)
-        : await this.useLocation(generator)
-
-      const templateLocation = path.join(__dirname, '..', '..', 'templates', 'event.txt')
-      generator.setTemplate(templateLocation, (content) => {
-        return content.replaceAll('$event', answers.event)
-      })
-
-      await generator.write()
-    } catch (err) {
-      this.logger.error('Order has been cancelled.')
-    }
+    await generator.write()
   }
 
   protected async createLocation (generator: FileFactory) {
-    const location = {
-      type: 'input',
-      name: 'location',
-      message: 'Please define the location of your file',
-      hint: 'App/Folder/SubFolder'
-    }
+    const location = await this.prompt.ask('Please define the location of your file', {
+      placeholder: 'App/Folder/SubFolder'
+    })
 
-    try {
-      const answer = await prompt([location]) as { location: string }
-      generator.setLocation(answer.location)
+    generator.setLocation(location)
 
-      await generator.buildFolders()
-    } catch (err) {
-      this.logger.error('Order has been cancelled.')
-    }
+    await generator.buildFolders()
   }
 
   protected async useLocation (generator: FileFactory) {
-    const location = {
-      type: 'autocomplete',
-      name: 'location',
-      message: 'Please define the location of your order',
-      limit: 3,
-      choices: generator.getFolders().length ? generator.getFolders() : ['App']
-    }
+    const choices = generator.getFolders().length ? generator.getFolders() : ['App']
+    const location = await this.prompt.autoComplete('Please define the location of your order', choices)
 
-    try {
-      const answer = await prompt([location]) as { location: string }
-      generator.setLocation(answer.location)
-    } catch (err) {
-      this.logger.error('Order has been cancelled.')
-    }
+    generator.setLocation(location)
   }
 }

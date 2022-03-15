@@ -30,7 +30,7 @@ import FileFactory from './forge/FileFactory'
 import Entity from './core/entities/Entity'
 
 export * from './typing/interfaces'
-export * from './core/entities/Plugin'
+export * from './core/entities/Module'
 
 export {
   WebsocketPayload,

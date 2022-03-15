@@ -11,6 +11,8 @@
 import Kernel from '../Kernel'
 import path from 'path'
 import Application from '../../application/Application'
+import { ForgeCommand } from '../../forge/entities/Command'
+import Prompt from '../../forge/actions/Prompt'
 
 class Forge {
   private kernel: Kernel = new Kernel()
@@ -43,12 +45,18 @@ class Forge {
         : path.join(process.cwd(), 'node_modules', forgeCommand.path)
 
       const { default: Command } = await import(location)
-      const command = new Command()
+      const command = new Command() as ForgeCommand
 
       command.logger = logger
-      command.application = this.kernel.application
+      command.ioc = Application.singleton()
+      command.prompt = new Prompt()
 
-      await command.run(...ARGS?.split(' ') || [])
+      try {
+        const args: string[] = ARGS?.split(' ') || []
+        await command.run(...args)
+      } catch {
+        logger.error('Order has been cancelled.')
+      }
     }
   }
 }

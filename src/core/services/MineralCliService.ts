@@ -3,6 +3,8 @@ import fs from 'fs'
 import path from 'path'
 import Help from '../../commands/Help'
 import Application from '../../application/Application'
+import { ForgeCommand } from '../../forge/entities/Command'
+import Prompt from '../../forge/actions/Prompt'
 
 interface CliCommands {
   'Mineral/Help': Help
@@ -43,10 +45,11 @@ export default class MineralCliService {
           }
 
           const { default: Command } = await import(path.join(location, file))
-          const command = new Command()
+          const command = new Command() as ForgeCommand
 
           command.logger = logger
           command.ioc = Application.singleton()
+          command.prompt = new Prompt()
 
           this.registerCommand(Command.commandName, command)
         })

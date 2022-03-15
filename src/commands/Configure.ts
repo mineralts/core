@@ -12,7 +12,8 @@ import { ForgeCommand } from '../forge/entities/Command'
 import Application from '../application/Application'
 import { join } from 'node:path'
 import fs from 'node:fs'
-import { MineralPlugin } from '../core/entities/Plugin'
+import { MineralModule } from '../core/entities/Module'
+import Prompt from '../forge/actions/Prompt'
 
 export default class Configure extends ForgeCommand {
   public static commandName = 'configure'
@@ -35,9 +36,10 @@ export default class Configure extends ForgeCommand {
     const provider = join(packageLocation, jsonPackage['@mineralts']['instruction'])
     const { default: Instruction } = await import(provider)
 
-    const instruction = new Instruction() as MineralPlugin
+    const instruction = new Instruction() as MineralModule
     instruction.logger = this.logger
     instruction.ioc = Application.singleton()
+    instruction.prompt = new Prompt()
 
     await instruction.configure()
   }
