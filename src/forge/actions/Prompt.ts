@@ -15,6 +15,16 @@ export default class Prompt {
     return answer[this.helpers.camelCase(message)]
   }
 
+  public async password (message: string): Promise<string> {
+    const answer = await prompt({
+      type: 'password',
+      name: this.helpers.camelCase(message),
+      message,
+    })
+
+    return answer[this.helpers.camelCase(message)]
+  }
+
   public async confirm (message: string): Promise<boolean> {
     const answer = await prompt({
       type: 'confirm',
