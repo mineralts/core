@@ -112,7 +112,7 @@ export default class WebSocketManager {
 
   private async reconnect () {
     console.log(2, this.reconnecting, this.status, this.status !== Status.READY)
-    if (this.reconnecting || this.status !== Status.READY) {
+    if (this.reconnecting) {
       return
     }
 

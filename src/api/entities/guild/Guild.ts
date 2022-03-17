@@ -462,7 +462,7 @@ export default class Guild {
 
       await request.put(`/applications/${client?.application.id}/guilds/${this.id}/commands/permissions`, permissions)
     } catch (e: any) {
-      console.log(e)
+      console.error(e)
     }
   }
 

@@ -15,7 +15,7 @@ export default class TypingStartPacket extends Packet {
     const channel: TextChannelResolvable | undefined = guild?.channels.cache.get(payload.channel_id)
     const member: GuildMember | undefined = guild?.members.cache.get(payload.user_id)
 
-    if (member) {
+    if (member && channel) {
       emitter.emit('start:typing', member!, channel)
     }
   }

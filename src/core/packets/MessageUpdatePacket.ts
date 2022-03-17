@@ -17,8 +17,9 @@ export default class MessageUpdatePacket extends Packet {
     const messageBuilder = new MessageBuilder(client!)
     const after = messageBuilder.build(payload)
 
-    emitter.emit('update:Message', before || undefined, after)
-
-    channel.messages.cache.set(after!.id, after!)
+    if (after) {
+      emitter.emit('update:Message', before || undefined, after)
+      channel.messages.cache.set(after!.id, after!)
+    }
   }
 }

@@ -40,6 +40,9 @@ import VoiceMuteRemovePacket from './VoiceMuteRemovePacket'
 import MessagePinPacket from './MessagePinPacket'
 import MessageUnPinPacket from './MessageUnPinPacket'
 import MemberUpdatePacket from './MemberUpdatePacket'
+import ThreadCreatePacket from './ThreadCreatePacket'
+import ThreadDeletePacket from './ThreadDeletePacket'
+import ThreadUpdatePacket from './ThreadUpdatePacket'
 
 export default class PacketManager {
   public packets: Collection<string, Packet[]> = new Collection()
@@ -50,6 +53,9 @@ export default class PacketManager {
       new GuildCreatePacket(),
       new GuildDeletePacket(),
       new GuildUpdatePacket(),
+      new ThreadCreatePacket(),
+      new ThreadDeletePacket(),
+      new ThreadUpdatePacket(),
       new MessageCreatePacket(),
       new MessageDeletePacket(),
       new MessageUnPinPacket(),

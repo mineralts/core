@@ -37,6 +37,12 @@ export default class Channel {
     return ChannelTypeResolvable[this.type] === ChannelTypeResolvable.GUILD_STAGE_VOICE
   }
 
+  public isThread () {
+    return ChannelTypeResolvable[this.type] === ChannelTypeResolvable.GUILD_PUBLIC_THREAD
+    || ChannelTypeResolvable[this.type] === ChannelTypeResolvable.GUILD_PRIVATE_THREAD
+    || ChannelTypeResolvable[this.type] === ChannelTypeResolvable.GUILD_NEWS_THREAD
+  }
+
   public async setParent (category: CategoryChannel | Snowflake) {
     const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     const parentId = typeof category === 'string'

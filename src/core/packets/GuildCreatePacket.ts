@@ -32,7 +32,6 @@ export default class GuildCreatePacket extends Packet {
   private guild!: Guild
 
   public async handle (payload: any) {
-    console.log(payload.threads)
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
     const connector = Application.singleton().resolveBinding('Mineral/Core/Connector')!

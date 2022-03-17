@@ -32,6 +32,7 @@ export default class ChannelBuilder {
       [ChannelTypeResolvable.DM]: () => this.createDMChannel(payload),
       [ChannelTypeResolvable.GUILD_STORE]: () => this.createStoreChannel(payload),
       [ChannelTypeResolvable.GUILD_PUBLIC_THREAD]: () => this.createThreadChannel(payload),
+      [ChannelTypeResolvable.GUILD_PRIVATE_THREAD]: () => this.createThreadChannel(payload),
       unknown: () => {
         logger?.warn(`Channel not supported : ${payload.type}`)
         return undefined
@@ -161,7 +162,7 @@ export default class ChannelBuilder {
     const threadMemberManager = new ThreadMemberManager()
 
     members.data.forEach((payload) => {
-      const member = this.guild.members.cache.get(payload.user_id)
+      const member = this.guild.members.cache.get(payload.user_id) || this.guild.bots.cache.get(payload.user_id)
       const threadMember = new ThreadMember(member!, DateTime.fromISO(payload.join_timestamp))
 
       threadMemberManager.cache.set(threadMember.member.id, threadMember)

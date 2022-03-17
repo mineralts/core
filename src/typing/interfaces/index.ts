@@ -67,6 +67,7 @@ import Collection from '../../api/utils/Collection'
 import { WebsocketPayload } from '@mineralts/connector-preview'
 import RateLimit from './rateLimit'
 import HttpRequest from './http'
+import ThreadChannel from './channels/ThreadChannel'
 
 export type ChannelResolvable = TextChannel | VoiceChannel | CategoryChannel | StageChannel | NewsChannel | DMChannel | StoreChannel
 export type OnlyKeys<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
@@ -123,6 +124,7 @@ export {
   InteractionType,
   RateLimit,
   HttpRequest,
+  ThreadChannel,
 }
 
 export interface ClientEvents {
@@ -140,9 +142,14 @@ export interface ClientEvents {
   'pin:Message': [message:Message]
   'unpin:Message': [message: Message]
 
+
   'create:Channel': [channel: Channel]
   'update:Channel': [channel: Channel]
   'delete:Channel': [channel: Channel]
+
+  'create:ThreadChannel': [channel: ThreadChannel]
+  'update:ThreadChannel': [channel: ThreadChannel]
+  'delete:ThreadChannel': [channel: ThreadChannel]
 
   'create:TextChannel': [channel: TextChannel]
   'update:TextChannel': [channel: TextChannel]

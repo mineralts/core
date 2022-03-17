@@ -39,7 +39,9 @@ export default class GuildMemberBuilder {
 
     payload.roles.forEach((id: Snowflake) => {
       const role = this.guild.roles.cache.get(id)
-      guildMember.roles.cache.set(role!.id, role!)
+      if (role) {
+        guildMember.roles.cache.set(role!.id, role!)
+      }
     })
 
     guildMember.voice = new VoiceState(

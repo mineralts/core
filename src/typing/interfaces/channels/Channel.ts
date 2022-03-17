@@ -17,6 +17,7 @@ export default interface Channel {
   isNews (): boolean
   isCategory (): boolean
   isStage (): boolean
+  isThread (): boolean
   setParent (category: CategoryChannel | Snowflake): Promise<void>
   setName (value: string): Promise<void>
   setPosition (position: number): Promise<void>
