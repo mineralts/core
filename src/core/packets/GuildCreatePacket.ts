@@ -32,6 +32,7 @@ export default class GuildCreatePacket extends Packet {
   private guild!: Guild
 
   public async handle (payload: any) {
+    console.log(payload.threads)
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
     const connector = Application.singleton().resolveBinding('Mineral/Core/Connector')!
@@ -76,7 +77,7 @@ export default class GuildCreatePacket extends Packet {
       const channel = channelBuilder.build(item)
 
       if (!(channel instanceof CategoryChannel)) {
-        channel.parent = this.channels.get(channel.parentId!) as CategoryChannel
+        channel.parent = this.channels.get(channel.parentId!)
       }
 
       this.channels.set(
@@ -99,6 +100,15 @@ export default class GuildCreatePacket extends Packet {
     this.guild.members.register(this.guildMembers)
     this.guild.bots.register(this.guildBots)
     this.guild.channels = new GuildChannelManager(this.guild).register(this.channels)
+
+    payload.threads.forEach((item: any) => {
+      const channel = channelBuilder.build(item)
+
+      this.channels.set(
+        channel ? channel.id : item.id,
+        channel
+      )
+    })
 
     const { data: invites } = await connector.http.get(`/guilds/${this.guild.id}/invites`)
 

@@ -36,6 +36,7 @@ export default class GuildMember {
 
   public async exclude (date: DateTime, reason?: string) {
     const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
 
     if (reason) {
       request.defineHeaders({
@@ -45,7 +46,7 @@ export default class GuildMember {
 
     const durationObject = date.diffNow().toObject()
     if (durationObject.days && durationObject.days > 28) {
-      // Log
+      logger.error('You cannot timeout a member for more than 28 days at a time, The operation has been cancelled.')
       return
     }
 

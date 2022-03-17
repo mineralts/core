@@ -11,7 +11,7 @@ export default class Channel {
     public guildId: Snowflake | undefined,
     public guild: Guild | undefined,
     public parentId: Snowflake | undefined,
-    public position: number,
+    public position: number | undefined,
     public parent?: CategoryChannel,
   ) {
   }

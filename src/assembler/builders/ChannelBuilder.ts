@@ -12,6 +12,10 @@ import MessageManager from '../../api/entities/message/MessageManager'
 import VoiceChannel from '../../api/entities/channels/VoiceChannel'
 import CategoryChannel from '../../api/entities/channels/CategoryChannel'
 import Application from '../../application/Application'
+import ThreadChannel from '../../api/entities/channels/ThreadChannel'
+import { DateTime } from 'luxon'
+import ThreadMemberManager from '../../api/entities/guild/ThreadMemberManager'
+import ThreadMember from '../../api/entities/guild/ThreadMember'
 
 export default class ChannelBuilder {
   constructor (private client: Client, private guild: Guild) {
@@ -27,6 +31,7 @@ export default class ChannelBuilder {
       [ChannelTypeResolvable.GUILD_NEWS]: () => this.createAnnouncementChannel(payload),
       [ChannelTypeResolvable.DM]: () => this.createDMChannel(payload),
       [ChannelTypeResolvable.GUILD_STORE]: () => this.createStoreChannel(payload),
+      [ChannelTypeResolvable.GUILD_PUBLIC_THREAD]: () => this.createThreadChannel(payload),
       unknown: () => {
         logger?.warn(`Channel not supported : ${payload.type}`)
         return undefined
@@ -146,6 +151,46 @@ export default class ChannelBuilder {
       payload.nsfw,
       payload.permission_overwrites,
       this.guild.channels.cache.get(payload.parent_id)
+    )
+  }
+
+  private async createThreadChannel (payload: any) {
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const owner = this.guild.members.cache.get(payload.owner_id) || this.guild.bots.cache.get(payload.owner_id)
+    const members = await request.get(`/channels/${payload.id}/thread-members`)
+    const threadMemberManager = new ThreadMemberManager()
+
+    members.data.forEach((payload) => {
+      const member = this.guild.members.cache.get(payload.user_id)
+      const threadMember = new ThreadMember(member!, DateTime.fromISO(payload.join_timestamp))
+
+      threadMemberManager.cache.set(threadMember.member.id, threadMember)
+    })
+
+    return new ThreadChannel(
+      payload.id,
+      keyFromEnum(ChannelTypeResolvable, payload.type),
+      payload.name,
+      undefined,
+      payload.guild_id,
+      this.guild,
+      payload.last_message_id,
+      undefined,
+      payload.parent_id,
+      this.guild.channels.cache.get(payload.parent_id),
+      undefined,
+      payload.rate_limit_per_user,
+      new MessageManager(),
+      payload.thread_metadata.locked,
+      payload.thread_metadata.archived,
+      DateTime.fromISO(payload.thread_metadata.create_timestamp),
+      DateTime.fromISO(payload.thread_metadata.archive_timestamp),
+      payload.thread_metadata.auto_archive_duration,
+      payload.owner_id,
+      owner,
+      payload.message_count,
+      payload.member_count,
+      threadMemberManager,
     )
   }
 }
