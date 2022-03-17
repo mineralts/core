@@ -6,7 +6,6 @@ export default class ThreadCreatePacket extends Packet {
   public packetType = 'THREAD_CREATE'
 
   public async handle (payload: any) {
-    console.log('thread created')
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 

@@ -15,7 +15,6 @@ import Application from '../../application/Application'
 import ThreadChannel from '../../api/entities/channels/ThreadChannel'
 import { DateTime } from 'luxon'
 import ThreadMemberManager from '../../api/entities/guild/ThreadMemberManager'
-import ThreadMember from '../../api/entities/guild/ThreadMember'
 
 export default class ChannelBuilder {
   constructor (private client: Client, private guild: Guild) {
@@ -156,17 +155,7 @@ export default class ChannelBuilder {
   }
 
   private async createThreadChannel (payload: any) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
     const owner = this.guild.members.cache.get(payload.owner_id) || this.guild.bots.cache.get(payload.owner_id)
-    const members = await request.get(`/channels/${payload.id}/thread-members`)
-    const threadMemberManager = new ThreadMemberManager()
-
-    members.data.forEach((payload) => {
-      const member = this.guild.members.cache.get(payload.user_id) || this.guild.bots.cache.get(payload.user_id)
-      const threadMember = new ThreadMember(member!, DateTime.fromISO(payload.join_timestamp))
-
-      threadMemberManager.cache.set(threadMember.member.id, threadMember)
-    })
 
     return new ThreadChannel(
       payload.id,
@@ -191,7 +180,7 @@ export default class ChannelBuilder {
       owner,
       payload.message_count,
       payload.member_count,
-      threadMemberManager,
+      new ThreadMemberManager()
     )
   }
 }

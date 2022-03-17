@@ -7,6 +7,8 @@ import MessageManager from '../message/MessageManager'
 import TextChannel from './TextChannel'
 import GuildMember from '../guild/GuildMember'
 import ThreadMemberManager from '../guild/ThreadMemberManager'
+import Application from '../../../application/Application'
+import ThreadMember from '../guild/ThreadMember'
 
 export default class ThreadChannel extends TextChannel {
   constructor (
@@ -43,5 +45,18 @@ export default class ThreadChannel extends TextChannel {
 
   public isPublicThread () {
     return this.type === 'GUILD_PUBLIC_THREAD'
+  }
+
+  public async loadMembers () {
+    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+
+    const { data: members } = await request.get(`/channels/${this.id}/thread-members`)
+
+    members.forEach((payload) => {
+      const member = this.guild?.members.cache.get(payload.user_id) || this.guild?.bots.cache.get(payload.user_id)
+      const threadMember = new ThreadMember(member!, DateTime.fromISO(payload.join_timestamp))
+
+      this.members.cache.set(threadMember.member.id, threadMember)
+    })
   }
 }
