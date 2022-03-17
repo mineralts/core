@@ -17,8 +17,13 @@ export default class MessageCreatePacket extends Packet {
     const useReflect = environment.resolveKey('reflect')
 
     const guild = client?.guilds.cache.get(payload.guild_id)
-    const channel = guild?.channels.cache.get(payload.channel_id) as TextChannel
 
+    if (!guild) {
+      return
+    }
+
+    const channel = guild.channels.cache.get(payload.channel_id) as TextChannel
+    
     const messageBuilder = new MessageBuilder(client!)
     const message = messageBuilder.build(payload)
 
