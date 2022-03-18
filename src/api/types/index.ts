@@ -239,22 +239,6 @@ export enum SystemChannelFlag {
   SUPPRESS_GUILD_REMINDER_NOTIFICATIONS = 1 << 2,
 }
 
-// export interface ClientEvents {
-//   rateLimit: [rateLimit: RateLimit]
-//
-//   interactionButtonCreate: [interaction: ButtonInteraction]
-//
-//   [key: `interactionButton::${string}`]: [interaction: ButtonInteraction]
-//
-//   interactionSelectMenuCreate: [interaction: SelectMenuInteraction]
-//
-//   [key: `interactionSelectMenu::${string}`]: [interaction: SelectMenuInteraction]
-//
-//   interactionCommandCreate: [interaction: CommandInteraction]
-//
-//   [key: `interactionCommand::${string}`]: [interaction: CommandInteraction]
-// }
-
 export const clientEvents = [
   'ready',
   'rateLimit',
@@ -313,7 +297,10 @@ export const clientEvents = [
   'create:Role',
   'update:Role',
   'delete:Role',
-  'create:Interaction:Modal',
+  'open:modal',
+  'press:button',
+  'use:command',
+  'action:context',
   'start:typing',
   'wss'
 ]

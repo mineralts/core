@@ -34,6 +34,6 @@ export default class MenuInteraction {
       logger.error('Menu interactions are not yet implemented in private channels')
       return undefined
     }
-    return this.guild.members.cache.get(this.params.target_id)
+    return this.guild.members.cache.get(this.params.target_id) || this.guild.bots.cache.get(this.params.target_id)
   }
 }

@@ -17,6 +17,7 @@ import { ContextMenu, MineralContextMenu } from './core/entities/ContextMenu'
 import Ignitor from './core/standalone/Ignitor'
 import MessageEmbed from './api/entities/embed/MessageEmbed'
 import ModalRow from './api/entities/modal/ModalRow'
+import Row from './api/entities/embed/EmbedRow'
 import Modal from './api/entities/modal'
 import Button from './api/entities/button/index'
 import Link from './api/entities/button/ButtonLink'
@@ -54,6 +55,7 @@ export {
   Select,
   Button,
   Link,
+  Row,
   Scheduler,
   MineralContextMenu,
   ContextMenu,

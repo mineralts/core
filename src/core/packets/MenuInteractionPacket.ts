@@ -13,7 +13,7 @@ export default class MenuInteractionPacket extends Packet {
 
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
-    const menus = Application.singleton().resolveBinding('Mineral/Core/SelectMenus')
+    const menus = Application.singleton().resolveBinding('Mineral/Core/ContextMenus')
 
     const guild = client?.guilds.cache.get(payload.guild_id)
     const member = guild?.members.cache.get(payload.member.user.id)
@@ -21,7 +21,7 @@ export default class MenuInteractionPacket extends Packet {
     const interactionBuilder = new MenuInteractionBuilder(client!, member!)
     const interaction = interactionBuilder.build(payload)
 
-    const menu = menus.get(interaction.params.name)
+    const menu = menus.collection.get(interaction.params.name)
 
     if (!menu) {
       return
@@ -29,6 +29,6 @@ export default class MenuInteractionPacket extends Packet {
 
     await menu.run(interaction as any)
 
-    emitter.emit('menuInteraction', interaction)
+    emitter.emit('action:context', interaction)
   }
 }

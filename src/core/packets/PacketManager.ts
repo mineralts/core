@@ -43,6 +43,7 @@ import MemberUpdatePacket from './MemberUpdatePacket'
 import ThreadCreatePacket from './ThreadCreatePacket'
 import ThreadDeletePacket from './ThreadDeletePacket'
 import ThreadUpdatePacket from './ThreadUpdatePacket'
+import ButtonInteractionPacket from './ButtonInteractionPacket'
 
 export default class PacketManager {
   public packets: Collection<string, Packet[]> = new Collection()
@@ -86,6 +87,7 @@ export default class PacketManager {
       new CommandInteractionPacket(),
       new MenuInteractionPacket(),
       new ModalInteractionPacket(),
+      new ButtonInteractionPacket(),
       new EmojiUpdatePacket(),
       new EmojiDeletePacket(),
       new EmojiCreatePacket(),

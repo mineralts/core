@@ -19,4 +19,5 @@ export default interface ThreadChannel extends TextChannelResolvable {
 
   isPrivateThread (): boolean
   isPublicThread (): boolean
+  loadMembers (): Promise<void>
 }

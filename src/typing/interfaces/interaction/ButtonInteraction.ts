@@ -1,9 +1,8 @@
 import { MessageOption } from '../../../api/types'
-import Button from '../button'
 import Interaction from './index'
 
 export default interface ButtonInteraction extends Interaction {
-  readonly component: Button | undefined
+  pass (): Promise<void>
 
   reply (messageOption: MessageOption): Promise<void>
 }

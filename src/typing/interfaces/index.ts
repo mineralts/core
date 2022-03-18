@@ -35,7 +35,6 @@ import Message from './message'
 import MentionResolvable from './mention/MentionResolvable'
 import MessageAttachment from './message/MessageAttachment'
 import Button from './button'
-import EmbedRow from './embed/EmbedRow'
 import SelectMenu from './select-menu'
 import EmbedAuthor from './embed/EmbedAuthor'
 import EmbedThumbnail from './embed/EmbedThumbnail'
@@ -68,6 +67,8 @@ import { WebsocketPayload } from '@mineralts/connector-preview'
 import RateLimit from './rateLimit'
 import HttpRequest from './http'
 import ThreadChannel from './channels/ThreadChannel'
+import ButtonInteraction from './interaction/ButtonInteraction'
+import MenuInteraction from './interaction/MenuInteraction'
 
 export type ChannelResolvable = TextChannel | VoiceChannel | CategoryChannel | StageChannel | NewsChannel | DMChannel | StoreChannel
 export type OnlyKeys<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
@@ -108,7 +109,6 @@ export {
   MentionResolvable,
   MessageAttachment,
   ComponentType,
-  EmbedRow,
   Button,
   ButtonStyle,
   SelectMenu,
@@ -125,6 +125,7 @@ export {
   RateLimit,
   HttpRequest,
   ThreadChannel,
+  MenuInteraction,
 }
 
 export interface ClientEvents {
@@ -213,7 +214,16 @@ export interface ClientEvents {
   'update:Role': [before: Role, after: Role]
   'delete:Role': [role: Role]
 
-  'create:Interaction:Modal': [interaction: ModalInteraction]
+  'open:modal': [interaction: ModalInteraction]
+  [event: `open:modal:${string}`]: [interaction: ModalInteraction]
+
+  'press:button': [interaction: ButtonInteraction]
+  [event: `press:button:${string}`]: [interaction: ButtonInteraction]
+
+  'use:command': [interaction: CommandInteraction]
+  [event: `use:command:${string}`]: [interaction: CommandInteraction]
+
+  'action:context': [interaction: MenuInteraction]
 
   'start:typing': [member: GuildMember, channel: TextChannelResolvable]
   'wss': [payload: WebsocketPayload]

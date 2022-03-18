@@ -20,7 +20,7 @@ export default class ModalInteractionPacket extends Packet {
     const interactionBuilder = new ModalInteractionBuilder(client!, member!)
     const interaction = interactionBuilder.build(payload)
 
-    emitter.emit('interactionModalCreate', interaction)
-    emitter.emit(`interactionModal::${interaction.customId}`, interaction)
+    emitter.emit('open:modal', interaction)
+    emitter.emit(`open:modal::${interaction.customId}`, interaction)
   }
 }

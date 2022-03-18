@@ -61,6 +61,7 @@ export default class CommandInteractionPacket extends Packet {
       await command['run'](interaction)
     }
 
-    emitter.emit('commandInteraction', interaction)
+    emitter.emit('use:command', interaction)
+    emitter.emit(`use:command:${interaction.customId}`, interaction)
   }
 }

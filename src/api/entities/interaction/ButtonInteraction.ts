@@ -1,7 +1,6 @@
 import { InteractionType, MessageComponentResolvable, MessageOption, Snowflake } from '../../types'
 import Message from '../message'
 import GuildMember from '../guild/GuildMember'
-import Button from '../button'
 import Interaction from './index'
 import EmbedRow from '../embed/EmbedRow'
 import Application from '../../../application/Application'
@@ -13,9 +12,9 @@ export default class ButtonInteraction extends Interaction {
     token: string,
     message: Message,
     member: GuildMember,
-    public component: Button | undefined,
+    customId: string,
   ) {
-    super(id, version, 'MESSAGE_COMPONENT', token, component?.customId, 'BUTTON', message, member)
+    super(id, version, 'MESSAGE_COMPONENT', token, customId, 'BUTTON', message, member)
   }
 
   public async pass () {
