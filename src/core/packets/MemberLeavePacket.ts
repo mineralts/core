@@ -11,14 +11,21 @@ export default class MemberLeavePacket extends Packet {
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
     const guild: Guild | undefined = client?.guilds.cache.get(payload.guild_id)
-    const guildMember: GuildMember | undefined = guild?.members.cache.get(payload.user.id) || guild?.bots.cache.get(payload.user.id)
+    if (!guild) {
+      return
+    }
+
+    const guildMember: GuildMember | undefined = guild.members.cache.get(payload.user.id) || guild.bots.cache.get(payload.user.id)
+    if (!guildMember) {
+      return
+    }
 
     emitter.emit('leave:Member', guildMember)
 
-    if (guildMember!.user.isBot()) {
-      guild?.bots.cache.delete(guildMember!.id)
+    if (guildMember.user.isBot()) {
+      guild.bots.cache.delete(guildMember.id)
     } else {
-      guild?.members.cache.delete(guildMember!.id)
+      guild.members.cache.delete(guildMember.id)
     }
   }
 }

@@ -117,7 +117,7 @@ export default class GuildCreatePacket extends Packet {
 
     await guild.registerCommands()
 
-    client?.guilds.cache.set(guild.id, guild as any)
+    client.guilds.cache.set(guild.id, guild as any)
 
     emitter.emit('create:Guild', guild)
   }

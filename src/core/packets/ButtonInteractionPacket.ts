@@ -13,11 +13,14 @@ export default class ButtonInteractionPacket extends Packet {
 
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const guild = client.guilds.cache.get(payload.guild_id)
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-    const member = guild?.members.cache.get(payload.member.user.id)
+    if (!guild) {
+      return
+    }
 
-    const buttonInteractionBuilder = new ButtonInteractionBuilder(client!, member!)
+    const member = guild.members.cache.get(payload.member.user.id)
+    const buttonInteractionBuilder = new ButtonInteractionBuilder(client, member!)
     const interaction = buttonInteractionBuilder.build(payload)
 
     emitter.emit('press:button', interaction)

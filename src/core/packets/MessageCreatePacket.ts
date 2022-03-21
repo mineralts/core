@@ -16,14 +16,12 @@ export default class MessageCreatePacket extends Packet {
     const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
     const useReflect = environment.resolveKey('reflect')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-
+    const guild = client.guilds.cache.get(payload.guild_id)
     if (!guild) {
       return
     }
 
     const channel = guild.channels.cache.get(payload.channel_id) as TextChannel
-    
     const messageBuilder = new MessageBuilder(client!)
     const message = messageBuilder.build(payload)
 

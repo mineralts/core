@@ -33,6 +33,8 @@ export default async function () {
     })
   )
 
+  console.log(includeFile)
+
   const registeredAlias = {}
 
   Object.entries(alias!).forEach(([key, location]) => {

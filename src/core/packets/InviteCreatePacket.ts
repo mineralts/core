@@ -10,7 +10,11 @@ export default class InviteCreatePacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
+
     const member = guild?.members.cache.get(payload.inviter.id)
     const channel = guild?.channels.cache.get(payload.channel_id)
 

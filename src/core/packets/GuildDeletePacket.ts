@@ -7,9 +7,12 @@ export default class GuildDeletePacket extends Packet {
   public async handle (payload: any) {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
-    const guild = client?.guilds.cache.get(payload.guild_id)
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
 
     emitter.emit('delete:Guild', guild)
-    client?.guilds.cache.delete(payload.guild_id)
+    client.guilds.cache.delete(payload.guild_id)
   }
 }

@@ -22,7 +22,11 @@ export default class GuildUpdatePacket extends Packet {
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
     const before = { ...client?.guilds.cache.get(payload.guild_id) } as Omit<Guild, OnlyKeys<Guild>>
-    const guild = client?.guilds.cache.clone().get(payload.guild_id)
+    const guild = client.guilds.cache.clone().get(payload.guild_id)
+
+    if (!guild) {
+      return
+    }
 
     guild.emojis = new GuildEmojiManager()
     guild.roles = new GuildRoleManager(guild)
@@ -68,6 +72,6 @@ export default class GuildUpdatePacket extends Packet {
 
 
     emitter.emit('update:Guild', before, guild)
-    client?.guilds.cache.set(guild.id, guild)
+    client.guilds.cache.set(guild.id, guild)
   }
 }

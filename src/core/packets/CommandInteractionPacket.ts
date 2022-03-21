@@ -18,10 +18,14 @@ export default class CommandInteractionPacket extends Packet {
     const commands = Application.singleton().resolveBinding('Mineral/Core/Commands')
     const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-    const member = guild?.members.cache.get(payload.member.user.id)
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
 
-    const interactionBuilder = new CommandInteractionBuilder(client!, member!)
+    const member = guild.members.cache.get(payload.member.user.id)
+
+    const interactionBuilder = new CommandInteractionBuilder(client, member!)
     let interaction: CommandInteraction
 
     const command = commands.collection.find((command: MineralBaseCommand) => (

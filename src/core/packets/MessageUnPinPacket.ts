@@ -9,8 +9,16 @@ export default class MessageUnPinPacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-    const channel = guild?.channels.cache.get(payload.channel_id) as TextChannel
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
+
+    const channel = guild.channels.cache.get(payload.channel_id) as TextChannel
+    if (!channel) {
+      return
+    }
+
     const message = channel.messages.cache.get(payload.id)
 
     if (message?.pinned && !payload.pinned) {

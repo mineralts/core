@@ -9,21 +9,20 @@ export default class MemberUpdatePacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-
+    const guild = client.guilds.cache.get(payload.guild_id)
     if (!guild) {
       return
     }
 
-    const before = guild?.members.cache.get(payload.user.id)
+    const before = guild.members.cache.get(payload.user.id)
 
-    const guildMemberBuilder = new GuildMemberBuilder(client as any, guild!.roles.cache as any, guild as any)
+    const guildMemberBuilder = new GuildMemberBuilder(client, guild.roles.cache, guild)
     const after = guildMemberBuilder.build(payload)
 
     if (after.user.isBot()) {
-      guild?.bots.cache.set(after.id, after)
+      guild.bots.cache.set(after.id, after)
     } else {
-      guild?.members.cache.set(after.id, after)
+      guild.members.cache.set(after.id, after)
     }
 
     emitter.emit('update:Member', before, after)

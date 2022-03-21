@@ -17,14 +17,18 @@ export default class ChannelUpdatePacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-    const before = guild?.channels.cache.get(payload.id)
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
 
-    const channelBuilder = new ChannelBuilder(client!, guild!)
+    const before = guild.channels.cache.get(payload.id)
+
+    const channelBuilder = new ChannelBuilder(client, guild!)
     const after = channelBuilder.build(payload)
 
     if (after instanceof TextChannelResolvable) {
-      after.parent = guild?.channels.cache.get(payload.parent_id)
+      after.parent = guild.channels.cache.get(payload.parent_id)
       after.messages = new MessageManager(after)
       after.guild = guild as any
     }

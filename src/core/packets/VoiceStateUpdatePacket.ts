@@ -12,16 +12,23 @@ export default class VoiceStateUpdatePacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
     const guild = client?.guilds.cache.get(payload.guild_id)
-    const before = guild?.members.cache.get(payload.member.user.id)
+    if (!guild) {
+      return
+    }
 
-    const voiceChannel: VoiceChannel | undefined = guild?.channels.cache.get(payload.channel_id)
-    const member: GuildMember | undefined = guild?.members.cache.get(payload.member.user.id)
+    const before = guild.members.cache.get(payload.member.user.id)
 
-    const voiceStateBuilder: VoiceStateBuilder = new VoiceStateBuilder(client!, guild!, member!, voiceChannel!)
+    const voiceChannel: VoiceChannel | undefined = guild.channels.cache.get(payload.channel_id)
+    const member: GuildMember | undefined = guild.members.cache.get(payload.member.user.id) || guild.bots.cache.get(payload.member.user.id)
+    if (!member || !voiceChannel) {
+      return
+    }
+
+    const voiceStateBuilder: VoiceStateBuilder = new VoiceStateBuilder(client, guild, member, voiceChannel)
     const voiceState: VoiceState = voiceStateBuilder.build(payload)
 
     emitter.emit('update:VoiceState', before, voiceState)
 
-    member!.voice = voiceState
+    member.voice = voiceState
   }
 }

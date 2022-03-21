@@ -13,9 +13,12 @@ export default class MemberRoleRemovePacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild: Guild | undefined = client?.guilds.cache.get(payload.guild_id)
-    const member: GuildMember | undefined = guild?.members.cache.get(payload.user.id)
+    const guild: Guild | undefined = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
 
+    const member: GuildMember | undefined = guild.members.cache.get(payload.user.id)
     if (!member) {
       return
     }
@@ -25,7 +28,7 @@ export default class MemberRoleRemovePacket extends Packet {
       const targetRoles: Collection<Snowflake, Role> = new Collection()
 
       payload.roles.forEach((id: Snowflake) => {
-        const role = guild?.roles.cache.get(id)
+        const role = guild.roles.cache.get(id)
         if (role) {
           member.roles.cache.delete(role.id)
           targetRoles.set(role.id, role)

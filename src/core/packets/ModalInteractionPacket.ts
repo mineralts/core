@@ -14,10 +14,17 @@ export default class ModalInteractionPacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-    const member = guild?.members.cache.get(payload.member.user.id)
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
 
-    const interactionBuilder = new ModalInteractionBuilder(client!, member!)
+    const member = guild.members.cache.get(payload.member.user.id)
+    if (!member) {
+      return
+    }
+
+    const interactionBuilder = new ModalInteractionBuilder(client, member!)
     const interaction = interactionBuilder.build(payload)
 
     emitter.emit('open:modal', interaction)

@@ -17,21 +17,24 @@ export default class ChannelCreatePacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
 
-    const channelBuilder = new ChannelBuilder(client!, guild as any)
+    const channelBuilder = new ChannelBuilder(client!, guild)
     const channel = channelBuilder.build(payload)
 
-    guild?.channels.cache.set(channel.id, channel)
+    guild.channels.cache.set(channel.id, channel)
 
     if (channel instanceof TextChannelResolvable) {
-      channel.parent = guild?.channels.cache.get(payload.parent_id)
+      channel.parent = guild.channels.cache.get(payload.parent_id)
       channel.messages = new MessageManager(channel)
       channel.guild = guild
     }
 
     if (channel instanceof DMChannel) {
-      client?.privates.cache.set(channel.id, channel)
+      client.privates.cache.set(channel.id, channel)
     }
 
     if (channel instanceof TextChannel) emitter.emit('create:TextChannel', channel)

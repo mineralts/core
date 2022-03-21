@@ -9,14 +9,17 @@ export default class MemberTimeoutRemovePacket extends Packet {
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
     const guild = client?.guilds.cache.get(payload.guild_id)
-    const member = guild?.members.cache.get(payload.user.id)
+    if (!guild) {
+      return
+    }
 
+    const member = guild.members.cache.get(payload.user.id)
     if (!member) {
       return
     }
 
-    if (member?.communicationTimeout !== payload.communication_disabled_until) {
-      member!.communicationTimeout = null
+    if (member.communicationTimeout !== payload.communication_disabled_until) {
+      member.communicationTimeout = null
       emitter.emit('remove:MemberTimeout', member)
     }
   }

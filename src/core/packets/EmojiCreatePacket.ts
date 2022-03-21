@@ -14,7 +14,11 @@ export default class EmojiCreatePacket extends Packet {
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
     const guild: Guild | undefined = client?.guilds.cache.get(payload.guild_id)
-    const guildEmojis: Collection<Snowflake, Emoji> = guild?.emojis.cache.clone()
+    if (!guild) {
+      return
+    }
+
+    const guildEmojis: Collection<Snowflake, Emoji> = guild.emojis.cache.clone()
     const payloadEmojis: any[] = payload.emojis
 
     if (payload.emojis.length > guildEmojis!.size) {
@@ -27,7 +31,7 @@ export default class EmojiCreatePacket extends Packet {
       const emojiBuilder = new EmojiBuilder(guild)
       const emoji = emojiBuilder.build(payloadEmojis[0])
 
-      guild?.emojis.cache.set(emoji.id, emoji)
+      guild.emojis.cache.set(emoji.id, emoji)
 
       emitter.emit('create:Emoji', emoji)
     }

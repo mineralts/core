@@ -10,13 +10,25 @@ export default class MessageReactionRemove extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-    const channel = guild?.channels.cache.get(payload.channel_id) as TextChannel
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
+
+    const channel = guild.channels.cache.get(payload.channel_id) as TextChannel
+    if (!channel) {
+      return
+    }
+
     const message = channel.messages.cache.get(payload.message_id)
 
     if (message) {
       const reactions = message.reactions.cache.get(payload.user_id)
-      const target = reactions!.find((reaction: Reaction) => (
+      if (!reactions) {
+        return
+      }
+
+      const target = reactions.find((reaction: Reaction) => (
         reaction.emoji.label === payload.emoji.name
       ))
 
@@ -24,10 +36,10 @@ export default class MessageReactionRemove extends Packet {
         return
       }
 
-      const index = reactions!.indexOf(target!)
-      const reaction = reactions!.splice(index, 1)!
+      const index = reactions.indexOf(target!)
+      const reaction = reactions.splice(index, 1)!
 
-      if (!reactions?.length) {
+      if (!reactions.length) {
         message.reactions.cache.delete(payload.user_id)
       }
 

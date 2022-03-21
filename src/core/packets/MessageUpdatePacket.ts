@@ -10,8 +10,16 @@ export default class MessageUpdatePacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-    const channel = guild?.channels.cache.get(payload.channel_id) as TextChannel
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
+
+    const channel = guild.channels.cache.get(payload.channel_id) as TextChannel
+    if (!channel) {
+      return
+    }
+
     const before = channel.messages.cache.get(payload.id)
 
     const messageBuilder = new MessageBuilder(client!)
@@ -19,7 +27,7 @@ export default class MessageUpdatePacket extends Packet {
 
     if (after) {
       emitter.emit('update:Message', before || undefined, after)
-      channel.messages.cache.set(after!.id, after!)
+      channel.messages.cache.set(after.id, after)
     }
   }
 }

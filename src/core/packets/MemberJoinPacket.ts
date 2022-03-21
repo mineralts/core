@@ -10,14 +10,17 @@ export default class MemberJoinPacket extends Packet {
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
     const guild = client?.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
 
-    const guildMemberBuilder = new GuildMemberBuilder(client as any, guild!.roles.cache as any, guild as any)
+    const guildMemberBuilder = new GuildMemberBuilder(client, guild.roles.cache, guild)
     const guildMember = guildMemberBuilder.build(payload)
 
     if (guildMember.user.isBot()) {
-      guild?.bots.cache.set(guildMember.id, guildMember)
+      guild.bots.cache.set(guildMember.id, guildMember)
     } else {
-      guild?.members.cache.set(guildMember.id, guildMember)
+      guild.members.cache.set(guildMember.id, guildMember)
     }
 
     // const request = await assembler.connector.http.get(`/guilds/${guild!.id}/invites`) as any[]

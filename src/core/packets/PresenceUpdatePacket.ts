@@ -9,17 +9,15 @@ export default class PresenceUpdatePacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-
+    const guild = client.guilds.cache.get(payload.guild_id)
     if (!guild) {
       return
     }
 
-    const presenceBuilder = new PresenceBuilder(client!, guild, guild.members.cache)
+    const presenceBuilder = new PresenceBuilder(client, guild, guild.members.cache)
     const presence = presenceBuilder.build(payload)
 
     const member = guild.members.cache.get(payload.user.id)
-
     if (!member) {
       return
     }

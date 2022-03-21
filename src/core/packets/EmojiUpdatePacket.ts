@@ -16,18 +16,21 @@ export default class EmojiUpdatePacket extends Packet {
     const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
 
     const guild: Guild | undefined = client?.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
 
-    if (payload.emojis.length === guild?.emojis.cache.size) {
+    if (payload.emojis.length === guild.emojis.cache.size) {
       const emojis: Collection<Snowflake, Emoji> = new Collection()
 
       const emojiBuilder = new EmojiBuilder(guild)
-      payload.emojis?.forEach((item) => {
+      payload.emojis.forEach((item) => {
         const emoji = emojiBuilder.build(item)
         emojis.set(emoji.id, emoji)
       })
 
       const emoji = emojis.map((emoji: Emoji) => {
-        const currentEmoji = guild?.emojis.cache.get(emoji.id)
+        const currentEmoji = guild.emojis.cache.get(emoji.id)
         const label = emoji.label !== currentEmoji?.label
         const currentRoles: Snowflake[] | undefined = currentEmoji?.roles.map((role: Role) => role.id)
 
@@ -47,7 +50,7 @@ export default class EmojiUpdatePacket extends Packet {
         return
       }
 
-      emitter.emit('update:Emoji', emoji, guild?.emojis.cache.get(emoji[0].id))
+      emitter.emit('update:Emoji', emoji, guild.emojis.cache.get(emoji[0].id))
     }
   }
 }

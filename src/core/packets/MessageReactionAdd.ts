@@ -13,20 +13,27 @@ export default class MessageReactionAdd extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-    const channel = guild?.channels.cache.get(payload.channel_id) as TextChannel
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
+
+    const channel = guild.channels.cache.get(payload.channel_id) as TextChannel
     const message = channel.messages.cache.get(payload.message_id)
 
     if (message) {
-      const member: GuildMember | undefined = guild?.members.cache.get(payload.user_id)
+      const member: GuildMember | undefined = guild.members.cache.get(payload.user_id)
+      if (!member) {
+        return
+      }
 
       const emojiBuilder: EmojiBuilder = new EmojiBuilder(guild)
       const emoji: Emoji = emojiBuilder.build(payload.emoji)
 
-      const reactionBuilder: ReactionBuilder = new ReactionBuilder(client as any, emoji, member!)
+      const reactionBuilder: ReactionBuilder = new ReactionBuilder(client, emoji, member)
       const reaction: Reaction = reactionBuilder.build()
 
-      message.reactions.addReaction(emoji, member!)
+      message.reactions.addReaction(emoji, member)
 
       emitter.emit('add:MessageReaction', message, reaction)
     }

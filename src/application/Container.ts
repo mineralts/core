@@ -15,7 +15,7 @@ import MineralTaskService from '../core/services/MineralTaskService'
 import Http from '../connector/http'
 
 export interface ServiceContract {
-  'Mineral/Core/Client': Client | undefined
+  'Mineral/Core/Client': Client
   'Mineral/Core/Logger': Logger
   'Mineral/Core/Emitter': EventsListener
   'Mineral/Core/Events': MineralEventService

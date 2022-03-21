@@ -15,8 +15,12 @@ export default class ChannelDeletePacket extends Packet {
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
     const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
 
-    const guild = client?.guilds.cache.get(payload.guild_id)
-    const channel = guild?.channels.cache.get(payload.id)
+    const guild = client.guilds.cache.get(payload.guild_id)
+    if (!guild) {
+      return
+    }
+
+    const channel = guild.channels.cache.get(payload.id)
 
     if (!channel) {
       logger?.error('Channel is missing')

@@ -13,10 +13,14 @@ export default class EmojiDeletePacket extends Packet {
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
 
     const guild: Guild | undefined = client?.guilds.cache.get(payload.guild_id)
-    const guildEmojis: Collection<Snowflake, Emoji> = guild?.emojis.cache.clone()
+    if (!guild) {
+      return
+    }
+
+    const guildEmojis: Collection<Snowflake, Emoji> = guild.emojis.cache.clone()
 
     if (payload.emojis.length < guildEmojis!.size) {
-      payload.emojis?.forEach((emoji: Emoji) => {
+      payload.emojis.forEach((emoji: Emoji) => {
         const item = guildEmojis.get(emoji.id)
         if (item) {
           guildEmojis.delete(item.id)
