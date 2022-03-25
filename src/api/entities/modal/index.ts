@@ -41,8 +41,8 @@ export default class Modal {
 
   public toJson () {
     if (!this.customId) {
-      const logger = Application.getLogger()
-      logger.error(`${this.title} component has not customId.`)
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.error(`${this.title} component has not customId.`)
       process.exit(0)
     }
 

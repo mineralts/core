@@ -2,7 +2,6 @@ import Collection from '../api/utils/Collection'
 import EventsListener from '../assembler/EventsListener'
 import MineralEnvironmentService from '../core/services/MineralEnvironmentService'
 import MineralProviderService from '../core/services/MineralProviderService'
-import Logger from '@mineralts/logger'
 import MineralCliService from '../core/services/MineralCliService'
 import MineralEventService from '../core/services/MineralEventService'
 import MineralCommandService from '../core/services/MineralCommandService'
@@ -13,10 +12,11 @@ import Reflect from '../reflect/Reflect'
 import MineralContextMenusService from '../core/services/MineralContextMenusService'
 import MineralTaskService from '../core/services/MineralTaskService'
 import Http from '../connector/http'
+import Logger from '@poppinss/cliui'
 
 export interface ServiceContract {
   'Mineral/Core/Client': Client
-  'Mineral/Core/Logger': Logger
+  'Mineral/Core/Console': typeof Logger
   'Mineral/Core/Emitter': EventsListener
   'Mineral/Core/Events': MineralEventService
   'Mineral/Core/Commands': MineralCommandService

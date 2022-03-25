@@ -56,7 +56,8 @@ export default class WebSocketManager {
   }
 
   private async createShards () {
-    this.application.logger.info('Create shard with shard : ' + this.shardQueue.size)
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    console.logger.info('Create shard with shard : ' + this.shardQueue.size)
     if (!this.shardQueue.size) {
       return false
     }
@@ -73,7 +74,6 @@ export default class WebSocketManager {
     })
 
     shard.on('close', async (event) => {
-      console.log(1, event)
       if (event.code === 1_000) {
         this.websocket?.emit('disconnect:shard', event, shard)
         return
@@ -104,14 +104,14 @@ export default class WebSocketManager {
     } catch (error) {}
 
     if (this.shardQueue.size) {
-      this.application.logger.error(`Shard Queue Size: ${this.shardQueue.size}; continuing in 5 seconds...`)
+      console.logger.error(`Shard Queue Size: ${this.shardQueue.size}; continuing in 5 seconds...`)
       await sleep(5000)
       return this.createShards()
     }
   }
 
   private async reconnect () {
-    console.log(2, this.reconnecting, this.status, this.status !== Status.READY)
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     if (this.reconnecting) {
       return
     }
@@ -121,9 +121,9 @@ export default class WebSocketManager {
     try {
       await this.createShards()
     } catch (error: any) {
-      this.application.logger.error('ERROR')
+      console.logger.error(new Error('Unexpected error'))
       if (error.httpStatus !== 401) {
-        this.application.logger.error('Possible network error occurred. Retrying in 5s...')
+        console.logger.error('Possible network error occurred. Retrying in 5s...')
 
         await sleep(5000)
 

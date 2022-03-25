@@ -21,7 +21,7 @@ class Forge {
     this.kernel.disposeKernel()
     await this.kernel.createCliApplication()
 
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
 
     const { COMMAND_NAME, ARGS } = process.env
 
@@ -36,7 +36,7 @@ class Forge {
       ))
 
       if (!forgeCommand) {
-        logger.error('Command not found.')
+        console.logger.error('Command not found.')
         return
       }
 
@@ -47,7 +47,7 @@ class Forge {
       const { default: Command } = await import(location)
       const command = new Command() as ForgeCommand
 
-      command.logger = logger
+      command.console = console
       command.ioc = Application.singleton()
       command.prompt = new Prompt()
 
@@ -55,7 +55,7 @@ class Forge {
         const args: string[] = ARGS?.split(' ') || []
         await command.run(...args)
       } catch {
-        logger.error('Order has been cancelled.')
+        console.logger.error('Order has been cancelled.')
       }
     }
   }

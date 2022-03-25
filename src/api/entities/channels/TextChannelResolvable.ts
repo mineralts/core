@@ -32,8 +32,8 @@ export default class TextChannelResolvable extends Channel {
 
   public async setCooldown (value: Milliseconds) {
     if (value < 0 || value > 21600) {
-      const logger = Application.getLogger()
-      logger.error(`${value} cannot be value < 0 or value > 21600`)
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.error(`${value} cannot be value < 0 or value > 21600`)
     }
 
     const request = Application.singleton().resolveBinding('Mineral/Core/Http')
@@ -75,8 +75,8 @@ export default class TextChannelResolvable extends Channel {
     })
 
     if (!messageOption.content?.length && !messageOption.embeds?.length) {
-      const logger = Application.getLogger()
-      logger.error('Invalid message body')
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.error('Invalid message body')
       process.exit(1)
     }
 

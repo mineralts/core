@@ -28,7 +28,7 @@ export default class Configure extends ForgeCommand {
     const packageLocation = join(process.cwd(), 'node_modules', moduleName)
 
     if (!fs.existsSync(packageLocation)) {
-      this.logger.error(`Module ${moduleName} not found.`)
+      this.console.logger.error(`Module ${moduleName} not found.`)
       process.exit(0)
     }
 
@@ -37,7 +37,7 @@ export default class Configure extends ForgeCommand {
     const { default: Instruction } = await import(provider)
 
     const instruction = new Instruction() as MineralModule
-    instruction.logger = this.logger
+    instruction.console = this.console
     instruction.ioc = Application.singleton()
     instruction.prompt = new Prompt()
 

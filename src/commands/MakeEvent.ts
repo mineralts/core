@@ -18,7 +18,7 @@ export default class GenerateManifest extends ForgeCommand {
   public static description = 'Make a new event class'
 
   public async run (): Promise<void> {
-    const generator = new FileFactory(this.logger)
+    const generator = new FileFactory(this.console.logger)
     await generator.loadFolders(path.join(process.cwd(), 'src'))
 
     const filename = await this.prompt.ask('Please define a name for your file')

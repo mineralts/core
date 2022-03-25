@@ -36,7 +36,7 @@ export default class GuildMember {
 
   public async exclude (date: DateTime, reason?: string) {
     const request = Application.singleton().resolveBinding('Mineral/Core/Http')
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
 
     if (reason) {
       request.defineHeaders({
@@ -46,7 +46,7 @@ export default class GuildMember {
 
     const durationObject = date.diffNow().toObject()
     if (durationObject.days && durationObject.days > 28) {
-      logger.error('You cannot timeout a member for more than 28 days at a time, The operation has been cancelled.')
+      console.logger.error('You cannot timeout a member for more than 28 days at a time, The operation has been cancelled.')
       return
     }
 
@@ -77,8 +77,8 @@ export default class GuildMember {
     const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 
     if (options.messageCount && (options.messageCount < 0 || options.messageCount > 50)) {
-      const logger = Application.getLogger()
-      logger.error(`You can delete between 0 and 7 days only (${options.messageCount} set).`)
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.error(new Error(`You can delete between 0 and 7 days only (${options.messageCount} set).`))
       return
     }
 

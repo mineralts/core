@@ -25,8 +25,8 @@ export default class MessageManager {
 
     if (value) {
       if (Object.entries(value).length > 1) {
-        const logger = Application.getLogger()
-        logger.error('The before, after, and around keys are mutually exclusive, only one may be passed at a time.')
+        const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+        console.logger.error('The before, after, and around keys are mutually exclusive, only one may be passed at a time.')
         process.exit(1)
       }
 

@@ -1,4 +1,4 @@
-import Logger from '@mineralts/logger'
+import { logger as Logger } from '@poppinss/cliui'
 import { ScheduledTask } from 'node-cron'
 import Client from '../../../api/entities/client'
 
@@ -12,7 +12,7 @@ export function Task (name: string, cron: string) {
 
 export abstract class MineralTask {
   public name: string
-  public logger!: Logger
-  public client!: Client
+  public logger: typeof Logger
+  public client: Client
   abstract run (task: ScheduledTask): Promise<void>
 }

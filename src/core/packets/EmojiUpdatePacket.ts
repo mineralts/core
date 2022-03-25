@@ -13,7 +13,7 @@ export default class EmojiUpdatePacket extends Packet {
   public async handle (payload: any) {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
 
     const guild: Guild | undefined = client?.guilds.cache.get(payload.guild_id)
     if (!guild) {
@@ -46,7 +46,7 @@ export default class EmojiUpdatePacket extends Packet {
       }).filter((role: Emoji | undefined) => role)
 
       if (!emoji[0]) {
-        logger.error('An error has occurred (emoji not recognised)')
+        console.logger.error('An error has occurred (emoji not recognised)')
         return
       }
 

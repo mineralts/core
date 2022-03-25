@@ -7,12 +7,12 @@ export default class MineralContextMenusService {
   public collection: Collection<string, MineralContextMenu> = new Collection()
 
   public register (path, item: { new (): MineralContextMenu } & { permissions: any }): void {
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
     const menus = Application.singleton().resolveBinding('Mineral/Core/ContextMenus')
     const menu = new item() as MineralContextMenu & { name: string, permissions: any[] }
 
-    menu.logger = logger
+    menu.console = console
     menu.client = client as unknown as Client
 
     menu.data = {
@@ -20,7 +20,7 @@ export default class MineralContextMenusService {
     }
 
     if (menus.collection.get(menu.name)) {
-      logger.fatal(`The ${menu.name} menu already exists, please choose another name`)
+      console.logger.fatal(new Error(`The ${menu.name} menu already exists, please choose another name`))
       return
     }
 

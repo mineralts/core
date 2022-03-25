@@ -1,4 +1,4 @@
-import Logger from '@mineralts/logger'
+import Console from '@poppinss/cliui'
 import { Client, ClientEvents } from '../../typing/interfaces'
 
 export function Event (event: keyof ClientEvents) {
@@ -9,7 +9,7 @@ export function Event (event: keyof ClientEvents) {
 }
 
 export abstract class MineralEvent {
-  public logger!: Logger
-  public client!: Client
+  public console: typeof Console
+  public client: Client
   abstract run (...args: any[]): Promise<void>
 }

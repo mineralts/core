@@ -8,7 +8,8 @@
  *
  */
 
-import path from 'path'
+import path from 'node:path'
+import { existsSync } from 'node:fs'
 import { ForgeCommand } from '../forge/entities/Command'
 
 export default class Help extends ForgeCommand {
@@ -22,13 +23,16 @@ export default class Help extends ForgeCommand {
   public async run (): Promise<void> {
     console.info()
     const location = path.join(process.cwd(), 'forge-manifest.json')
+
+    if (!existsSync(location)) {
+      const commands = this.ioc.resolveBinding('Mineral/Core/Cli')
+      const command = commands.resolveCommand('generate:manifest')
+
+      await command?.run(false)
+    }
+
     const manifest = await import(location)
-
-    const maxWidth = Math.max.apply(
-      Math,
-      [...manifest.commands.map((command) => command.commandName.length)]
-    )
-
+    const maxWidth = Math.max.apply(Math, [...manifest.commands.map((command) => command.commandName.length)])
     const sortedCommands = this.sortAndGroupCommands(manifest.commands)
 
     sortedCommands
@@ -43,11 +47,11 @@ export default class Help extends ForgeCommand {
           const whiteSpace = ''.padEnd(maxWidth - commandName.length, ' ')
 
           console.log(
-            `  ${this.logger.colors.cyan(commandName)} ${whiteSpace}  ${this.logger.colors.dim(description)}`
+            `  ${this.console.logger.colors.cyan(commandName)} ${whiteSpace}  ${this.console.logger.colors.dim(description)}`
           )
         })
       })
-    console.log('')
+    console.info()
   }
 
   private sortAndGroupCommands(commands) {

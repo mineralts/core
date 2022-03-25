@@ -16,7 +16,7 @@ export default class CommandInteractionPacket extends Packet {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
     const commands = Application.singleton().resolveBinding('Mineral/Core/Commands')
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
 
     const guild = client.guilds.cache.get(payload.guild_id)
     if (!guild) {
@@ -58,7 +58,7 @@ export default class CommandInteractionPacket extends Packet {
       })
 
       if (!command['run']) {
-        logger.fatal('The "run" method does not exist within your command.')
+        console.logger.fatal(new Error('The "run" method does not exist within your command.'))
         return
       }
 

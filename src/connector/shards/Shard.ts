@@ -26,6 +26,7 @@ export default class Shard extends EventEmitter {
   }
   
   public connect () {
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     this.reactor = new Observable((observer: Subscriber<any>) => {
       this.manager.websocket?.on('message', (data: Data) => {
         const payload = JSON.parse(data.toString())
@@ -35,13 +36,13 @@ export default class Shard extends EventEmitter {
 
     this.manager.websocket?.on('close', async (code: number) => {
       this.heartbeatManager.shutdown()
-      this.manager.application.logger.fatal('Socket disconnected with ' + code + ' code.')
+      console.logger.fatal('Socket disconnected with ' + code + ' code.')
       this.emit('close', code)
     })
 
     this.manager.websocket?.on('open', () => {
       if (this.manager.application.debug) {
-        this.manager.application.logger.info('Socket opened')
+        console.logger.info('Socket opened')
       }
     })
   }
@@ -126,6 +127,7 @@ export default class Shard extends EventEmitter {
   }
 
   protected opCodeActionHook (payload) {
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     const codes: { [K in keyof typeof Opcode]?: () => void } = {
       'HELLO': () => hello(),
       'RECONNECT': () => reconnect(),
@@ -136,7 +138,7 @@ export default class Shard extends EventEmitter {
       this.identify()
     }
     const reconnect = () => {
-      this.manager.application.logger.info('Reconnecting..')
+      console.logger.info('Reconnecting..')
       this.destroy(4_000)
       this.reconnect()
     }

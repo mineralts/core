@@ -10,7 +10,7 @@
 
 import path from 'path'
 import fs from 'fs'
-import Logger from '@mineralts/logger'
+import { logger as Logger } from '@poppinss/cliui'
 import Application from '../application/Application'
 
 export default class FileFactory {
@@ -21,7 +21,7 @@ export default class FileFactory {
   private location! : string[]
   private dirs: string[] = []
 
-  constructor (private logger: Logger) {
+  constructor (private logger: typeof Logger) {
   }
 
   public setFilename (value: string) {

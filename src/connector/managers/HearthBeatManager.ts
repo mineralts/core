@@ -10,9 +10,11 @@
 
 import { Opcode } from '../types'
 import Shard from '../shards/Shard'
+import Application from '../../application/Application'
 
 export default class HearthBeatManager {
   private scheduler: any
+  private console = Application.singleton().resolveBinding('Mineral/Core/Console')
   constructor (private shard: Shard) {
   }
 
@@ -29,7 +31,7 @@ export default class HearthBeatManager {
       this.shard.manager.websocket?.send(request)
 
       if (this.shard.manager.application.debug) {
-        this.shard.manager.application.logger.info('Sending a heartbeat')
+        this.console.logger.info('Sending a heartbeat')
       }
     }, interval)
   }

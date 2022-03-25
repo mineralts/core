@@ -33,9 +33,9 @@ export default class ButtonLink extends BaseButton {
   }
 
   public toJson () {
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     if (!this.url) {
-      const logger = Application.getLogger()
-      logger.error(`${this.label} component has not url.`)
+      console.logger.error(new Error(`${this.label} component has not url.`))
       process.exit(0)
     }
 

@@ -20,8 +20,17 @@ export default class GenerateManifest extends ForgeCommand {
     loadApp: true
   }
 
-  public async run (): Promise<void> {
-    this.logger.info('Waiting to generate manifest file...')
+  public async run (...args): Promise<void> {
+    let [withLogger] = args
+
+    if (withLogger === undefined) {
+      withLogger = true
+    }
+
+    if (withLogger) {
+      this.console.logger.info('Waiting to generate manifest file...')
+    }
+
     const environment = this.ioc.resolveBinding('Mineral/Core/Environment')
     const commandDirs = environment?.resolveKey('RC_FILE')?.commands
 
@@ -33,7 +42,9 @@ export default class GenerateManifest extends ForgeCommand {
     const manifest = this.syncManifest(commands)
     await this.writeManifest(manifest)
 
-    this.logger.info('Manifest was create in the root folder.')
+    if (withLogger) {
+      this.console.logger.info('Manifest was create in the root folder.')
+    }
   }
 
   public async getCommands (commandDirs: string[]) {

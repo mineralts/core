@@ -21,8 +21,8 @@ export default class MenuInteraction {
 
   public getTargetMessage (): Message | undefined {
     if (!this.guild) {
-      const logger = Application.getLogger()
-      logger.error('Menu interactions are not yet implemented in private channels')
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.error(new Error('Menu interactions are not yet implemented in private channels'))
       return undefined
     }
     return this.channel?.messages.cache.get<Message>(this.params.target_id)
@@ -30,8 +30,8 @@ export default class MenuInteraction {
 
   public getTargetMember (): GuildMember | undefined {
     if (!this.guild) {
-      const logger = Application.getLogger()
-      logger.error('Menu interactions are not yet implemented in private channels')
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.error(new Error('Menu interactions are not yet implemented in private channels'))
       return undefined
     }
     return this.guild.members.cache.get(this.params.target_id) || this.guild.bots.cache.get(this.params.target_id)

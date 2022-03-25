@@ -13,7 +13,7 @@ export default class ChannelDeletePacket extends Packet {
   public async handle (payload: any) {
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
 
     const guild = client.guilds.cache.get(payload.guild_id)
     if (!guild) {
@@ -23,7 +23,7 @@ export default class ChannelDeletePacket extends Packet {
     const channel = guild.channels.cache.get(payload.id)
 
     if (!channel) {
-      logger?.error('Channel is missing')
+      console.logger?.error('Channel is missing')
       return
     }
 

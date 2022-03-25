@@ -5,9 +5,11 @@ import Help from '../../commands/Help'
 import Application from '../../application/Application'
 import { ForgeCommand } from '../../forge/entities/Command'
 import Prompt from '../../forge/actions/Prompt'
+import GenerateManifest from '../../commands/GenerateManifest'
 
 interface CliCommands {
-  'Mineral/Help': Help
+  'help': Help
+  'generate:manifest': GenerateManifest
 }
 
 type CommandType<T> = T extends keyof CliCommands ? CliCommands[T] : any
@@ -25,7 +27,7 @@ export default class MineralCliService {
 
   public async register () {
     const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     const rcFile = environment!.resolveKey('RC_FILE')
     const root = environment!.resolveKey('APP_ROOT')
 
@@ -34,7 +36,7 @@ export default class MineralCliService {
     ))
 
     if (invalidLocation.length) {
-      logger?.fatal('The pre-loaded commands must be commands from npm packages.')
+      console.logger.fatal(new Error('The pre-loaded commands must be commands from npm packages.'))
     }
 
     const fetchCommandFiles = (files, logger, location) => {
@@ -47,7 +49,7 @@ export default class MineralCliService {
           const { default: Command } = await import(path.join(location, file))
           const command = new Command() as ForgeCommand
 
-          command.logger = logger
+          command.console = console
           command.ioc = Application.singleton()
           command.prompt = new Prompt()
 
@@ -73,7 +75,7 @@ export default class MineralCliService {
             const location = path.join(baseLocation, dir)
             const files = await fs.promises.readdir(location)
 
-            return fetchCommandFiles(files, logger, location)
+            return fetchCommandFiles(files, console, location)
           })
         )
       })

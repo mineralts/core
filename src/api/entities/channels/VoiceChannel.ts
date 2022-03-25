@@ -29,8 +29,8 @@ export default class VoiceChannel extends Channel {
       await request.patch(`/channels/${this.id}`, { bitrate: value })
       this.bitrate = value
     } else {
-      const logger = Application.getLogger()
-      logger.error('Please define your bitrate between 8000 and 96000')
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.error(new Error('Please define your bitrate between 8000 and 96000'))
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@mineralts/core-preview",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "main": "build/index.js",
   "repository": "git@github.com:Mineral-ts/core.git",
   "author": "leadcodedev <baptiste.parmantier.pro@gmail.com>",
@@ -12,7 +12,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "@mineralts/logger": "1.1.5",
+    "@poppinss/cliui": "^3.0.1",
     "@swc/core": "^1.2.151",
     "@swc/helpers": "^0.3.6",
     "@types/luxon": "^2.0.5",

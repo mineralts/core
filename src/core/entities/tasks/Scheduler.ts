@@ -14,9 +14,10 @@ export default class Scheduler {
   }
 
   public start () {
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     this.task.on(`task:${this.identifier}`, async () => {
       await this.cb.call({
-        logger: Application.getLogger(),
+        console: console,
         client: Application.getClient()
       }, this.task)
     })

@@ -21,11 +21,11 @@ export default class MakeCommand extends ForgeCommand {
   }
 
   public async run (): Promise<void> {
-    const generator = new FileFactory(this.logger)
+    const generator = new FileFactory(this.console.logger)
     await generator.loadFolders(path.join(process.cwd(), 'src'))
 
-    const confirm = await this.prompt.confirm('Would you like to create a new folder ?')
     const filename = await this.prompt.ask('Please define a name for your file')
+    const confirm = await this.prompt.confirm('Would you like to create a new folder ?')
 
     generator.setFilename(filename)
 

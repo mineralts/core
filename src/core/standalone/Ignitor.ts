@@ -11,17 +11,18 @@
 import { execSync } from 'child_process'
 import path from 'path'
 import Kernel from '../Kernel'
-import Logger from '@mineralts/logger'
+import { logger as Logger } from '@poppinss/cliui'
 import Application from '../../application/Application'
 
 export default class Ignitor {
-  private logger: Logger = new Logger
+  private logger: typeof Logger = Logger
 
   public async forge () {
     const [commandName, ...args] = process.argv.slice(2)
 
     if (commandName === 'generate:manifest' || commandName === 'help' || !commandName) {
       await this.execTypescript(commandName || 'help', ...args)
+      return
     }
 
     let command
@@ -48,8 +49,9 @@ export default class Ignitor {
 
   protected async execTypescript (commandName: string, ...args: string[]) {
     const forgeFile = path.join('node_modules', '@mineralts', 'core-preview', 'build', 'core', 'standalone', 'Forge.js')
+    const tsnode = path.join('node_modules', 'ts-node', 'dist', 'bin-transpile.js')
 
-    execSync(`ts-node ${forgeFile} --transpileOnly`, {
+    execSync(`node ${tsnode} ${forgeFile}`, {
       cwd: process.cwd(),
       stdio: 'inherit',
       env: {
@@ -58,7 +60,7 @@ export default class Ignitor {
         NODE_ENV: 'development'
       }
     })
-
+    process.exit()
   }
 
   private async execJavascript (commandName: string, ...args: string[]) {

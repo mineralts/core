@@ -7,12 +7,12 @@ export default class MineralEventService {
   public collection: Collection<string, Collection<string, MineralEvent>> = new Collection()
 
   public register (path, item: { new (): MineralEvent, event: string }) {
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
     const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
 
     const event = new item() as MineralEvent & { event: string }
-    event.logger = logger!
+    event.console = console
     event.client = client as unknown as Client
 
     const eventContainer = this.collection.get(item.event)

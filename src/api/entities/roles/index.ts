@@ -31,7 +31,7 @@ export default class Role {
   }
 
   public async update (options: RoleUpdateOption) {
-    const logger = Application.getLogger()
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     const payload = {
       name: options.label,
       permissions: options.permissions?.reduce((acc: number, current: keyof typeof PermissionFlag) => acc + parseInt(PermissionFlag[current]), 0),
@@ -49,7 +49,7 @@ export default class Role {
 
     if (options.icon) {
       if (!this.guild.hasFeature('ROLE_ICONS') && options.icon) {
-        logger.error('You must have the `ROLE_ICONS` feature in order to define a role icon')
+        console.logger.warning('You must have the `ROLE_ICONS` feature in order to define a role icon')
         return
       }
 
@@ -61,7 +61,8 @@ export default class Role {
 
     if (options.emoji) {
       if (!this.guild.hasFeature('ROLE_ICONS') && options.icon) {
-        logger.error('You must have the `ROLE_ICONS` feature in order to define a role icon')
+        const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+        console.logger.warning('You must have the `ROLE_ICONS` feature in order to define a role icon')
         return
       }
 

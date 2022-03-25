@@ -195,8 +195,9 @@ export default class Guild {
 
   public async setIcon (path: LocalPath): Promise<void> {
     if (!this.hasFeature('ANIMATED_ICON') && path.split('.')[1] === 'gif') {
-      const logger = Application.getLogger()
-      logger.error('You do not have permission to upload a invitation banner')
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.warning('Action cancelled. You do not have permission to upload a invitation banner')
+      return
     }
 
     const filePath = join(process.cwd(), path)
@@ -244,8 +245,8 @@ export default class Guild {
 
   public async setSplash (path: string): Promise<void> {
     if (!this.features.includes('INVITE_SPLASH')) {
-      const logger = Application.getLogger()
-      logger.warn('You do not have permission to upload a invitation banner')
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.warning('You do not have permission to upload a invitation banner')
     }
 
     const filePath = join(process.cwd(), path)
@@ -263,8 +264,8 @@ export default class Guild {
 
   public async setDiscoverySplash (path: string): Promise<void> {
     if (!this.features.includes('DISCOVERABLE')) {
-      const logger = Application.getLogger()
-      logger.warn('You do not have permission to upload a discovery banner')
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.warning('You do not have permission to upload a discovery banner')
     }
 
     const filePath = join(process.cwd(), path)
@@ -281,9 +282,9 @@ export default class Guild {
   }
 
   public async setBanner (path: string): Promise<void> {
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     if (!this.features.includes('DISCOVERABLE')) {
-      const logger = Application.getLogger()
-      logger.warn('You do not have permission to upload a banner')
+      console.logger.warning('You do not have permission to upload a banner')
     }
 
     const filePath = join(process.cwd(), path)
@@ -410,7 +411,7 @@ export default class Guild {
   public async registerCommands () {
     const commands = Application.singleton().resolveBinding('Mineral/Core/Commands')
     const contextMenus = Application.singleton().resolveBinding('Mineral/Core/ContextMenus')
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const logger = Application.singleton().resolveBinding('Mineral/Core/Console')
     const client = Application.singleton().resolveBinding('Mineral/Core/Client')
     const request = Application.singleton().resolveBinding('Mineral/Core/Http')
 

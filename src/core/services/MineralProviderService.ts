@@ -10,7 +10,7 @@ export default class MineralProviderService {
 
   public async register () {
     const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     const root = environment?.resolveKey('APP_ROOT')
     const mode = environment?.resolveKey('APP_MODE')
 
@@ -30,7 +30,7 @@ export default class MineralProviderService {
           const { default: item } = await import(file.path)
           if (item && item.identifier === 'provider') {
             const provider = new item() as MineralProvider
-            provider.logger = logger!
+            provider.console = console
             provider.application = Application.singleton()
 
             this.collection.set(item.path, provider)
@@ -51,7 +51,7 @@ export default class MineralProviderService {
           const { default: Provider } = await import(providerLocation)
 
           const provider = new Provider()
-          provider.logger = logger!
+          provider.console = console
           provider.application = Application.singleton()
 
           this.collection.set(providerLocation, provider)

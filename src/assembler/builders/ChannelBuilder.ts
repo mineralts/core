@@ -21,7 +21,7 @@ export default class ChannelBuilder {
   }
 
   public build (payload: any): ChannelResolvable {
-    const logger = Application.singleton().resolveBinding('Mineral/Core/Logger')
+    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
     const channels = {
       [ChannelTypeResolvable.GUILD_TEXT]: () => this.createTextChannel(payload),
       [ChannelTypeResolvable.GUILD_VOICE]: () => this.createVoiceChannel(payload),
@@ -33,7 +33,7 @@ export default class ChannelBuilder {
       [ChannelTypeResolvable.GUILD_PUBLIC_THREAD]: () => this.createThreadChannel(payload),
       [ChannelTypeResolvable.GUILD_PRIVATE_THREAD]: () => this.createThreadChannel(payload),
       unknown: () => {
-        logger?.warn(`Channel not supported : ${payload.type}`)
+        console.logger.warning(`Channel not supported : ${payload.type}`)
         return undefined
       }
     }

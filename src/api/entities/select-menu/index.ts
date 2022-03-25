@@ -58,8 +58,8 @@ export default class SelectMenu {
 
   public toJson () {
     if (!this.customId) {
-      const logger = Application.getLogger()
-      logger.error('Select menu component has not customId.')
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.error('Select menu component has not customId.')
       process.exit(0)
     }
 

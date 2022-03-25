@@ -6,8 +6,8 @@ export default class ModalRow {
   public components: any[] = new Proxy([], {
     set: function(target: MessageComponentResolvable[], property: string | symbol, value) {
       if (target.length > 5) {
-        const logger = Application.getLogger()
-        logger.error(`A row can contain a maximum of 5 components, ${target.length}.`)
+        const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+        console.logger.error(`A row can contain a maximum of 5 components, ${target.length}.`)
         process.exit(1)
       }
       target[property] = value

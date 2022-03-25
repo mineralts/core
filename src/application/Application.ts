@@ -8,7 +8,7 @@
  *
  */
 
-import Logger from '@mineralts/logger'
+import * as Console from '@poppinss/cliui'
 import { Intent } from './types'
 import Collection from '../api/utils/Collection'
 import Helper from '../helper'
@@ -26,8 +26,6 @@ import MineralProviderService from '../core/services/MineralProviderService'
 
 export default class Application {
   private static $instance: Application
-
-  public logger: Logger = new Logger()
   public reflect: Reflect | undefined
 
   public readonly appName: string
@@ -45,7 +43,7 @@ export default class Application {
   public readonly intents: number
 
   public setup () {
-    this.ioc.registerBinding('Mineral/Core/Logger', new Logger())
+    this.ioc.registerBinding('Mineral/Core/Console', Console)
     this.ioc.registerBinding('Mineral/Core/Emitter', new EventsListener())
     this.ioc.registerBinding('Mineral/Core/Environment', new MineralEnvironmentService())
 
@@ -113,11 +111,6 @@ export default class Application {
   public static getClient () {
     const instance = this.getInstance()
     return instance.client
-  }
-
-  public static getLogger () {
-    const instance = this.getInstance()
-    return instance.logger
   }
 
   public static singleton () {

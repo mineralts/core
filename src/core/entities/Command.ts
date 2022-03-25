@@ -1,7 +1,6 @@
-import Logger from '@mineralts/logger'
+import * as Console from '@poppinss/cliui'
 import { CommandOption, CommandOptionType, PermissionType, Snowflake } from '../../api/types'
 import Application from '../../application/Application'
-import { Client } from '../../typing/interfaces'
 
 export function Command (name: string, description: string, scope: 'GUILDS' | Snowflake) {
   return (target: any) => {
@@ -28,7 +27,7 @@ export function Command (name: string, description: string, scope: 'GUILDS' | Sn
         : target.prototype.commandOptions
           ? target.prototype.commandOptions.reverse()
           : []
-        || []
+          || []
     }
 
     commands?.collection.set(command.data.label, command)
@@ -98,8 +97,7 @@ export function Option<T extends keyof typeof CommandOptionType | 'CHOICE'> (typ
 
 export abstract class MineralBaseCommand {
   public id: string
-  public logger: Logger
-  public client: Client
+  public console: typeof Console = Console
   public hasSubcommands: boolean
   public data: any
 }

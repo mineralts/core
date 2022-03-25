@@ -49,9 +49,8 @@ export default class Button extends BaseButton {
 
   public toJson () {
     if (!this.customId) {
-      const logger = Application.getLogger()
-      logger.error(`${this.label} component has not customId.`)
-      process.exit(0)
+      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      console.logger.error(new Error(`${this.label} component has not customId.`))
     }
 
     return {
