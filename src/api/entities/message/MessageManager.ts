@@ -4,6 +4,7 @@ import Message from './index'
 import TextChannel from '../channels/TextChannel'
 import Application from '../../../application/Application'
 import { MessageBuilder } from '../../../assembler/builders'
+import TextChannelResolvable from '../channels/TextChannelResolvable'
 
 export default class MessageManager {
   public cache: Collection<Snowflake, Message> = new Collection()
@@ -39,6 +40,10 @@ export default class MessageManager {
     if (status === 200) {
       data.forEach((item) => this.instantiate(item))
     }
+  }
+
+  public associateChannel (channel: TextChannelResolvable) {
+    this.channel = channel
   }
 
   private instantiate (payload): Message {

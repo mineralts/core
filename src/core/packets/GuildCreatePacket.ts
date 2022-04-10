@@ -17,6 +17,7 @@ import Emoji from '../../api/entities/emoji'
 import GuildChannelManager from '../../api/entities/guild/GuildChannelManager'
 import CategoryChannel from '../../api/entities/channels/CategoryChannel'
 import Application from '../../application/Application'
+import TextChannelResolvable from '../../api/entities/channels/TextChannelResolvable'
 
 export default class GuildCreatePacket extends Packet {
   public packetType = 'GUILD_CREATE'
@@ -72,6 +73,10 @@ export default class GuildCreatePacket extends Packet {
     const channelBuilder = new ChannelBuilder(client!, guild)
     payload.channels.forEach((item: any) => {
       const channel = channelBuilder.build(item)
+
+      if ('messages' in channel) {
+        channel.messages.associateChannel(channel as TextChannelResolvable)
+      }
 
       if (!(channel instanceof CategoryChannel)) {
         channel.parent = channels.get(channel.parentId!)

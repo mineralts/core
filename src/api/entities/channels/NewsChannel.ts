@@ -20,7 +20,7 @@ export default class NewsChannel extends Channel {
     position: number,
     rateLimitePerUser: DateTime | undefined,
     topic: string,
-    messages: MessageManager,
+    public messages: MessageManager,
     parent?: CategoryChannel,
   ) {
     super(id, 'GUILD_NEWS', name, guildId, guild, parentId, position, parent)
