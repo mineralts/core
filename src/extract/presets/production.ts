@@ -1,11 +1,11 @@
 import { fetch } from 'fs-recursive'
-import Application from '../../application/Application'
 import fs from 'node:fs'
 import { join } from 'node:path'
 import Logger from '../plugins/Logger'
+import Ioc from '../../Ioc'
 
 export default async function() {
-  const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+  const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
   const buildOptions = environment.resolveKey('BUILD')
 
   const buildLocation = join(process.cwd(), buildOptions?.OUT_DIR || 'build')

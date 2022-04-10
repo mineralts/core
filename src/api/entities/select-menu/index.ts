@@ -1,6 +1,6 @@
 import { ComponentType, MenuSelect, MenuSelectOption } from '../../types'
 import { parseEmoji } from '../../utils'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 
 export default class SelectMenu {
   public type: ComponentType = ComponentType.SELECT_MENU
@@ -58,7 +58,7 @@ export default class SelectMenu {
 
   public toJson () {
     if (!this.customId) {
-      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      const console = Ioc.singleton().resolve('Mineral/Core/Console')
       console.logger.error('Select menu component has not customId.')
       process.exit(0)
     }

@@ -11,7 +11,7 @@ import TextChannel from '../../api/entities/channels/TextChannel'
 import MessageManager from '../../api/entities/message/MessageManager'
 import VoiceChannel from '../../api/entities/channels/VoiceChannel'
 import CategoryChannel from '../../api/entities/channels/CategoryChannel'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 import ThreadChannel from '../../api/entities/channels/ThreadChannel'
 import { DateTime } from 'luxon'
 import ThreadMemberManager from '../../api/entities/guild/ThreadMemberManager'
@@ -21,7 +21,7 @@ export default class ChannelBuilder {
   }
 
   public build (payload: any): ChannelResolvable {
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     const channels = {
       [ChannelTypeResolvable.GUILD_TEXT]: () => this.createTextChannel(payload),
       [ChannelTypeResolvable.GUILD_VOICE]: () => this.createVoiceChannel(payload),

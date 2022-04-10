@@ -16,7 +16,7 @@ import Role from '../../api/entities/roles'
 import Emoji from '../../api/entities/emoji'
 import GuildChannelManager from '../../api/entities/guild/GuildChannelManager'
 import CategoryChannel from '../../api/entities/channels/CategoryChannel'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 import TextChannelResolvable from '../../api/entities/channels/TextChannelResolvable'
 
 export default class GuildCreatePacket extends Packet {
@@ -31,9 +31,9 @@ export default class GuildCreatePacket extends Packet {
     const emojis: Collection<Snowflake, Emoji> = new Collection()
     const channels: Collection<Snowflake, ChannelResolvable> = new Collection()
 
-    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
-    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
-    const connector = Application.singleton().resolveBinding('Mineral/Core/Connector')!
+    const emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
+    const client = Ioc.singleton().resolve('Mineral/Core/Client')
+    const connector = Ioc.singleton().resolve('Mineral/Core/Connector')!
 
     const roleBuilder = new RoleBuilder()
     payload.roles.forEach((item: any) => {

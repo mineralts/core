@@ -2,7 +2,7 @@ import Collection from '../../api/utils/Collection'
 import fs from 'fs'
 import path from 'path'
 import Help from '../../commands/Help'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 import { ForgeCommand } from '../../forge/entities/Command'
 import Prompt from '../../forge/actions/Prompt'
 import GenerateManifest from '../../commands/GenerateManifest'
@@ -26,8 +26,8 @@ export default class MineralCliService {
   }
 
   public async register () {
-    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     const rcFile = environment!.resolveKey('RC_FILE')
     const root = environment!.resolveKey('APP_ROOT')
 
@@ -50,7 +50,7 @@ export default class MineralCliService {
           const command = new Command() as ForgeCommand
 
           command.console = console
-          command.ioc = Application.singleton()
+          command.ioc = Ioc.singleton()
           command.prompt = new Prompt()
 
           this.registerCommand(Command.commandName, command)

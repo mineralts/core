@@ -31,7 +31,7 @@ export default class GenerateManifest extends ForgeCommand {
       this.console.logger.info('Waiting to generate manifest file...')
     }
 
-    const environment = this.ioc.resolveBinding('Mineral/Core/Environment')
+    const environment = this.ioc.resolve('Mineral/Core/Environment')
     const commandDirs = environment?.resolveKey('RC_FILE')?.commands
 
     if (!commandDirs) {

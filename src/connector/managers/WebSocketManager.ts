@@ -3,10 +3,11 @@ import { Status } from '../types'
 import Http from '../http'
 import Shard from '../shards/Shard'
 import WebSocket from 'ws'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 import { sleep } from '../../api/utils'
 import { Snowflake } from '../../api/types'
 import Guild from '../../api/entities/guild/Guild'
+import Application from '../../application/Application'
 
 export default class WebSocketManager {
   public websocket?: WebSocket
@@ -23,8 +24,10 @@ export default class WebSocketManager {
   }
 
   public async connect () {
-    const version = '/v9/gateway/bot'
-    const { endpoint, shards } = await this.getDiscordWebsocket(version)
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
+    const version = environment.resolveKey('API_VERSION')
+
+    const { endpoint, shards } = await this.getDiscordWebsocket(`/v${version}/gateway/bot`)
 
     this.websocketEndpoint = endpoint
 
@@ -37,7 +40,7 @@ export default class WebSocketManager {
       this.shardQueue.add(new Shard(this, id))
     })
 
-    this.websocket = new WebSocket(this.websocketEndpoint + version)
+    this.websocket = new WebSocket(this.websocketEndpoint)
 
     await this.createShards()
   }
@@ -56,8 +59,7 @@ export default class WebSocketManager {
   }
 
   private async createShards () {
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
-    console.logger.info('Create shard with shard : ' + this.shardQueue.size)
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     if (!this.shardQueue.size) {
       return false
     }
@@ -111,7 +113,7 @@ export default class WebSocketManager {
   }
 
   private async reconnect () {
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     if (this.reconnecting) {
       return
     }

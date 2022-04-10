@@ -1,7 +1,7 @@
 import { InteractionType, Snowflake } from '../../types'
 import Message from '../message'
 import GuildMember from '../guild/GuildMember'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 import Guild from '../guild/Guild'
 import TextChannelResolvable from '../channels/TextChannelResolvable'
 
@@ -21,7 +21,7 @@ export default class MenuInteraction {
 
   public getTargetMessage (): Message | undefined {
     if (!this.guild) {
-      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      const console = Ioc.singleton().resolve('Mineral/Core/Console')
       console.logger.error(new Error('Menu interactions are not yet implemented in private channels'))
       return undefined
     }
@@ -30,7 +30,7 @@ export default class MenuInteraction {
 
   public getTargetMember (): GuildMember | undefined {
     if (!this.guild) {
-      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      const console = Ioc.singleton().resolve('Mineral/Core/Console')
       console.logger.error(new Error('Menu interactions are not yet implemented in private channels'))
       return undefined
     }

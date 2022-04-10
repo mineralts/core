@@ -1,9 +1,9 @@
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 import { DateTime } from 'luxon'
 import { BuildResult, PluginBuild } from 'esbuild'
 
-const console = Application.singleton().resolveBinding('Mineral/Core/Console')
-const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+const console = Ioc.singleton().resolve('Mineral/Core/Console')
+const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
 const appName = environment.resolveKey('APP_NAME')
 
 export default {

@@ -10,7 +10,6 @@
 
 import { fetch } from 'fs-recursive'
 import fs from 'node:fs'
-import Application from '../application/Application'
 import PacketManager from '../core/packets/PacketManager'
 import { MineralProvider } from '../core/entities/Provider'
 import Entity from '../core/entities/Entity'
@@ -19,6 +18,7 @@ import Scheduler from '../core/entities/tasks/Scheduler'
 import Packet from '../core/entities/Packet'
 import Connector from '../connector/Connector'
 import Shard from '../connector/shards/Shard'
+import Application from '../application/Application'
 
 export default class Assembler {
   public connector!: Connector
@@ -27,8 +27,8 @@ export default class Assembler {
   }
 
   public async build () {
-    const emitter = this.application.ioc.resolveBinding('Mineral/Core/Emitter')
-    const environment = this.application.ioc.resolveBinding('Mineral/Core/Environment')
+    const emitter = this.application.ioc.resolve('Mineral/Core/Emitter')
+    const environment = this.application.ioc.resolve('Mineral/Core/Environment')
 
     this.connector = new Connector(this.application)
     this.connector.http.defineHeaders({
@@ -55,8 +55,8 @@ export default class Assembler {
   }
 
   public async register () {
-    const providers = this.application.ioc.resolveBinding('Mineral/Core/Providers')
-    const environment = this.application.ioc.resolveBinding('Mineral/Core/Environment')
+    const providers = this.application.ioc.resolve('Mineral/Core/Providers')
+    const environment = this.application.ioc.resolve('Mineral/Core/Environment')
 
     const root = environment?.resolveKey('APP_ROOT')
     const mode = environment?.resolveKey('APP_MODE')
@@ -86,9 +86,9 @@ export default class Assembler {
   }
 
   private async dispatch (path, item) {
-    const events = this.application.ioc.resolveBinding('Mineral/Core/Events')
-    const providers = this.application.ioc.resolveBinding('Mineral/Core/Providers')
-    const contextMenus = this.application.ioc.resolveBinding('Mineral/Core/ContextMenus')
+    const events = this.application.ioc.resolve('Mineral/Core/Events')
+    const providers = this.application.ioc.resolve('Mineral/Core/Providers')
+    const contextMenus = this.application.ioc.resolve('Mineral/Core/ContextMenus')
 
     const identifiers = {
       event: () => events?.register(path, item),

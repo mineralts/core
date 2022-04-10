@@ -4,6 +4,10 @@ import { BuildOption, RcFile } from '../types'
 import { Intent } from '../../application/types'
 import { join } from 'node:path'
 import { parse } from 'dotenv'
+import { Exception } from '@poppinss/utils'
+import Ioc from '../../Ioc'
+
+type Schema = { [K: string]: unknown }
 
 interface Environment {
   APP_NAME: string,
@@ -19,7 +23,9 @@ interface Environment {
   INTENTS: {
     selected: 'ALL' | Exclude<keyof typeof Intent, 'ALL'>[]
     bitfield: number
-  }
+  },
+  CDN: string
+  DISCORD_VERSION: string
 }
 
 type EnvironmentType<T> = T extends keyof Environment ? Environment[T] : any
@@ -54,6 +60,49 @@ export default class MineralEnvironmentService {
     } catch (error) {
       throw new Error(
         message || `The file ${filename} at location ${location} was not found.`
+      )
+    }
+  }
+
+  public rules<T extends Schema> (rules: T) {
+    return rules
+  }
+
+  public schema = {
+    number: () => 'number',
+    string: () => 'string',
+    boolean: () => 'boolean'
+  }
+
+  public async validateSchema () {
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
+
+    const { default: validator } = await import(join(process.cwd(), 'env.ts'))
+    Object.entries(validator).forEach(([key, type]: [string, any]) => {
+      const value = environment.resolveKey(key)
+      if (!value) {
+        console.log('error', key)
+        return
+      }
+
+      const schema = {
+        number: () => this.wrapProcess(key, 'number', type === 'number' && !isNaN(value)),
+        string: () => this.wrapProcess(key, 'string', type === 'string' && typeof value === 'string' && (value !== 'true' && value !== 'false')),
+        boolean: () => this.wrapProcess(key, 'boolean', [true, false].includes(JSON.parse(value)))
+      }
+
+      if (type in schema) {
+        schema[type]()
+      }
+    })
+  }
+
+  protected wrapProcess (key: string, type, test: boolean) {
+    if (!test) {
+      throw new Exception(
+        `Value for environment variable "${key}" must be ${type}`,
+        500,
+        'INVALID_ENV_KEY'
       )
     }
   }

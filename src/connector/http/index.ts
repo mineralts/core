@@ -10,10 +10,10 @@
 
 import axios, { Axios, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { DateTime } from 'luxon'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class Http {
-  private emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
+  private emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
   private axios: Axios = axios.create({
     baseURL: 'https://discord.com/api'
   })

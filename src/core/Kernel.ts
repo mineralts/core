@@ -1,5 +1,5 @@
 import PacketManager from './packets/PacketManager'
-import Application from '../application/Application'
+import Ioc from '../Ioc'
 import Assembler from '../assembler/Assembler'
 import { MineralProvider } from './entities/Provider'
 import { fetch } from 'fs-recursive'
@@ -7,28 +7,27 @@ import fs from 'node:fs'
 import Entity from './entities/Entity'
 import { join } from 'node:path'
 import ModuleAlias from 'module-alias'
+import Application from '../application/Application'
 
 export default class Kernel {
-  public application: Application
+  public application: Application = new Application()
   private readonly assembler: Assembler
   private readonly packetManager: PacketManager
 
   constructor () {
-    this.application = Application.create()
     this.application.setup()
-
     this.packetManager = new PacketManager()
     this.assembler = new Assembler(this.application, this.packetManager)
 
-    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
     Object.entries(environment.resolveKey('RC_FILE')!.aliases).forEach(([key, value]) => {
       ModuleAlias.addAlias(key, join(process.cwd(), value))
     })
   }
 
   public async createApplication () {
-    const providers = Application.singleton().resolveBinding('Mineral/Core/Providers')
-    const cli = Application.singleton().resolveBinding('Mineral/Core/Providers')
+    const providers = Ioc.singleton().resolve('Mineral/Core/Providers')
+    const cli = Ioc.singleton().resolve('Mineral/Core/Providers')
 
     await Promise.all([
       cli?.register(),
@@ -37,27 +36,27 @@ export default class Kernel {
 
     await this.assembler.build()
 
-    Application.singleton().registerBinding('Mineral/Core/Http', this.assembler.connector.http)
-    Application.singleton().registerBinding('Mineral/Core/Connector', this.assembler.connector)
-    Application.singleton().registerBinding('Mineral/Core/Assembler', this.assembler)
+    Ioc.singleton().registerBinding('Mineral/Core/Http', this.assembler.connector.http)
+    Ioc.singleton().registerBinding('Mineral/Core/Connector', this.assembler.connector)
+    Ioc.singleton().registerBinding('Mineral/Core/Assembler', this.assembler)
 
     await this.bootProviders()
   }
 
   public disposeKernel () {
-    Application.singleton().registerBinding('Mineral/Core/kernel', this)
+    // Ioc.singleton().registerBinding('Mineral/Core/kernel', this)
   }
 
   public async createCliApplication () {
-    const cli = Application.singleton().resolveBinding('Mineral/Core/Cli')
-    const providers = Application.singleton().resolveBinding('Mineral/Core/Providers')
+    const cli = Ioc.singleton().resolve('Mineral/Core/Cli')
+    const providers = Ioc.singleton().resolve('Mineral/Core/Providers')
     await providers.register()
     await cli?.register()
   }
 
   public async bootProviders () {
-    const providers = Application.singleton().resolveBinding('Mineral/Core/Providers')
-    const environment = this.application.ioc.resolveBinding('Mineral/Core/Environment')
+    const providers = Ioc.singleton().resolve('Mineral/Core/Providers')
+    const environment = this.application.ioc.resolve('Mineral/Core/Environment')
     await Promise.all(
       providers.collection.map(async (provider: MineralProvider) => {
         await provider.boot()

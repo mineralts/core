@@ -7,7 +7,7 @@ import MessageManager from '../message/MessageManager'
 import TextChannel from './TextChannel'
 import GuildMember from '../guild/GuildMember'
 import ThreadMemberManager from '../guild/ThreadMemberManager'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 import ThreadMember from '../guild/ThreadMember'
 
 export default class ThreadChannel extends TextChannel {
@@ -48,7 +48,7 @@ export default class ThreadChannel extends TextChannel {
   }
 
   public async loadMembers () {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     const { data: members } = await request.get(`/channels/${this.id}/thread-members`)
 

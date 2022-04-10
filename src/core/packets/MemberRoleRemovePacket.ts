@@ -4,14 +4,14 @@ import Collection from '../../api/utils/Collection'
 import Guild from '../../api/entities/guild/Guild'
 import GuildMember from '../../api/entities/guild/GuildMember'
 import Role from '../../api/entities/roles'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class MemberRoleRemovePacket extends Packet {
   public packetType = 'GUILD_MEMBER_UPDATE'
 
   public async handle (payload: any) {
-    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
-    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
+    const client = Ioc.singleton().resolve('Mineral/Core/Client')
 
     const guild: Guild | undefined = client.guilds.cache.get(payload.guild_id)
     if (!guild) {

@@ -10,11 +10,8 @@
 
 import * as Console from '@poppinss/cliui'
 import { Intent } from './types'
-import Collection from '../api/utils/Collection'
 import Helper from '../helper'
-import Container from './Container'
 import Reflect from '../reflect/Reflect'
-import Client from '../api/entities/client'
 import MineralEnvironmentService from '../core/services/MineralEnvironmentService'
 import EventsListener from '../assembler/EventsListener'
 import MineralCliService from '../core/services/MineralCliService'
@@ -23,33 +20,29 @@ import MineralCommandService from '../core/services/MineralCommandService'
 import MineralTaskService from '../core/services/MineralTaskService'
 import MineralContextMenusService from '../core/services/MineralContextMenusService'
 import MineralProviderService from '../core/services/MineralProviderService'
+import Ioc from '../Ioc'
 
 export default class Application {
-  private static $instance: Application
   public reflect: Reflect | undefined
 
   public readonly appName: string
   public readonly version: string
   public readonly debug: boolean
 
-  public static cdn = 'https://cdn.discordapp.com'
-
-  public commands: Collection<string, any> = new Collection()
-
-  public ioc: Container = new Container()
-
-  public helper: Helper = new Helper()
-  public client!: Client
-  public readonly intents: number
+  public ioc: Ioc = Ioc.create()
 
   public setup () {
     this.ioc.registerBinding('Mineral/Core/Console', Console)
-    this.ioc.registerBinding('Mineral/Core/Emitter', new EventsListener())
     this.ioc.registerBinding('Mineral/Core/Environment', new MineralEnvironmentService())
+    this.ioc.registerBinding('Mineral/Core/Emitter', new EventsListener())
 
-    const environment = this.ioc.resolveBinding('Mineral/Core/Environment')
+    const environment = this.ioc.resolve('Mineral/Core/Environment')
     const jsonPackage = environment.loadFileSync(process.cwd(), 'package.json')
-    const rcFile = environment.loadFileSync(process.cwd(), '.mineralrc.json', 'The .mineralrc.json file was not found at the root of the project.')
+    const rcFile = environment.loadFileSync(
+      process.cwd(),
+      '.mineralrc.json',
+      'The .mineralrc.json file was not found at the root of the project.'
+    )
 
     this.ioc.registerBinding('Mineral/Core/Helpers', new Helper())
     this.ioc.registerBinding('Mineral/Core/Providers', new MineralProviderService())
@@ -66,6 +59,8 @@ export default class Application {
     environment?.registerKey('REFLECT', false)
     environment?.registerKey('RC_FILE', rcFile)
     environment?.registerKey('APP_MODE', process.env.NODE_ENV as any)
+    environment?.registerKey('CDN', 'https://cdn.discordapp.com')
+    environment?.registerKey('DISCORD_VERSION', 'https://cdn.discordapp.com')
 
     const dependencies: { [K: string]: unknown }[] = []
     Object.entries(jsonPackage.dependencies).forEach(([key, version]) => {
@@ -76,6 +71,7 @@ export default class Application {
 
     environment?.registerKey('MINERAL_DEPENDENCIES', dependencies)
     environment?.resolveEnvironment()
+    environment?.validateSchema()
 
     const intents: 'ALL' | Exclude<keyof typeof Intent, 'ALL'>[] = 'ALL'
     environment?.registerKey('INTENTS', { selected: intents, bitfield: this.getIntentValue(intents) })
@@ -95,31 +91,5 @@ export default class Application {
         ? Intent[intents]
         : intents.reduce((acc: number, current: keyof typeof Intent) => acc + Intent[current], 0)
       : 0
-  }
-
-  private static getInstance () {
-    return this.$instance
-  }
-
-  public static create () {
-    if (!this.$instance) {
-      this.$instance = new Application()
-    }
-    return this.$instance
-  }
-
-  public static getClient () {
-    const instance = this.getInstance()
-    return instance.client
-  }
-
-  public static singleton () {
-    const instance = this.getInstance()
-    return instance.ioc
-  }
-
-  public static getHelper (): Helper {
-    const instance = this.getInstance()
-    return instance.helper
   }
 }

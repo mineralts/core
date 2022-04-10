@@ -9,12 +9,12 @@
  */
 
 import Console from '@poppinss/cliui'
-import Container from '../../application/Container'
+import Index from '../../Ioc'
 import Prompt from '../actions/Prompt'
 
 export abstract class ForgeCommand {
   public console: typeof Console
-  public ioc: Container
+  public ioc: Index
   public prompt: Prompt
   public static settings: { loadApp: boolean } = { loadApp: false }
   public abstract run (...args: string[]): Promise<void>

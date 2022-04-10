@@ -1,5 +1,5 @@
 import ModalRow from './ModalRow'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 import { InputOption, MessageComponentResolvable } from '../../types'
 
 export default class Modal {
@@ -41,7 +41,7 @@ export default class Modal {
 
   public toJson () {
     if (!this.customId) {
-      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      const console = Ioc.singleton().resolve('Mineral/Core/Console')
       console.logger.error(`${this.title} component has not customId.`)
       process.exit(0)
     }

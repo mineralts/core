@@ -5,14 +5,14 @@ import UserFlags from '../../api/entities/user/UserFlags'
 import { FlagIdentifier, FlagLabel } from '../../api/types'
 import User from '../../api/entities/user'
 import Client from '../../api/entities/client'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class ReadyPacket extends Packet {
   public packetType = 'READY'
 
   public async handle (payload: any) {
-    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
-    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+    const emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
 
     const flag = new UserFlags(
       FlagIdentifier[payload.user.public_flags || 0],
@@ -54,9 +54,9 @@ export default class ReadyPacket extends Packet {
       new Collection()
     )
 
-    Application.singleton().registerBinding('Mineral/Core/Client', client)
+    Ioc.singleton().registerBinding('Mineral/Core/Client', client)
 
-    const assembler = await Application.singleton().resolveBinding('Mineral/Core/Assembler')
+    const assembler = await Ioc.singleton().resolve('Mineral/Core/Assembler')
     await assembler.register()
     await client.registerGlobalCommands()
 

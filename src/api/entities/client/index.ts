@@ -3,7 +3,7 @@ import { ClientOptions, Snowflake } from '../../types'
 import User from '../user'
 import Presence from '../presence'
 import Command from '../../command/Command'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 import { serializeCommand } from '../../utils'
 import GuildManager from '../guild/GuildManager'
 import DmManager from '../private/DmManager'
@@ -25,8 +25,8 @@ export default class Client {
   }
   
   public async registerGlobalCommands () {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
-    const container = Application.singleton().resolveBinding('Mineral/Core/Commands')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
+    const container = Ioc.singleton().resolve('Mineral/Core/Commands')
     const commands = container!.collection.filter((command: MineralBaseCommand) => (
       command.data.scope == 'GLOBAL'
     ))

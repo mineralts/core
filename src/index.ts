@@ -23,12 +23,12 @@ import Button from './api/entities/button/index'
 import Link from './api/entities/button/ButtonLink'
 import Select from './api/entities/select-menu'
 import Scheduler from './core/entities/tasks/Scheduler'
-import Application from './application/Application'
 import Collection from './api/utils/Collection'
 import { WebsocketPayload } from '@mineralts/connector-preview'
 import { ForgeCommand } from './forge/entities/Command'
 import FileFactory from './forge/FileFactory'
 import Entity from './core/entities/Entity'
+import Ioc from './Ioc'
 
 export * from './typing/interfaces'
 export * from './core/entities/Module'
@@ -59,9 +59,9 @@ export {
   Scheduler,
   MineralContextMenu,
   ContextMenu,
-  Application,
   Collection,
   FileFactory,
   ForgeCommand,
-  Entity
+  Entity,
+  Ioc,
 }

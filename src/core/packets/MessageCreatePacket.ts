@@ -1,7 +1,7 @@
 import Packet from '../entities/Packet'
 import { MessageBuilder } from '../../assembler/builders'
 import TextChannel from '../../api/entities/channels/TextChannel'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class MessageCreatePacket extends Packet {
   public packetType = 'MESSAGE_CREATE'
@@ -11,9 +11,9 @@ export default class MessageCreatePacket extends Packet {
       return
     }
 
-    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
-    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
-    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+    const emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
+    const client = Ioc.singleton().resolve('Mineral/Core/Client')
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
     const useReflect = environment.resolveKey('reflect')
 
     const guild = client.guilds.cache.get(payload.guild_id)
@@ -33,7 +33,7 @@ export default class MessageCreatePacket extends Packet {
 
     emitter.emit('create:Message', message)
     if (useReflect) {
-      const reflect = Application.singleton().resolveBinding('Mineral/Core/Reflect')
+      const reflect = Ioc.singleton().resolve('Mineral/Core/Reflect')
       reflect.sendEvent('MessageCreate', message)
     }
   }

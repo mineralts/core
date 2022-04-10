@@ -6,8 +6,8 @@ import CategoryChannel from './CategoryChannel'
 import Message from '../message'
 import MessageManager from '../message/MessageManager'
 import EmbedRow from '../embed/EmbedRow'
-import Application from '../../../application/Application'
 import { MessageBuilder } from '../../../assembler/builders'
+import Ioc from '../../../Ioc'
 
 export default class TextChannelResolvable extends Channel {
   constructor (
@@ -32,18 +32,18 @@ export default class TextChannelResolvable extends Channel {
 
   public async setCooldown (value: Milliseconds) {
     if (value < 0 || value > 21600) {
-      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      const console = Ioc.singleton().resolve('Mineral/Core/Console')
       console.logger.error(`${value} cannot be value < 0 or value > 21600`)
     }
 
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, { rate_limit_per_user: value })
 
     this.cooldown = DateTime.fromMillis(value)
   }
 
   public async setDescription (value: string | null) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, { topic: value })
 
     this.description = value || ''
@@ -54,7 +54,7 @@ export default class TextChannelResolvable extends Channel {
   }
 
   public async setNSFW(bool: boolean) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, { nsfw: bool })
 
     this.isNsfw = bool
@@ -65,7 +65,7 @@ export default class TextChannelResolvable extends Channel {
   }
 
   public async send (messageOption: MessageOption) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     const components = messageOption.components?.map((row: EmbedRow) => {
       row.components = row.components.map((component: MessageComponentResolvable) => {
@@ -75,7 +75,7 @@ export default class TextChannelResolvable extends Channel {
     })
 
     if (!messageOption.content?.length && !messageOption.embeds?.length) {
-      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      const console = Ioc.singleton().resolve('Mineral/Core/Console')
       console.logger.error('Invalid message body')
       process.exit(1)
     }
@@ -85,7 +85,7 @@ export default class TextChannelResolvable extends Channel {
       components
     })
 
-    const client = Application.getClient()
+    const client = Ioc.singleton().resolve('Mineral/Core/Client')
     const messageBuilder = new MessageBuilder(client as any)
     return messageBuilder.build({
       ...payload,

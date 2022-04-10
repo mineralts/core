@@ -1,7 +1,7 @@
 import { ChannelTypeResolvable, Snowflake } from '../../types'
 import Guild from '../guild/Guild'
 import CategoryChannel from './CategoryChannel'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 
 export default class Channel {
   constructor (
@@ -44,7 +44,7 @@ export default class Channel {
   }
 
   public async setParent (category: CategoryChannel | Snowflake) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     const parentId = typeof category === 'string'
       ? category
       : category.id
@@ -58,7 +58,7 @@ export default class Channel {
   }
 
   public async setName (value: string) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, {
       name: value
     })
@@ -67,7 +67,7 @@ export default class Channel {
   }
 
   public async setPosition (position: number) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, { position })
 
     this.position = position
@@ -78,7 +78,7 @@ export default class Channel {
       return
     }
 
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     await request.delete(`/channels/${this.id}`)
   }
 

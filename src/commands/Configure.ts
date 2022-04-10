@@ -9,7 +9,7 @@
  */
 
 import { ForgeCommand } from '../forge/entities/Command'
-import Application from '../application/Application'
+import Ioc from '../Ioc'
 import { join } from 'node:path'
 import fs from 'node:fs'
 import { MineralModule } from '../core/entities/Module'
@@ -38,7 +38,7 @@ export default class Configure extends ForgeCommand {
 
     const instruction = new Instruction() as MineralModule
     instruction.console = this.console
-    instruction.ioc = Application.singleton()
+    instruction.ioc = Ioc.singleton()
     instruction.prompt = new Prompt()
 
     await instruction.configure()

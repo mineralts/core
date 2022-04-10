@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { Snowflake } from '../../types'
 import Presence from '../presence'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 import UserFlags from './UserFlags'
 
 export default class User {
@@ -36,19 +36,28 @@ export default class User {
 
   public getAvatarUrl (format = 'webp', size?, dynamic = false): string | null {
     format = dynamic && this.avatar?.startsWith('a_') ? 'gif' : format
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
+    const cdn = environment.resolveKey('CDN')
+
     return this.avatar
-      ? this.makeImageUrl(`${Application.cdn}/avatars/${this.id}/${this.avatar}`, { format, size })
+      ? this.makeImageUrl(`${cdn}/avatars/${this.id}/${this.avatar}`, { format, size })
       : null
   }
 
   public getDefaultAvatarUrl (): string {
-    return `${Application.cdn}/embed/avatars/${this.discriminator}.png`
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
+    const cdn = environment.resolveKey('CDN')
+
+    return `${cdn}/embed/avatars/${this.discriminator}.png`
   }
 
   public async getBannerUrl (format = 'webp', size?, dynamic = false): Promise<string | null> {
     if (dynamic) format = this.avatar?.startsWith('a_') ? 'gif' : format
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
+    const cdn = environment.resolveKey('CDN')
+
     return this.avatar
-      ? this.makeImageUrl(`${Application.cdn}/banners/${this.id}/${this.banner}`, { format, size })
+      ? this.makeImageUrl(`${cdn}/banners/${this.id}/${this.banner}`, { format, size })
       : null
   }
 

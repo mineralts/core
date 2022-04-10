@@ -1,8 +1,8 @@
 import { prompt } from 'enquirer'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class Prompt {
-  private helpers = Application.getHelper()
+  private helpers = Ioc.singleton().resolve('Mineral/Core/Helpers')
 
   public async ask (message: string, options?: { placeholder: string }): Promise<string> {
     const answer = await prompt({

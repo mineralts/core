@@ -4,7 +4,7 @@ import VoiceChannel from '../../api/entities/channels/VoiceChannel'
 import Guild from '../../api/entities/guild/Guild'
 import GuildMember from '../../api/entities/guild/GuildMember'
 import VoiceState from '../../api/entities/voice/VoiceState'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class VoiceJoinPacket extends Packet {
   public packetType = 'VOICE_STATE_UPDATE'
@@ -14,8 +14,8 @@ export default class VoiceJoinPacket extends Packet {
       return
     }
 
-    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
-    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
+    const client = Ioc.singleton().resolve('Mineral/Core/Client')
 
     const guild: Guild | undefined = client?.guilds.cache.get(payload.guild_id)
     const voiceChannel: VoiceChannel | undefined = guild?.channels.cache.get(payload.channel_id)

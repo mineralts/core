@@ -1,13 +1,13 @@
 import * as Console from '@poppinss/cliui'
 import { CommandOption, CommandOptionType, PermissionType, Snowflake } from '../../api/types'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export function Command (name: string, description: string, scope: 'GUILDS' | Snowflake) {
   return (target: any) => {
     target.identifier = 'command'
     target.label = name.toLowerCase()
 
-    const commands = Application.singleton().resolveBinding('Mineral/Core/Commands')
+    const commands = Ioc.singleton().resolve('Mineral/Core/Commands')
     const command = new target() as MineralBaseCommand & { data: any }
 
     command.hasSubcommands = target.prototype.subcommands

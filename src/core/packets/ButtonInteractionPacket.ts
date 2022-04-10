@@ -1,6 +1,6 @@
 import Packet from '../entities/Packet'
 import { CommandType } from '../../api/types'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 import ButtonInteractionBuilder from '../../assembler/builders/ButtonInteractionBuilder'
 
 export default class ButtonInteractionPacket extends Packet {
@@ -11,8 +11,8 @@ export default class ButtonInteractionPacket extends Packet {
       return
     }
 
-    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
-    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
+    const client = Ioc.singleton().resolve('Mineral/Core/Client')
     const guild = client.guilds.cache.get(payload.guild_id)
 
     if (!guild) {

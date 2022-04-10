@@ -9,7 +9,7 @@ import GuildStickerManager from '../../api/entities/guild/GuildStickerManager'
 import GuildEmojiManager from '../../api/entities/guild/GuildEmojiManager'
 import GuildRoleManager from '../../api/entities/guild/GuildRoleManager'
 import { OnlyKeys } from '../../typing/interfaces'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class GuildUpdatePacket extends Packet {
   public packetType = 'GUILD_UPDATE'
@@ -18,8 +18,8 @@ export default class GuildUpdatePacket extends Packet {
   private emojis: Collection<Snowflake, Emoji> = new Collection()
 
   public async handle (payload: any) {
-    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
-    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
+    const client = Ioc.singleton().resolve('Mineral/Core/Client')
 
     const before = { ...client?.guilds.cache.get(payload.guild_id) } as Omit<Guild, OnlyKeys<Guild>>
     const guild = client.guilds.cache.clone().get(payload.guild_id)

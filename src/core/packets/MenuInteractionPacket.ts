@@ -1,7 +1,7 @@
 import Packet from '../entities/Packet'
 import { CommandType, InteractionType } from '../../api/types'
 import MenuInteractionBuilder from '../../assembler/builders/MenuInteractionBuilder'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class MenuInteractionPacket extends Packet {
   public packetType = 'INTERACTION_CREATE'
@@ -11,9 +11,9 @@ export default class MenuInteractionPacket extends Packet {
       return
     }
 
-    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
-    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
-    const menus = Application.singleton().resolveBinding('Mineral/Core/ContextMenus')
+    const emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
+    const client = Ioc.singleton().resolve('Mineral/Core/Client')
+    const menus = Ioc.singleton().resolve('Mineral/Core/ContextMenus')
 
     const guild = client.guilds.cache.get(payload.guild_id)
     if (!guild) {

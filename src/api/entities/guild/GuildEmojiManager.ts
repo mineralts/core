@@ -4,7 +4,7 @@ import Emoji from '../emoji'
 import { join } from 'path'
 import fs from 'fs'
 import Role from '../roles'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 import Guild from './Guild'
 import { EmojiBuilder } from '../../../assembler/builders'
 
@@ -27,7 +27,7 @@ export default class GuildEmojiManager {
     const filePath = join(process.cwd(), options.path)
     const file = await fs.promises.readFile(filePath, 'base64')
 
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (options.reason) {
       request.defineHeaders({

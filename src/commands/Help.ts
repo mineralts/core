@@ -25,7 +25,7 @@ export default class Help extends ForgeCommand {
     const location = path.join(process.cwd(), 'forge-manifest.json')
 
     if (!existsSync(location)) {
-      const commands = this.ioc.resolveBinding('Mineral/Core/Cli')
+      const commands = this.ioc.resolve('Mineral/Core/Cli')
       const command = commands.resolveCommand('generate:manifest')
 
       await command?.run(false)

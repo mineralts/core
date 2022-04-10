@@ -1,9 +1,9 @@
 import { schedule, ScheduledTask } from 'node-cron'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 
 export default class Scheduler {
   public task: ScheduledTask
-  private schedulers = Application.singleton().resolveBinding('Mineral/Core/Tasks')
+  private schedulers = Ioc.singleton().resolve('Mineral/Core/Tasks')
 
   constructor (public identifier: string, private cron: string, private cb: (task: ScheduledTask) => Promise<void>) {
     this.task = schedule(this.cron, () => {
@@ -14,11 +14,11 @@ export default class Scheduler {
   }
 
   public start () {
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     this.task.on(`task:${this.identifier}`, async () => {
       await this.cb.call({
         console: console,
-        client: Application.getClient()
+        client: Ioc.singleton().resolve('Mineral/Core/Client')
       }, this.task)
     })
 

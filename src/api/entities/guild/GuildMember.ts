@@ -5,7 +5,7 @@ import Guild from './Guild'
 import GuildMemberRoleManager from './GuildMemberRoleManager'
 import Role from '../roles'
 import VoiceState from '../voice/VoiceState'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 
 export default class GuildMember {
   constructor (
@@ -27,7 +27,7 @@ export default class GuildMember {
   }
 
   public async setUsername (value: string) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     await request.patch(`/guilds/${this.guild.id}/members/${this.id}`, {
       nick: value
@@ -35,8 +35,8 @@ export default class GuildMember {
   }
 
   public async exclude (date: DateTime, reason?: string) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
 
     if (reason) {
       request.defineHeaders({
@@ -58,7 +58,7 @@ export default class GuildMember {
   }
 
   public async sorry (reason?: string) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({
@@ -74,10 +74,10 @@ export default class GuildMember {
   }
   
   public async ban (options: { messageCount?: number, reason?: string }) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (options.messageCount && (options.messageCount < 0 || options.messageCount > 50)) {
-      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      const console = Ioc.singleton().resolve('Mineral/Core/Console')
       console.logger.error(new Error(`You can delete between 0 and 7 days only (${options.messageCount} set).`))
       return
     }
@@ -97,7 +97,7 @@ export default class GuildMember {
   }
 
   public async unban (reason?: string) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({
@@ -110,7 +110,7 @@ export default class GuildMember {
   }
 
   public async kick (reason?: string) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({

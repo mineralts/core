@@ -1,7 +1,7 @@
 import Collection from '../../utils/Collection'
 import { ChannelOptionResolvable, ChannelResolvable, ChannelTypeResolvable, Snowflake } from '../../types'
 import Guild from './Guild'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 
 export default class GuildChannelManager {
   public cache: Collection<Snowflake, ChannelResolvable> = new Collection()
@@ -16,7 +16,7 @@ export default class GuildChannelManager {
 
   public async create (channel: ChannelOptionResolvable) {
     let payload: any
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     const baseChannel = {
       name: channel.name,
       type: ChannelTypeResolvable[channel.type],

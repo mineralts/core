@@ -1,6 +1,6 @@
 import Emoji from '../emoji'
 import BaseButton from './BaseButton'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 import { ButtonStyle } from '../../types'
 
 export default class ButtonLink extends BaseButton {
@@ -33,7 +33,7 @@ export default class ButtonLink extends BaseButton {
   }
 
   public toJson () {
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     if (!this.url) {
       console.logger.error(new Error(`${this.label} component has not url.`))
       process.exit(0)

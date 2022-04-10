@@ -12,7 +12,7 @@ import { execSync } from 'child_process'
 import path from 'path'
 import Kernel from '../Kernel'
 import { logger as Logger } from '@poppinss/cliui'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class Ignitor {
   private logger: typeof Logger = Logger
@@ -68,7 +68,7 @@ export default class Ignitor {
     const kernel = new Kernel()
     await kernel.createCliApplication()
 
-    const cli = Application.singleton().resolveBinding('Mineral/Core/Cli')
+    const cli = Ioc.singleton().resolve('Mineral/Core/Cli')
     const command = cli?.resolveCommand(commandName)
 
     if (!command) {

@@ -1,6 +1,6 @@
 import Console from '@poppinss/cliui'
 import Entity from './Entity'
-import Container from '../../application/Container'
+import Ioc from '../../Ioc'
 
 export function Provider () {
   return (target: any) => {
@@ -10,7 +10,7 @@ export function Provider () {
 
 export abstract class MineralProvider {
   public console: typeof Console
-  public application: Container
+  public ioc: Ioc
 
   abstract boot (...args: any[]): Promise<void>
   abstract loadFile (entity: Entity): Promise<void>

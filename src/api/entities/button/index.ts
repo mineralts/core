@@ -2,7 +2,7 @@ import Emoji from '../emoji'
 import { ButtonStyle, ComponentType, Snowflake } from '../../types'
 import { keyFromEnum } from '../../utils'
 import BaseButton from './BaseButton'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 
 export default class Button extends BaseButton {
   public customId?: Snowflake
@@ -49,7 +49,7 @@ export default class Button extends BaseButton {
 
   public toJson () {
     if (!this.customId) {
-      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      const console = Ioc.singleton().resolve('Mineral/Core/Console')
       console.logger.error(new Error(`${this.label} component has not customId.`))
     }
 

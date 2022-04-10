@@ -1,6 +1,6 @@
 import { PermissionFlag, RoleUpdateOption, Snowflake } from '../../types'
 import Guild from '../guild/Guild'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 import { resolveColor } from '../../utils'
 import { join } from 'path'
 import fs from 'fs'
@@ -31,7 +31,7 @@ export default class Role {
   }
 
   public async update (options: RoleUpdateOption) {
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     const payload = {
       name: options.label,
       permissions: options.permissions?.reduce((acc: number, current: keyof typeof PermissionFlag) => acc + parseInt(PermissionFlag[current]), 0),
@@ -61,7 +61,7 @@ export default class Role {
 
     if (options.emoji) {
       if (!this.guild.hasFeature('ROLE_ICONS') && options.icon) {
-        const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+        const console = Ioc.singleton().resolve('Mineral/Core/Console')
         console.logger.warning('You must have the `ROLE_ICONS` feature in order to define a role icon')
         return
       }
@@ -69,7 +69,7 @@ export default class Role {
       payload['unicode_emoji'] = options.emoji
     }
 
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (options.reason) {
       request.defineHeaders({
@@ -84,7 +84,7 @@ export default class Role {
   }
 
   public async delete (reason?: string): Promise<void> {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({
@@ -97,7 +97,7 @@ export default class Role {
   }
 
   public async setPosition (position: number, reason?: string): Promise<void> {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({

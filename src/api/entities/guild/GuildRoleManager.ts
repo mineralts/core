@@ -2,7 +2,7 @@ import Collection from '../../utils/Collection'
 import { PermissionFlag, RoleOption, Snowflake } from '../../types'
 import Role from '../roles'
 import Guild from './Guild'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 import Color from '../colors'
 import { join } from 'path'
 import fs from 'fs'
@@ -23,7 +23,7 @@ export default class GuildRoleManager {
   }
 
   public async create (options: RoleOption) {
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     const payload = {
       name: options.label,
       permissions: options.permissions?.reduce((acc: number, current: keyof typeof PermissionFlag) => acc + parseInt(PermissionFlag[current]), 0),
@@ -60,7 +60,7 @@ export default class GuildRoleManager {
       payload['unicode_emoji'] = options.emoji
     }
 
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (options.reason) {
       request.defineHeaders({

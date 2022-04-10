@@ -2,7 +2,7 @@ import { RTC_Region, Snowflake, VideoQuality } from '../../types'
 import Channel from './Channel'
 import Guild from '../guild/Guild'
 import CategoryChannel from './CategoryChannel'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 
 export default class VoiceChannel extends Channel {
   constructor (
@@ -24,18 +24,18 @@ export default class VoiceChannel extends Channel {
   }
 
   public async setBitrate (value: number) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     if (value >= 8000 && value <= 96000) {
       await request.patch(`/channels/${this.id}`, { bitrate: value })
       this.bitrate = value
     } else {
-      const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+      const console = Ioc.singleton().resolve('Mineral/Core/Console')
       console.logger.error(new Error('Please define your bitrate between 8000 and 96000'))
     }
   }
 
   public async setRtcRegion (region: keyof typeof RTC_Region) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, {
       rtc_region: region !== 'AUTO'
         ? RTC_Region[region]
@@ -46,7 +46,7 @@ export default class VoiceChannel extends Channel {
   }
 
   public async setMaxMember (value: number | 'UNLIMITED') {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, {
       user_limit: value === 'UNLIMITED' ? 0 : value
     })
@@ -55,7 +55,7 @@ export default class VoiceChannel extends Channel {
   }
 
   public async setVideoQuality (quality: keyof typeof VideoQuality) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
     await request.patch(`/channels/${this.id}`, {
       video_quality_mode: VideoQuality[quality]
     })

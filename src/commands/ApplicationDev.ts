@@ -25,7 +25,7 @@ export default class ApplicationDev extends ForgeCommand {
   }
 
   public async run (): Promise<void> {
-    const console = this.ioc.resolveBinding('Mineral/Core/Console')
+    const console = this.ioc.resolve('Mineral/Core/Console')
     const watcherHelper = getWatcherHelpers(process.cwd())
 
     const compiler = new TypescriptCompiler(

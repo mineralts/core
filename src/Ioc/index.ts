@@ -33,10 +33,20 @@ export interface ServiceContract {
 
 type ServiceType<T> = T extends keyof ServiceContract ? ServiceContract[T] : any
 
-export default class Container {
+export default class Ioc {
+  private static $instance: Ioc
   public services: Collection<string, unknown> = new Collection()
 
-  public resolveBinding<T extends keyof ServiceContract | string> (binding: T): ServiceType<T> {
+  public static create () {
+    this.$instance = new Ioc()
+    return this.$instance
+  }
+
+  public static singleton () {
+    return this.$instance
+  }
+
+  public resolve<T extends keyof ServiceContract | string> (binding: T): ServiceType<T> {
     const service = this.services.get(binding)
 
     if (!service) {

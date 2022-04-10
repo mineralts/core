@@ -12,7 +12,7 @@ import { ForgeCommand } from '../forge/entities/Command'
 import { build, BuildOptions } from 'esbuild'
 import fs from 'node:fs'
 import { join } from 'node:path'
-import Application from '../application/Application'
+import Ioc from '../Ioc'
 import production from '../extract/presets/production'
 
 export default class ApplicationProd extends ForgeCommand {
@@ -24,7 +24,7 @@ export default class ApplicationProd extends ForgeCommand {
   }
 
   public async run (): Promise<void> {
-    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
     const buildOptions = environment.resolveKey('BUILD')
 
     const buildLocation = join(process.cwd(), buildOptions?.OUT_DIR || 'build')

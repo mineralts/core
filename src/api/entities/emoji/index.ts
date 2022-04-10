@@ -1,6 +1,6 @@
 import { Snowflake } from '../../types'
 import Role from '../roles'
-import Application from '../../../application/Application'
+import Ioc from '../../../Ioc'
 import Guild from '../guild/Guild'
 
 export default class Emoji {
@@ -16,7 +16,7 @@ export default class Emoji {
   }
 
   public async update (options: { label: string, roles?: Role[] | Snowflake[], reason?: string }) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (options.reason) {
       request.defineHeaders({
@@ -35,7 +35,7 @@ export default class Emoji {
   }
 
   public async delete (reason?: string) {
-    const request = Application.singleton().resolveBinding('Mineral/Core/Http')
+    const request = Ioc.singleton().resolve('Mineral/Core/Http')
 
     if (reason) {
       request.defineHeaders({

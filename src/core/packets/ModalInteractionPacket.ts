@@ -1,7 +1,7 @@
 import Packet from '../entities/Packet'
 import { InteractionType } from '../../api/types'
 import ModalInteractionBuilder from '../../assembler/builders/ModalInteractionBuilder'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class ModalInteractionPacket extends Packet {
   public packetType = 'INTERACTION_CREATE'
@@ -11,8 +11,8 @@ export default class ModalInteractionPacket extends Packet {
       return
     }
 
-    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
-    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
+    const emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
+    const client = Ioc.singleton().resolve('Mineral/Core/Client')
 
     const guild = client.guilds.cache.get(payload.guild_id)
     if (!guild) {

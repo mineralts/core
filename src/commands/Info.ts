@@ -22,10 +22,10 @@ export default class MakeCommand extends ForgeCommand {
   }
 
   public async run (): Promise<void> {
-    const environment = this.ioc.resolveBinding('Mineral/Core/Environment')
-    const cli = this.ioc.resolveBinding('Mineral/Core/Cli')
-    const commands = this.ioc.resolveBinding('Mineral/Core/Commands')
-    const events = this.ioc.resolveBinding('Mineral/Core/Events')
+    const environment = this.ioc.resolve('Mineral/Core/Environment')
+    const cli = this.ioc.resolve('Mineral/Core/Cli')
+    const commands = this.ioc.resolve('Mineral/Core/Commands')
+    const events = this.ioc.resolve('Mineral/Core/Events')
 
     const result = {
       node_version: process.version,

@@ -10,11 +10,11 @@
 
 import { Opcode } from '../types'
 import Shard from '../shards/Shard'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class HearthBeatManager {
   private scheduler: any
-  private console = Application.singleton().resolveBinding('Mineral/Core/Console')
+  private console = Ioc.singleton().resolve('Mineral/Core/Console')
   constructor (private shard: Shard) {
   }
 

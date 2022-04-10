@@ -3,7 +3,7 @@ import { CommandInteractionBuilder } from '../../assembler/builders'
 import { CommandType, OptionType } from '../../api/types'
 import { MineralBaseCommand } from '../entities/Command'
 import CommandInteraction from '../../api/entities/interaction/CommandInteraction'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 export default class CommandInteractionPacket extends Packet {
   public packetType = 'INTERACTION_CREATE'
@@ -13,10 +13,10 @@ export default class CommandInteractionPacket extends Packet {
       return
     }
 
-    const emitter = Application.singleton().resolveBinding('Mineral/Core/Emitter')
-    const client = Application.singleton().resolveBinding('Mineral/Core/Client')
-    const commands = Application.singleton().resolveBinding('Mineral/Core/Commands')
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const emitter = Ioc.singleton().resolve('Mineral/Core/Emitter')
+    const client = Ioc.singleton().resolve('Mineral/Core/Client')
+    const commands = Ioc.singleton().resolve('Mineral/Core/Commands')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
 
     const guild = client.guilds.cache.get(payload.guild_id)
     if (!guild) {

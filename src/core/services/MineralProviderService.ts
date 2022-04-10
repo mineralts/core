@@ -1,5 +1,5 @@
 import Collection from '../../api/utils/Collection'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 import { fetch } from 'fs-recursive'
 import fs from 'node:fs'
 import { MineralProvider } from '../entities/Provider'
@@ -9,8 +9,8 @@ export default class MineralProviderService {
   public collection: Collection<string, MineralProvider> = new Collection()
 
   public async register () {
-    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     const root = environment?.resolveKey('APP_ROOT')
     const mode = environment?.resolveKey('APP_MODE')
 
@@ -31,7 +31,7 @@ export default class MineralProviderService {
           if (item && item.identifier === 'provider') {
             const provider = new item() as MineralProvider
             provider.console = console
-            provider.application = Application.singleton()
+            provider.ioc = Ioc.singleton()
 
             this.collection.set(item.path, provider)
           }
@@ -52,7 +52,7 @@ export default class MineralProviderService {
 
           const provider = new Provider()
           provider.console = console
-          provider.application = Application.singleton()
+          provider.application = Ioc.singleton()
 
           this.collection.set(providerLocation, provider)
         } catch (err) {}

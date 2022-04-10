@@ -5,7 +5,7 @@ import { Data } from 'ws'
 import HearthBeatManager from '../managers/HearthBeatManager'
 import { keyFromEnum } from '../../api/utils'
 import { EventEmitter } from 'node:events'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 
 enum WebSocketState {
   OPEN,
@@ -26,7 +26,7 @@ export default class Shard extends EventEmitter {
   }
   
   public connect () {
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     this.reactor = new Observable((observer: Subscriber<any>) => {
       this.manager.websocket?.on('message', (data: Data) => {
         const payload = JSON.parse(data.toString())
@@ -48,7 +48,7 @@ export default class Shard extends EventEmitter {
   }
 
   private identify () {
-    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
     const intents = environment.resolveKey('INTENTS')
     const token = environment.resolveKey('TOKEN')
 
@@ -65,7 +65,7 @@ export default class Shard extends EventEmitter {
   }
 
   private reconnect () {
-    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
     const token = environment.resolveKey('TOKEN')
 
     const request = this.request(Opcode.RESUME, {
@@ -127,7 +127,7 @@ export default class Shard extends EventEmitter {
   }
 
   protected opCodeActionHook (payload) {
-    const console = Application.singleton().resolveBinding('Mineral/Core/Console')
+    const console = Ioc.singleton().resolve('Mineral/Core/Console')
     const codes: { [K in keyof typeof Opcode]?: () => void } = {
       'HELLO': () => hello(),
       'RECONNECT': () => reconnect(),

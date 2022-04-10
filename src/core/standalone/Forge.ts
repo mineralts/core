@@ -10,7 +10,7 @@
 
 import Kernel from '../Kernel'
 import path from 'path'
-import Application from '../../application/Application'
+import Ioc from '../../Ioc'
 import { ForgeCommand } from '../../forge/entities/Command'
 import Prompt from '../../forge/actions/Prompt'
 
@@ -21,12 +21,10 @@ class Forge {
     this.kernel.disposeKernel()
     await this.kernel.createCliApplication()
 
-    // const console = Application.singleton().resolveBinding('Mineral/Core/Console')
-
     const { COMMAND_NAME, ARGS } = process.env
 
     if (COMMAND_NAME === 'generate:manifest' || COMMAND_NAME === 'help' || !COMMAND_NAME) {
-      const commands = Application.singleton().resolveBinding('Mineral/Core/Cli')
+      const commands = Ioc.singleton().resolve('Mineral/Core/Cli')
       const command = commands.resolveCommand(COMMAND_NAME || 'help')
       await command.run()
     } else {
@@ -48,7 +46,7 @@ class Forge {
       const command = new Command() as ForgeCommand
 
       // command.console = console
-      command.ioc = Application.singleton()
+      command.ioc = Ioc.singleton()
       command.prompt = new Prompt()
 
       try {

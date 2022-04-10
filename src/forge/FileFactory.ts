@@ -11,7 +11,7 @@
 import path from 'path'
 import fs from 'fs'
 import { logger as Logger } from '@poppinss/cliui'
-import Application from '../application/Application'
+import Ioc from '../Ioc'
 
 export default class FileFactory {
   private root = path.join(process.cwd(), 'src')
@@ -25,7 +25,8 @@ export default class FileFactory {
   }
 
   public setFilename (value: string) {
-    this.filename = Application.getHelper()
+    const helpers = Ioc.singleton().resolve('Mineral/Core/Helpers')
+    this.filename = helpers
       .capitalCase(value)
       .replace(/(.*)\.[^.]+$/, '')
       .replaceAll(' ', '')
