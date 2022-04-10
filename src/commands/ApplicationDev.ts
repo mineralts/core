@@ -15,7 +15,7 @@ import { TypescriptCompiler } from '@poppinss/chokidar-ts'
 import { getWatcherHelpers } from '@adonisjs/require-ts'
 
 export default class ApplicationDev extends ForgeCommand {
-  public static commandName = 'app:dev'
+  public static commandName = 'dev'
   public static description = 'Starting the application in development mode'
 
   public child: ChildProcess | undefined

@@ -16,8 +16,8 @@ import Application from '../application/Application'
 import production from '../extract/presets/production'
 
 export default class ApplicationProd extends ForgeCommand {
-  public static commandName = 'app:build'
-  public static description = 'Starting the application in development mode'
+  public static commandName = 'build'
+  public static description = 'Builds and optimises the application for production'
 
   public static settings = {
     loadApp: true
