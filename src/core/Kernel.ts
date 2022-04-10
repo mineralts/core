@@ -22,7 +22,6 @@ export default class Kernel {
 
     const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
     Object.entries(environment.resolveKey('RC_FILE')!.aliases).forEach(([key, value]) => {
-      console.log(key, join(process.cwd(), value))
       ModuleAlias.addAlias(key, join(process.cwd(), value))
     })
   }
