@@ -9,7 +9,7 @@
  */
 
 import { ForgeCommand } from '../forge/entities/Command'
-import { build } from 'esbuild'
+import { build, BuildOptions } from 'esbuild'
 import fs from 'node:fs'
 import { join } from 'node:path'
 import Application from '../application/Application'
@@ -30,7 +30,7 @@ export default class ApplicationProd extends ForgeCommand {
     const buildLocation = join(process.cwd(), buildOptions?.OUT_DIR || 'build')
     const preset = await production()
 
-    await build(preset)
+    await build(preset as BuildOptions)
 
     await Promise.all([
       this.copyToBuild(buildLocation, '.env'),

@@ -12,10 +12,13 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
+    "@adonisjs/ioc-transformer": "^2.3.3",
+    "@adonisjs/require-ts": "^2.0.11",
     "@poppinss/cliui": "^3.0.1",
     "@swc/core": "^1.2.151",
     "@swc/helpers": "^0.3.6",
     "@types/luxon": "^2.0.5",
+    "@types/module-alias": "^2.0.1",
     "@types/node": "^16.11.6",
     "@types/node-cron": "^3.0.1",
     "@types/ws": "^8.5.1",
@@ -27,6 +30,7 @@
     "fs-recursive": "^1.1.7",
     "js-yaml": "^4.1.0",
     "luxon": "^2.0.2",
+    "module-alias": "^2.2.2",
     "node-cron": "^3.0.0",
     "pluralize": "^8.0.0",
     "regenerator-runtime": "^0.13.9",

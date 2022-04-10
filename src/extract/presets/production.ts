@@ -3,12 +3,10 @@ import Application from '../../application/Application'
 import fs from 'node:fs'
 import { join } from 'node:path'
 import Logger from '../plugins/Logger'
-import Alias from '../plugins/Alias'
 
-export default async function () {
+export default async function() {
   const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
   const buildOptions = environment.resolveKey('BUILD')
-  const alias = environment.resolveKey('RC_FILE')?.aliases
 
   const buildLocation = join(process.cwd(), buildOptions?.OUT_DIR || 'build')
   const buildDir = fs.existsSync(buildLocation)
@@ -33,14 +31,6 @@ export default async function () {
     })
   )
 
-  console.log(includeFile)
-
-  const registeredAlias = {}
-
-  Object.entries(alias!).forEach(([key, location]) => {
-    registeredAlias[key] = join(process.cwd(), location)
-  })
-
   return {
     entryPoints: includeFile.filter((file: string | undefined) => file) as string[],
     platform: 'node',
@@ -49,9 +39,6 @@ export default async function () {
     minify: buildOptions?.MINIFY || false,
     format: 'cjs',
     globalName: 'mineral',
-    plugins: [
-      Logger,
-      Alias(registeredAlias)
-    ]
-  } as any
+    plugins: [Logger]
+  }
 }

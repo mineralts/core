@@ -5,6 +5,8 @@ import { MineralProvider } from './entities/Provider'
 import { fetch } from 'fs-recursive'
 import fs from 'node:fs'
 import Entity from './entities/Entity'
+import { join } from 'node:path'
+import ModuleAlias from 'module-alias'
 
 export default class Kernel {
   public application: Application
@@ -17,6 +19,12 @@ export default class Kernel {
 
     this.packetManager = new PacketManager()
     this.assembler = new Assembler(this.application, this.packetManager)
+
+    const environment = Application.singleton().resolveBinding('Mineral/Core/Environment')
+    Object.entries(environment.resolveKey('RC_FILE')!.aliases).forEach(([key, value]) => {
+      console.log(key, join(process.cwd(), value))
+      ModuleAlias.addAlias(key, join(process.cwd(), value))
+    })
   }
 
   public async createApplication () {
