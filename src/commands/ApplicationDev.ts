@@ -21,7 +21,7 @@ export default class ApplicationDev extends ForgeCommand {
   public child: ChildProcess | undefined
 
   public static settings = {
-    loadApp: true
+    typescript: true
   }
 
   public async run (): Promise<void> {

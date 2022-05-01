@@ -16,6 +16,6 @@ export abstract class ForgeCommand {
   public console: typeof Console
   public ioc: Index
   public prompt: Prompt
-  public static settings: { loadApp: boolean } = { loadApp: false }
+  public static settings: { loadApp?: boolean, typescript?: boolean } = { loadApp: false, typescript: false }
   public abstract run (...args: string[]): Promise<void>
 }

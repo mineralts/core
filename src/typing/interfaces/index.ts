@@ -35,7 +35,6 @@ import Message from './message'
 import MentionResolvable from './mention/MentionResolvable'
 import MessageAttachment from './message/MessageAttachment'
 import Button from './button'
-import SelectMenu from './select-menu'
 import EmbedAuthor from './embed/EmbedAuthor'
 import EmbedThumbnail from './embed/EmbedThumbnail'
 import EmbedImage from './embed/EmbedImage'
@@ -69,6 +68,7 @@ import HttpRequest from './http'
 import ThreadChannel from './channels/ThreadChannel'
 import ButtonInteraction from './interaction/ButtonInteraction'
 import MenuInteraction from './interaction/MenuInteraction'
+import SelectMenuInteraction from './interaction/SelectMenuInteraction'
 
 export type ChannelResolvable = TextChannel | VoiceChannel | CategoryChannel | StageChannel | NewsChannel | DMChannel | StoreChannel
 export type OnlyKeys<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
@@ -111,7 +111,6 @@ export {
   ComponentType,
   Button,
   ButtonStyle,
-  SelectMenu,
   EmbedThumbnail,
   EmbedAuthor,
   EmbedImage,
@@ -126,6 +125,7 @@ export {
   HttpRequest,
   ThreadChannel,
   MenuInteraction,
+  SelectMenuInteraction,
 }
 
 export interface ClientEvents {
@@ -215,13 +215,16 @@ export interface ClientEvents {
   'delete:Role': [role: Role]
 
   'open:modal': [interaction: ModalInteraction]
-  [event: `open:modal:${string}`]: [interaction: ModalInteraction]
+  [event: `open:modal::${string}`]: [interaction: ModalInteraction]
 
   'press:button': [interaction: ButtonInteraction]
-  [event: `press:button:${string}`]: [interaction: ButtonInteraction]
+  [event: `press:button::${string}`]: [interaction: ButtonInteraction]
 
   'use:command': [interaction: CommandInteraction]
-  [event: `use:command:${string}`]: [interaction: CommandInteraction]
+  [event: `use:command::${string}`]: [interaction: CommandInteraction]
+
+  'select:menu': [interaction: SelectMenuInteraction]
+  [event: `select:menu::${string}`]: [interaction: SelectMenuInteraction]
 
   'action:context': [interaction: MenuInteraction]
 

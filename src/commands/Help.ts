@@ -17,7 +17,8 @@ export default class Help extends ForgeCommand {
   public static description = 'Generate manifest file'
 
   public static settings = {
-    loadApp: true
+    typescript: true,
+    loadApp: true,
   }
 
   public async run (): Promise<void> {

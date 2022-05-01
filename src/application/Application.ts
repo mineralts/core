@@ -71,7 +71,10 @@ export default class Application {
 
     environment?.registerKey('MINERAL_DEPENDENCIES', dependencies)
     environment?.resolveEnvironment()
-    environment?.validateSchema()
+
+    if (environment.resolveKey('APP_MODE') !== 'forge') {
+      environment?.validateSchema()
+    }
 
     const intents: 'ALL' | Exclude<keyof typeof Intent, 'ALL'>[] = 'ALL'
     environment?.registerKey('INTENTS', { selected: intents, bitfield: this.getIntentValue(intents) })

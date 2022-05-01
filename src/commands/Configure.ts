@@ -20,7 +20,7 @@ export default class Configure extends ForgeCommand {
   public static description = 'Configure installed mineral package'
 
   public static settings = {
-    loadApp: true
+    typescript: true
   }
 
   public async run (...args: string[]): Promise<void> {

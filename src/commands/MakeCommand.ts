@@ -17,7 +17,8 @@ export default class MakeCommand extends ForgeCommand {
   public static description = 'Make a new command class'
 
   public static settings = {
-    loadApp: false
+    typescript: false,
+    loadApp: false,
   }
 
   public async run (): Promise<void> {

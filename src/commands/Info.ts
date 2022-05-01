@@ -18,7 +18,7 @@ export default class MakeCommand extends ForgeCommand {
   public static description = 'Displays the current information about your project'
 
   public static settings = {
-    loadApp: true
+    typescript: true
   }
 
   public async run (): Promise<void> {

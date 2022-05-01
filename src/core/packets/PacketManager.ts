@@ -44,6 +44,7 @@ import ThreadCreatePacket from './ThreadCreatePacket'
 import ThreadDeletePacket from './ThreadDeletePacket'
 import ThreadUpdatePacket from './ThreadUpdatePacket'
 import ButtonInteractionPacket from './ButtonInteractionPacket'
+import SelectMenuInteractionPacket from './SelectMenuInteractionPacket'
 
 export default class PacketManager {
   public packets: Collection<string, Packet[]> = new Collection()
@@ -88,6 +89,7 @@ export default class PacketManager {
       new MenuInteractionPacket(),
       new ModalInteractionPacket(),
       new ButtonInteractionPacket(),
+      new SelectMenuInteractionPacket(),
       new EmojiUpdatePacket(),
       new EmojiDeletePacket(),
       new EmojiCreatePacket(),

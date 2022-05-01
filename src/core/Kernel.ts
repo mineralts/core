@@ -6,7 +6,7 @@ import { fetch } from 'fs-recursive'
 import fs from 'node:fs'
 import Entity from './entities/Entity'
 import { join } from 'node:path'
-import ModuleAlias from 'module-alias'
+import { addAlias } from 'module-alias'
 import Application from '../application/Application'
 
 export default class Kernel {
@@ -21,16 +21,14 @@ export default class Kernel {
 
     const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
     Object.entries(environment.resolveKey('RC_FILE')!.aliases).forEach(([key, value]) => {
-      ModuleAlias.addAlias(key, join(process.cwd(), value))
+      addAlias(key, join(process.cwd(), value))
     })
   }
 
   public async createApplication () {
     const providers = Ioc.singleton().resolve('Mineral/Core/Providers')
-    const cli = Ioc.singleton().resolve('Mineral/Core/Providers')
 
     await Promise.all([
-      cli?.register(),
       providers.register()
     ])
 
@@ -43,25 +41,28 @@ export default class Kernel {
     await this.bootProviders()
   }
 
-  public disposeKernel () {
-    // Ioc.singleton().registerBinding('Mineral/Core/kernel', this)
-  }
-
-  public async createCliApplication () {
+  public async createCliApplication (loadApp) {
     const cli = Ioc.singleton().resolve('Mineral/Core/Cli')
-    const providers = Ioc.singleton().resolve('Mineral/Core/Providers')
-    await providers.register()
+
+    if (loadApp) {
+      await this.bootProviders()
+    }
     await cli?.register()
+
+    return cli
   }
 
   public async bootProviders () {
     const providers = Ioc.singleton().resolve('Mineral/Core/Providers')
-    const environment = this.application.ioc.resolve('Mineral/Core/Environment')
+    const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
+    await providers.register()
+
     await Promise.all(
       providers.collection.map(async (provider: MineralProvider) => {
         await provider.boot()
       })
     )
+
 
     const root = environment?.resolveKey('APP_ROOT')
     const mode = environment?.resolveKey('APP_MODE')
@@ -76,7 +77,11 @@ export default class Kernel {
     )
 
     for (const [, file] of files) {
-      const content = await fs.promises.readFile(file.path, 'utf8')
+      if (join(process.cwd(), 'index.ts') === file.path) {
+        return
+      }
+
+      const content = await fs.promises.readFile(file.path, 'utf-8')
       if (!content.startsWith('// mineral-ignore')) {
         try {
           const { default: item } = await import(file.path)
@@ -86,7 +91,7 @@ export default class Kernel {
               await provider.loadFile(entity)
             })
           )
-        } catch (e) {
+        } catch {
         }
       }
     }

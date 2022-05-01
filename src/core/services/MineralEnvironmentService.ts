@@ -14,7 +14,7 @@ interface Environment {
   APP_VERSION: string
   APP_ROOT: string
   APP_DEBUG: boolean
-  APP_MODE: 'production' | 'testing' | 'development'
+  APP_MODE: 'production' | 'testing' | 'development' | 'forge'
   TOKEN: string
   REFLECT: boolean
   RC_FILE: RcFile
@@ -76,8 +76,8 @@ export default class MineralEnvironmentService {
 
   public async validateSchema () {
     const environment = Ioc.singleton().resolve('Mineral/Core/Environment')
-
     const { default: validator } = await import(join(process.cwd(), 'env.ts'))
+
     Object.entries(validator).forEach(([key, type]: [string, any]) => {
       const value = environment.resolveKey(key)
       if (!value) {

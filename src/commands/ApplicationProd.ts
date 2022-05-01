@@ -20,7 +20,7 @@ export default class ApplicationProd extends ForgeCommand {
   public static description = 'Builds and optimises the application for production'
 
   public static settings = {
-    loadApp: true
+    typescript: true
   }
 
   public async run (): Promise<void> {

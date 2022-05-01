@@ -17,6 +17,12 @@ export default class GenerateManifest extends ForgeCommand {
   public static commandName = 'make:event'
   public static description = 'Make a new event class'
 
+  public static settings = {
+    typescript: false,
+    loadApp: false,
+  }
+
+
   public async run (): Promise<void> {
     const generator = new FileFactory(this.console.logger)
     await generator.loadFolders(path.join(process.cwd(), 'src'))

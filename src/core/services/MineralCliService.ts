@@ -39,7 +39,7 @@ export default class MineralCliService {
       console.logger.fatal(new Error('The pre-loaded commands must be commands from npm packages.'))
     }
 
-    const fetchCommandFiles = (files, logger, location) => {
+    const fetchCommandFiles = (files, location) => {
       return Promise.all(
         files.map(async (file: string) => {
           if (file.endsWith('.d.ts')) {
@@ -75,7 +75,7 @@ export default class MineralCliService {
             const location = path.join(baseLocation, dir)
             const files = await fs.promises.readdir(location)
 
-            return fetchCommandFiles(files, console, location)
+            return fetchCommandFiles(files, location)
           })
         )
       })

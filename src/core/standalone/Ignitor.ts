@@ -21,7 +21,7 @@ export default class Ignitor {
     const [commandName, ...args] = process.argv.slice(2)
 
     if (commandName === 'generate:manifest' || commandName === 'help' || !commandName) {
-      await this.execTypescript(commandName || 'help', ...args)
+      await this.execTypescript(commandName || 'help', true, ...args)
       return
     }
 
@@ -40,14 +40,14 @@ export default class Ignitor {
       return
     }
 
-    if (command.settings?.loadApp) {
-      await this.execTypescript(commandName, ...args)
+    if (command.settings?.typescript && command.settings?.loadApp) {
+      await this.execTypescript(commandName, command.settings?.loadApp, ...args)
     } else {
-      await this.execJavascript(commandName, ...args)
+      await this.execJavascript(commandName, command.settings?.loadApp, ...args)
     }
   }
 
-  protected async execTypescript (commandName: string, ...args: string[]) {
+  protected async execTypescript (commandName: string, loadApp: boolean, ...args: string[]) {
     const forgeFile = path.join('node_modules', '@mineralts', 'core-preview', 'build', 'core', 'standalone', 'Forge.js')
     const tsnode = path.join('node_modules', 'ts-node', 'dist', 'bin-transpile.js')
 
@@ -56,17 +56,18 @@ export default class Ignitor {
       stdio: 'inherit',
       env: {
         COMMAND_NAME: commandName,
+        LOAD_APP: loadApp.toString(),
         ARGS: args.join(' '),
-        NODE_ENV: 'development'
+        NODE_ENV: 'forge'
       }
     })
     process.exit()
   }
 
-  private async execJavascript (commandName: string, ...args: string[]) {
-    process.env.NODE_ENV = 'development'
+  private async execJavascript (commandName: string, loadApp, ...args: string[]) {
+    process.env.NODE_ENV = 'forge'
     const kernel = new Kernel()
-    await kernel.createCliApplication()
+    await kernel.createCliApplication(loadApp)
 
     const cli = Ioc.singleton().resolve('Mineral/Core/Cli')
     const command = cli?.resolveCommand(commandName)

@@ -57,9 +57,6 @@ export default class Ioc {
   }
 
   public registerBinding<T extends keyof ServiceContract | string> (binding: T, service: ServiceType<T>): void {
-    if (this.services.get(binding)) {
-      throw new Error(`The ${binding} service already exists.`)
-    }
     this.services.set(binding, service)
   }
 }

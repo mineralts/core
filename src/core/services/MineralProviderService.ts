@@ -25,7 +25,7 @@ export default class MineralProviderService {
 
     for (const [, file] of files) {
       const content = await fs.promises.readFile(file.path, 'utf-8')
-      if (!content.startsWith('// mineral-ignore')) {
+      if (!content.startsWith('// mineral-ignore') && join(process.cwd(), 'index.ts') !== file.path) {
         try {
           const { default: item } = await import(file.path)
           if (item && item.identifier === 'provider') {
@@ -52,10 +52,10 @@ export default class MineralProviderService {
 
           const provider = new Provider()
           provider.console = console
-          provider.application = Ioc.singleton()
+          provider.ioc = Ioc.singleton()
 
           this.collection.set(providerLocation, provider)
-        } catch (err) {}
+        } catch {}
       })
     )
   }

@@ -299,6 +299,7 @@ export const clientEvents = [
   'delete:Role',
   'open:modal',
   'press:button',
+  'select:menu',
   'use:command',
   'action:context',
   'start:typing',

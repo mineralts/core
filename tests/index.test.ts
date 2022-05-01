@@ -2,7 +2,6 @@ import { afterAll, describe, expect, test } from 'vitest'
 import fs from 'fs'
 import mineralrc from '../mocks/mineralrc'
 import { join } from 'node:path'
-import { Kernel } from '../build'
 import { tmpdir } from 'os'
 
 describe('Create Kernel application', async () => {
@@ -20,7 +19,7 @@ describe('Create Kernel application', async () => {
     await Promise.all([
       fs.promises.writeFile(rcLocation, JSON.stringify(mineralrc), 'utf8'),
       fs.promises.writeFile(jsonLocation, JSON.stringify(mineralrc), 'utf8'),
-      fs.promises.writeFile(envLocation, JSON.stringify(mineralrc), 'utf8'),
+      fs.promises.writeFile(envLocation, JSON.stringify(mineralrc), 'utf8')
     ])
 
     test('Exist .mineralrc.json', async () => {
@@ -34,10 +33,6 @@ describe('Create Kernel application', async () => {
     test('Exist jsonPackage', async () => {
       expect(envLocation).exist
     })
-  })
-
-  test('Create Kernel', async () => {
-    new Kernel(tmpFolder)
   })
 
   afterAll(async () => {
