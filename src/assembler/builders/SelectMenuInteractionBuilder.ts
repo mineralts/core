@@ -8,8 +8,6 @@ export default class SelectMenuInteractionBuilder {
   }
 
   public build (payload: any) {
-    const guild = this.client.guilds.cache.get(payload.guild_id)
-    const member = guild?.members.cache.get(payload.member.user.id)
     const messageBuilder = new MessageBuilder(this.client)
     const message = messageBuilder.build({
       ...payload.message,
@@ -24,7 +22,8 @@ export default class SelectMenuInteractionBuilder {
       payload.data.custom_id,
       'SELECT_MENU',
       message!,
-      member!
+      this.member,
+      payload.data.values
     )
   }
 }

@@ -13,7 +13,8 @@ export default class SelectMenuInteraction {
     public customId: string | undefined,
     public componentType: keyof typeof ComponentType | undefined,
     public message: Message | undefined,
-    public member: GuildMember
+    public member: GuildMember,
+    public values: string[]
   ) {
   }
 
